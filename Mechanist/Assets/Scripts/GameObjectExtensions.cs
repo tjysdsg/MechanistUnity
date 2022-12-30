@@ -7,70 +7,41 @@ namespace ProceduralPrimitives
     /// </summary>
     public static class GameObjectExtensions
     {
-        /// <summary>
-        /// Adds a <see cref="MeshFilter"/> to the <see cref="GameObject"/> and assigns it the given <see cref="Mesh"/>.
-        /// </summary>
-        /// <param name="gameObject">The <see cref="GameObject"/> to add the <see cref="MeshFilter"/> to.</param>
-        /// <param name="mesh">The <see cref="Mesh"/> to assign.</param>
-        /// <returns>The newly created and added <see cref="MeshFilter"/>.</returns>
+        public static T AddComponentIfNotExist<T>(this GameObject go) where T : Component
+        {
+            T ret;
+            if (!go.TryGetComponent<T>(out ret))
+                return go.AddComponent<T>();
+            return ret;
+        }
+
         public static MeshFilter AddMeshFilter(this GameObject gameObject, Mesh mesh)
         {
-            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+            MeshFilter meshFilter = gameObject.AddComponentIfNotExist<MeshFilter>();
             meshFilter.sharedMesh = mesh;
-
             return meshFilter;
         }
 
-        /// <summary>
-        /// Adds a <see cref="MeshRenderer"/> to the <see cref="GameObject"/> and disables shadows on it.
-        /// </summary>
-        /// <param name="gameObject">The <see cref="GameObject"/> to add the <see cref="MeshRenderer"/> to.</param>
-        /// <returns>The newly created and added <see cref="MeshRenderer"/>.</returns>
-        public static MeshRenderer AddMeshFilterAndRenderer(this GameObject gameObject)
+        public static MeshRenderer AddMeshRenderer(this GameObject gameObject)
         {
-            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = gameObject.AddComponentIfNotExist<MeshRenderer>();
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-            meshRenderer.receiveShadows = false;
-
             return meshRenderer;
         }
 
-        /// <summary>
-        /// Adds a <see cref="MeshRenderer"/> to the <see cref="GameObject"/>, disables shadows on it, and assigns it the given <see cref="Material"/>.
-        /// </summary>
-        /// <param name="gameObject">The <see cref="GameObject"/> to add the <see cref="MeshRenderer"/> to.</param>
-        /// <param name="material">The <see cref="Material"/> to assign.</param>
-        /// <returns>The newly created and added <see cref="MeshRenderer"/>.</returns>
-        public static MeshRenderer AddMeshFilterAndRenderer(this GameObject gameObject, Material material)
+        public static MeshRenderer AddMeshRenderer(this GameObject gameObject, Material material)
         {
-            MeshRenderer meshRenderer = gameObject.AddMeshFilterAndRenderer();
+            MeshRenderer meshRenderer = gameObject.AddMeshRenderer();
             meshRenderer.sharedMaterial = material;
-
             return meshRenderer;
         }
 
-        /// <summary>
-        /// Adds a <see cref="MeshRenderer"/> to the <see cref="GameObject"/>, disables shadows on it, assigns it the given <see cref="Material"/>, adds 
-        /// a <see cref="MeshFilter"/> (if there isn't one), and assigns it the given <see cref="Mesh"/>.
-        /// </summary>
-        /// <param name="gameObject">The <see cref="GameObject"/> to add the <see cref="MeshRenderer"/> to.</param>
-        /// <param name="material">The <see cref="Material"/> to assign.</param>
-        /// <param name="mesh">The <see cref="Mesh"/> to assign.</param>
-        /// <returns>The newly created and added <see cref="MeshRenderer"/>.</returns>
-        public static MeshRenderer AddMeshFilterAndRenderer(this GameObject gameObject, Material material, Mesh mesh)
+        public static (MeshFilter, MeshRenderer) AddMeshFilterAndRenderer(this GameObject gameObject, Material material,
+            Mesh mesh)
         {
-            // add a MeshFilter automatically, if there isn't already one
-            MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-            if (meshFilter == null)
-            {
-                gameObject.AddMeshFilter(mesh);
-            }
-            else
-            {
-                meshFilter.sharedMesh = mesh;
-            }
-
-            return gameObject.AddMeshFilterAndRenderer(material);
+            MeshFilter meshFilter = gameObject.AddMeshFilter(mesh);
+            meshFilter.sharedMesh = mesh;
+            return (meshFilter, gameObject.AddMeshRenderer(material));
         }
 
         public static void CreateCircle(this GameObject gameObject, float radius, int segments, float startAngle,
