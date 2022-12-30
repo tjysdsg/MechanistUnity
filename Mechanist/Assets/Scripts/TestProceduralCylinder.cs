@@ -14,5 +14,10 @@ public class TestProceduralCylinder : MonoBehaviour
         go1.CreateCylinder(0.3f, 0.3f, 10, 30, 2);
         go1.transform.Rotate(new Vector3(45, 45, 0), Space.Self);
         go1.transform.Translate(new Vector3(-2, 0, 0), Space.Self);
+
+        go1.AddComponent<PhysicalBlockBase>();
+        MeshCollider meshCollider = go1.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = go1.GetComponent<MeshFilter>().sharedMesh;
+        meshCollider.convex = true;
     }
 }

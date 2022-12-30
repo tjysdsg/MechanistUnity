@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This component is added to blocks that is affected by physics (gravity, collision, etc.)
+///
+/// A Rigidbody component is added if not, and the mass is automatically calculated based on the estimated mesh volume.
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(MeshFilter))]
 public class PhysicalBlockBase : MonoBehaviour
@@ -45,9 +50,5 @@ public class PhysicalBlockBase : MonoBehaviour
         // initialize the mass using the volume and density of the object
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.mass = VolumeOfMesh(mesh) * density;
-    }
-
-    void Update()
-    {
     }
 }
