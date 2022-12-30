@@ -2,7 +2,7 @@
     "name": "CameraMovement",
     "maps": [
         {
-            "name": "Default",
+            "name": "BuildingModeCamera",
             "id": "028c605f-29c8-4bd8-8cde-704ffcfd3855",
             "actions": [
                 {
@@ -19,6 +19,15 @@
                     "type": "Value",
                     "id": "044d363c-5ba6-47f4-a251-ee60ff721141",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "MovePivot",
+                    "type": "Value",
+                    "id": "a9686e8c-9ad5-4e82-b9d9-79d9265253b5",
+                    "expectedControlType": "Vector3",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -46,6 +55,83 @@
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "WASD",
+                    "id": "4c4478a1-2c06-4c99-b33c-941e3962cf92",
+                    "path": "3DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "8e3be511-f2c6-4124-b9e8-0b7120460310",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "14dac7ba-fc74-486c-9d5d-11b58b4177ea",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Left",
+                    "id": "e4b4dbfe-f600-4edb-927c-82cbc4169cab",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Right",
+                    "id": "c7ca2fa0-7a43-436d-9d8a-4092cdcd7454",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Forward",
+                    "id": "516b2382-f60f-44c5-a996-b93401d34873",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Backward",
+                    "id": "ddd841f1-8e31-4947-9ddf-c00d73e5ccb6",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePivot",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
