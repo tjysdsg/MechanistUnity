@@ -6,10 +6,14 @@ public class BuildingModeCamera : MonoBehaviour
 {
     public Transform cameraPivot;
     public InputActionReference mouseLookInputActionRef;
-    public InputActionReference moveCameraPivotInputActionRef;
     public float cameraRotateSpeed = 0.2f;
+
     public float distance = 10;
-    public float moveSpeed = 0.2f;
+    public float minDistance = 2;
+    public float maxDistance = 30;
+
+    public float moveSpeed = 0.1f;
+    public float zoomSpeed = 0.2f;
 
     private bool _rotating = false;
     private Transform _transform;
@@ -52,5 +56,13 @@ public class BuildingModeCamera : MonoBehaviour
     public void OnPivotMove(InputAction.CallbackContext callbackContext)
     {
         _pivotMoveDelta = callbackContext.ReadValue<Vector3>();
+    }
+
+    public void OnZoom(InputAction.CallbackContext callbackContext)
+    {
+        float zoom = callbackContext.ReadValue<float>();
+        zoom = Mathf.Clamp(zoom, -10f, 10f);
+        distance -= zoom * zoomSpeed;
+        distance = Mathf.Clamp(distance, minDistance, maxDistance);
     }
 }

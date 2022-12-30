@@ -543,10 +543,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraPivot: {fileID: 1470068752}
   mouseLookInputActionRef: {fileID: 1800994731441831864, guid: 027e5b8b89cd9d44bb39962b63397b1c, type: 3}
-  moveCameraPivotInputActionRef: {fileID: 8866782878553332730, guid: 027e5b8b89cd9d44bb39962b63397b1c, type: 3}
   cameraRotateSpeed: 0.2
   distance: 10
-  moveSpeed: 0.2
+  minDistance: 2
+  maxDistance: 30
+  moveSpeed: 0.1
+  zoomSpeed: 0.2
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,6 +609,22 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: a9686e8c-9ad5-4e82-b9d9-79d9265253b5
+    m_ActionName: BuildingModeCamera/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 963194229}
+        m_TargetAssemblyTypeName: BuildingModeCamera, Assembly-CSharp
+        m_MethodName: OnZoom
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e67dc4d3-e39e-4f33-8d66-174dcab4f3de
     m_ActionName: BuildingModeCamera/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
