@@ -9,8 +9,8 @@ namespace ProceduralPrimitives
     {
         public static T AddComponentIfNotExist<T>(this GameObject go) where T : Component
         {
-            T ret;
-            if (!go.TryGetComponent<T>(out ret))
+            T ret = go.GetComponent<T>();
+            if (ret == null)
                 return go.AddComponent<T>();
             return ret;
         }

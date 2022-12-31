@@ -22,9 +22,10 @@ public class ProceduralCylinder
     public ProceduralCylinder(float topRadius, float bottomRadius, float height,
         int nRadialSegments, int nHeightSegments)
     {
-        Mesh = new Mesh();
-        Mesh.name = "Cylinder";
-        Mesh.Clear();
+        Mesh = new Mesh
+        {
+            name = "Cylinder"
+        };
 
         _topRadius = topRadius;
         _bottomRadius = bottomRadius;

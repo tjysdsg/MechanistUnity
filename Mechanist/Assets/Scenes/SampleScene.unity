@@ -724,6 +724,7 @@ GameObject:
   - component: {fileID: 1445862733}
   - component: {fileID: 1445862732}
   - component: {fileID: 1445862737}
+  - component: {fileID: 1445862738}
   m_Layer: 0
   m_Name: Brace
   m_TagString: Untagged
@@ -852,6 +853,21 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1811821266}
+--- !u!138 &1445862738
+FixedJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445862728}
+  m_ConnectedBody: {fileID: 0}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &1470068751
 GameObject:
   m_ObjectHideFlags: 0
