@@ -30,6 +30,13 @@ public class ProceduralCylinder : MonoBehaviour
         _meshFilter.sharedMesh = _proceduralCylinderMesh.UpdateMesh(topRadius, bottomRadius, height);
     }
 
+    public void UpdateMeshInEditor()
+    {
+        ProceduralCylinderMesh mesh =
+            new ProceduralCylinderMesh(topRadius, bottomRadius, height, nRadialSegments, nHeightSegments);
+        GetComponent<MeshFilter>().sharedMesh = mesh.UpdateMesh();
+    }
+
     public void SetHeight(float h, bool updateMesh = true)
     {
         this.height = h;

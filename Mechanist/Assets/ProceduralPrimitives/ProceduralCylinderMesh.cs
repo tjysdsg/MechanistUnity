@@ -104,8 +104,8 @@ public class ProceduralCylinderMesh
         // Draw caps
         _vertices[_numVerts - 2] = new Vector3(0, _height / 2, 0); // top center
         _vertices[_numVerts - 1] = new Vector3(0, -_height / 2, 0); // bottom center
-        _uvs[_numVerts - 2] = new Vector2(0, 1 + _topRadius);
-        _uvs[_numVerts - 1] = new Vector2(0, -_bottomRadius);
+        _uvs[_numVerts - 2] = new Vector2(0.5f, 0.5f);
+        _uvs[_numVerts - 1] = new Vector2(0.5f, 0.5f);
 
         // perimeter vertices of the cap
         int topPerimeterVertIdxOffset = _vertCols * _vertRows;
@@ -124,10 +124,10 @@ public class ProceduralCylinderMesh
                 _bottomRadius * Mathf.Sin(angle)
             );
             _uvs[topPerimeterVertIdxOffset + i] = new Vector2(
-                _topRadius * Mathf.Cos(angle), 1 + _topRadius + _topRadius * Mathf.Sin(angle)
+                0.5f + 0.5f * Mathf.Cos(angle), 0.5f + 0.5f * Mathf.Sin(angle)
             );
             _uvs[bottomPerimeterVertIdxOffset + i] = new Vector2(
-                _bottomRadius * Mathf.Cos(angle), -_bottomRadius + _bottomRadius * Mathf.Sin(angle)
+                0.5f + 0.5f * Mathf.Cos(angle), 0.5f + 0.5f * Mathf.Sin(angle)
             );
         }
 
