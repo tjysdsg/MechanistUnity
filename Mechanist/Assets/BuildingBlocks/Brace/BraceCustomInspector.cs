@@ -12,9 +12,7 @@ public class BraceCustomInspector : Editor
 
         EditorGUILayout.LabelField("Length", brace.Length.ToString());
 
-        if (GUILayout.Button("Refresh"))
-        {
-            brace.OnValidate();
-        }
+        // if (GUILayout.Button("Refresh"))
+        //     brace.OnValidate();
     }
 }
