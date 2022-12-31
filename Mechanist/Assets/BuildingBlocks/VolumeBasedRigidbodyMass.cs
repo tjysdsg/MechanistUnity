@@ -9,9 +9,9 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(MeshFilter))]
-public class PhysicalBlockBase : MonoBehaviour
+public class VolumeBasedRigidbodyMass : MonoBehaviour
 {
-    public float density = 8000; // density of steel
+    public float density = 10; // density of steel
 
     private Rigidbody _rigidbody;
 

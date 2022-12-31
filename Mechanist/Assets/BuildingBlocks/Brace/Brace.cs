@@ -9,32 +9,58 @@ public class Brace : MonoBehaviour
 {
     [SerializeField] public Transform block1;
     [SerializeField] public Transform block2;
-    
+
     private float _length;
     public float Length => _length;
 
     private ProceduralCylinder _proceduralCylinder;
-    private MeshCollider _meshCollider;
+    // private MeshCollider _meshCollider;
     private MeshFilter _meshFilter;
 
-    void Awake()
+    private GameObject _go;
+
+    public void Awake()
     {
-        AddRequiredComponents();
+        InitializeInEditModeOrRuntime();
 
         UpdateProceduralModel();
 
-        _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
+        // _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
         _meshFilter.sharedMesh = _proceduralCylinder.Mesh;
-        gameObject.AddComponentIfNotExist<PhysicalBlockBase>(); // uses the mesh
+        _go.AddComponentIfNotExist<VolumeBasedRigidbodyMass>(); // uses the mesh
     }
 
-    private void AddRequiredComponents()
+    public void Start()
     {
+        // make sure the connected two objects have rigidbody
+        if (!block1.gameObject.HasComponent<Rigidbody>() || !block2.gameObject.HasComponent<Rigidbody>())
+        {
+            String msg = "Brace requires block1 and block2 has a RigidBody";
+            if (Application.isPlaying)
+                throw new Exception(msg);
+            else
+                Debug.Log(msg);
+        }
+
+        // Add fixed joint to the connected blocks
+        if (Application.isPlaying)
+        {
+            FixedJoint j1 = _go.AddComponent<FixedJoint>();
+            j1.connectedBody = block1.GetComponent<Rigidbody>();
+            FixedJoint j2 = _go.AddComponent<FixedJoint>();
+            j2.connectedBody = block2.GetComponent<Rigidbody>();
+        }
+    }
+
+    private void InitializeInEditModeOrRuntime()
+    {
+        _go = gameObject;
+
         if (_meshFilter == null)
             _meshFilter = GetComponent<MeshFilter>();
 
-        _meshCollider = gameObject.AddComponentIfNotExist<MeshCollider>();
-        _meshCollider.convex = true;
+        // _meshCollider = _go.AddComponentIfNotExist<MeshCollider>();
+        // _meshCollider.convex = true;
     }
 
     // Update the position and the mesh of the cylinder based on the two connected objects
@@ -60,7 +86,7 @@ public class Brace : MonoBehaviour
 
     public void OnValidate()
     {
-        AddRequiredComponents();
+        InitializeInEditModeOrRuntime();
         UpdateProceduralModel();
     }
 
@@ -73,6 +99,6 @@ public class Brace : MonoBehaviour
 
         UpdateCylinder();
         _meshFilter.sharedMesh = _proceduralCylinder.Mesh;
-        _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
+        // _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
     }
 }

@@ -15,6 +15,12 @@ namespace ProceduralPrimitives
             return ret;
         }
 
+        public static bool HasComponent<T>(this GameObject go) where T : Component
+        {
+            T ret = go.GetComponent<T>();
+            return ret != null;
+        }
+
         public static MeshFilter AddMeshFilter(this GameObject gameObject, Mesh mesh)
         {
             MeshFilter meshFilter = gameObject.AddComponentIfNotExist<MeshFilter>();
