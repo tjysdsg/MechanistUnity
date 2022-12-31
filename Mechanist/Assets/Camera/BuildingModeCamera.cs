@@ -13,9 +13,11 @@ public class BuildingModeCamera : MonoBehaviour
     public float maxDistance = 30;
 
     public float moveSpeed = 0.1f;
+    public float slideSpeed = 0.1f;
     public float zoomSpeed = 0.2f;
 
     private bool _rotating = false;
+    private bool _dragging = false;
     private Transform _transform;
     private Vector3 _pivotMoveDelta = Vector2.zero;
 
@@ -39,6 +41,12 @@ public class BuildingModeCamera : MonoBehaviour
 
             _transform.RotateAround(cameraPivot.position, axis, delta.magnitude * cameraRotateSpeed);
         }
+        else if (_dragging)
+        {
+            Vector3 delta = -mouseLookInputActionRef.action.ReadValue<Vector2>();
+            _transform.Translate(delta * slideSpeed, Space.Self);
+            cameraPivot.Translate(_transform.TransformDirection(delta) * slideSpeed, Space.World);
+        }
 
         // keep constant distance with the target
         var targetPos = cameraPivot.position;
@@ -51,6 +59,11 @@ public class BuildingModeCamera : MonoBehaviour
     public void OnRotate(InputAction.CallbackContext callbackContext)
     {
         _rotating = callbackContext.ReadValue<float>() > 0.001;
+    }
+
+    public void OnDrag(InputAction.CallbackContext callbackContext)
+    {
+        _dragging = !_rotating && callbackContext.ReadValue<float>() > 0.001;
     }
 
     public void OnPivotMove(InputAction.CallbackContext callbackContext)
