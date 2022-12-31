@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class BuildingModeCamera : MonoBehaviour
 {
     public Transform cameraPivot;
-    public InputActionReference mouseLookInputActionRef;
+    public InputManager inputManager;
     public float cameraRotateSpeed = 0.2f;
 
     public float distance = 10;
@@ -18,12 +17,31 @@ public class BuildingModeCamera : MonoBehaviour
 
     private bool _rotating = false;
     private bool _dragging = false;
+    private Vector2 _lookDelta;
     private Transform _transform;
     private Vector3 _pivotMoveDelta = Vector2.zero;
 
     public void Start()
     {
         _transform = GetComponent<Transform>();
+    }
+
+    private void OnEnable()
+    {
+        inputManager.BuildingModeCameraRotateEvent += OnRotate;
+        inputManager.BuildingModeCameraDragViewEvent += OnDrag;
+        inputManager.BuildingModeCameraZoomEvent += OnZoom;
+        inputManager.BuildingModeCameraMovePivotEvent += OnPivotMove;
+        inputManager.BuildingModeCameraLookEvent += OnLook;
+    }
+
+    private void OnDisable()
+    {
+        inputManager.BuildingModeCameraRotateEvent -= OnRotate;
+        inputManager.BuildingModeCameraDragViewEvent -= OnDrag;
+        inputManager.BuildingModeCameraZoomEvent -= OnZoom;
+        inputManager.BuildingModeCameraMovePivotEvent -= OnPivotMove;
+        inputManager.BuildingModeCameraLookEvent -= OnLook;
     }
 
     public void Update()
@@ -36,14 +54,13 @@ public class BuildingModeCamera : MonoBehaviour
         // rotate camera based on input
         if (_rotating)
         {
-            Vector3 delta = mouseLookInputActionRef.action.ReadValue<Vector2>();
-            Vector3 axis = _transform.TransformDirection(Vector3.Cross(Vector3.forward, delta));
+            Vector3 axis = _transform.TransformDirection(Vector3.Cross(Vector3.forward, _lookDelta));
 
-            _transform.RotateAround(cameraPivot.position, axis, delta.magnitude * cameraRotateSpeed);
+            _transform.RotateAround(cameraPivot.position, axis, _lookDelta.magnitude * cameraRotateSpeed);
         }
         else if (_dragging)
         {
-            Vector3 delta = -mouseLookInputActionRef.action.ReadValue<Vector2>();
+            Vector3 delta = -_lookDelta;
             _transform.Translate(delta * slideSpeed, Space.Self);
             cameraPivot.Translate(_transform.TransformDirection(delta) * slideSpeed, Space.World);
         }
@@ -56,24 +73,28 @@ public class BuildingModeCamera : MonoBehaviour
         _transform.LookAt(cameraPivot);
     }
 
-    public void OnRotate(InputAction.CallbackContext callbackContext)
+    public void OnLook(Vector2 v)
     {
-        _rotating = callbackContext.ReadValue<float>() > 0.001;
+        _lookDelta = v;
     }
 
-    public void OnDrag(InputAction.CallbackContext callbackContext)
+    public void OnRotate(float val)
     {
-        _dragging = !_rotating && callbackContext.ReadValue<float>() > 0.001;
+        _rotating = val > 0.001;
     }
 
-    public void OnPivotMove(InputAction.CallbackContext callbackContext)
+    public void OnDrag(float val)
     {
-        _pivotMoveDelta = callbackContext.ReadValue<Vector3>();
+        _dragging = !_rotating && val > 0.001;
     }
 
-    public void OnZoom(InputAction.CallbackContext callbackContext)
+    public void OnPivotMove(Vector3 v)
     {
-        float zoom = callbackContext.ReadValue<float>();
+        _pivotMoveDelta = v;
+    }
+
+    public void OnZoom(float zoom)
+    {
         zoom = Mathf.Clamp(zoom, -10f, 10f);
         distance -= zoom * zoomSpeed;
         distance = Mathf.Clamp(distance, minDistance, maxDistance);
