@@ -96,8 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a011c004051bda8478775ae42d6ab18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nRadialSegments: 10
-  nHeightSegments: 2
+  nRadialSegments: 4
+  nHeightSegments: 1
   height: 1
   topRadius: 0.2
   bottomRadius: 0.2

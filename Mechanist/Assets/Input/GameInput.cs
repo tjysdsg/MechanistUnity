@@ -24,7 +24,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     ""name"": ""GameInput"",
     ""maps"": [
         {
-            ""name"": ""BuildingModeCamera"",
+            ""name"": ""BuildingMode"",
             ""id"": ""028c605f-29c8-4bd8-8cde-704ffcfd3855"",
             ""actions"": [
                 {
@@ -38,15 +38,15 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RotateCamera"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""044d363c-5ba6-47f4-a251-ee60ff721141"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MovePivot"",
+                    ""name"": ""MoveCameraPivot"",
                     ""type"": ""Value"",
                     ""id"": ""a9686e8c-9ad5-4e82-b9d9-79d9265253b5"",
                     ""expectedControlType"": ""Vector3"",
@@ -64,13 +64,22 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""DragView"",
-                    ""type"": ""Value"",
+                    ""name"": ""DragCamera"",
+                    ""type"": ""Button"",
                     ""id"": ""da35ee6b-cad8-42d8-a934-12ec5462a272"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""a443427d-9b0b-4070-a650-b6a2018ec41b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -103,7 +112,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -114,7 +123,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -125,7 +134,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -136,7 +145,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -147,7 +156,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -158,7 +167,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -169,7 +178,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MovePivot"",
+                    ""action"": ""MoveCameraPivot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -191,7 +200,18 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""DragView"",
+                    ""action"": ""DragCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2931c2b-049d-47ae-bbb8-3e874ebc7c90"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -261,13 +281,14 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // BuildingModeCamera
-        m_BuildingModeCamera = asset.FindActionMap("BuildingModeCamera", throwIfNotFound: true);
-        m_BuildingModeCamera_Look = m_BuildingModeCamera.FindAction("Look", throwIfNotFound: true);
-        m_BuildingModeCamera_RotateCamera = m_BuildingModeCamera.FindAction("RotateCamera", throwIfNotFound: true);
-        m_BuildingModeCamera_MovePivot = m_BuildingModeCamera.FindAction("MovePivot", throwIfNotFound: true);
-        m_BuildingModeCamera_Zoom = m_BuildingModeCamera.FindAction("Zoom", throwIfNotFound: true);
-        m_BuildingModeCamera_DragView = m_BuildingModeCamera.FindAction("DragView", throwIfNotFound: true);
+        // BuildingMode
+        m_BuildingMode = asset.FindActionMap("BuildingMode", throwIfNotFound: true);
+        m_BuildingMode_Look = m_BuildingMode.FindAction("Look", throwIfNotFound: true);
+        m_BuildingMode_RotateCamera = m_BuildingMode.FindAction("RotateCamera", throwIfNotFound: true);
+        m_BuildingMode_MoveCameraPivot = m_BuildingMode.FindAction("MoveCameraPivot", throwIfNotFound: true);
+        m_BuildingMode_Zoom = m_BuildingMode.FindAction("Zoom", throwIfNotFound: true);
+        m_BuildingMode_DragCamera = m_BuildingMode.FindAction("DragCamera", throwIfNotFound: true);
+        m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -324,49 +345,54 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // BuildingModeCamera
-    private readonly InputActionMap m_BuildingModeCamera;
-    private IBuildingModeCameraActions m_BuildingModeCameraActionsCallbackInterface;
-    private readonly InputAction m_BuildingModeCamera_Look;
-    private readonly InputAction m_BuildingModeCamera_RotateCamera;
-    private readonly InputAction m_BuildingModeCamera_MovePivot;
-    private readonly InputAction m_BuildingModeCamera_Zoom;
-    private readonly InputAction m_BuildingModeCamera_DragView;
-    public struct BuildingModeCameraActions
+    // BuildingMode
+    private readonly InputActionMap m_BuildingMode;
+    private IBuildingModeActions m_BuildingModeActionsCallbackInterface;
+    private readonly InputAction m_BuildingMode_Look;
+    private readonly InputAction m_BuildingMode_RotateCamera;
+    private readonly InputAction m_BuildingMode_MoveCameraPivot;
+    private readonly InputAction m_BuildingMode_Zoom;
+    private readonly InputAction m_BuildingMode_DragCamera;
+    private readonly InputAction m_BuildingMode_Fire;
+    public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
-        public BuildingModeCameraActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Look => m_Wrapper.m_BuildingModeCamera_Look;
-        public InputAction @RotateCamera => m_Wrapper.m_BuildingModeCamera_RotateCamera;
-        public InputAction @MovePivot => m_Wrapper.m_BuildingModeCamera_MovePivot;
-        public InputAction @Zoom => m_Wrapper.m_BuildingModeCamera_Zoom;
-        public InputAction @DragView => m_Wrapper.m_BuildingModeCamera_DragView;
-        public InputActionMap Get() { return m_Wrapper.m_BuildingModeCamera; }
+        public BuildingModeActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Look => m_Wrapper.m_BuildingMode_Look;
+        public InputAction @RotateCamera => m_Wrapper.m_BuildingMode_RotateCamera;
+        public InputAction @MoveCameraPivot => m_Wrapper.m_BuildingMode_MoveCameraPivot;
+        public InputAction @Zoom => m_Wrapper.m_BuildingMode_Zoom;
+        public InputAction @DragCamera => m_Wrapper.m_BuildingMode_DragCamera;
+        public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
+        public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BuildingModeCameraActions set) { return set.Get(); }
-        public void SetCallbacks(IBuildingModeCameraActions instance)
+        public static implicit operator InputActionMap(BuildingModeActions set) { return set.Get(); }
+        public void SetCallbacks(IBuildingModeActions instance)
         {
-            if (m_Wrapper.m_BuildingModeCameraActionsCallbackInterface != null)
+            if (m_Wrapper.m_BuildingModeActionsCallbackInterface != null)
             {
-                @Look.started -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnLook;
-                @Look.performed -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnLook;
-                @Look.canceled -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnLook;
-                @RotateCamera.started -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnRotateCamera;
-                @RotateCamera.performed -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnRotateCamera;
-                @RotateCamera.canceled -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnRotateCamera;
-                @MovePivot.started -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnMovePivot;
-                @MovePivot.performed -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnMovePivot;
-                @MovePivot.canceled -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnMovePivot;
-                @Zoom.started -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnZoom;
-                @Zoom.performed -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnZoom;
-                @Zoom.canceled -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnZoom;
-                @DragView.started -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnDragView;
-                @DragView.performed -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnDragView;
-                @DragView.canceled -= m_Wrapper.m_BuildingModeCameraActionsCallbackInterface.OnDragView;
+                @Look.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
+                @RotateCamera.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
+                @RotateCamera.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
+                @RotateCamera.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
+                @MoveCameraPivot.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnMoveCameraPivot;
+                @MoveCameraPivot.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnMoveCameraPivot;
+                @MoveCameraPivot.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnMoveCameraPivot;
+                @Zoom.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnZoom;
+                @DragCamera.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
+                @DragCamera.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
+                @DragCamera.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
+                @Fire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
             }
-            m_Wrapper.m_BuildingModeCameraActionsCallbackInterface = instance;
+            m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Look.started += instance.OnLook;
@@ -375,19 +401,22 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
-                @MovePivot.started += instance.OnMovePivot;
-                @MovePivot.performed += instance.OnMovePivot;
-                @MovePivot.canceled += instance.OnMovePivot;
+                @MoveCameraPivot.started += instance.OnMoveCameraPivot;
+                @MoveCameraPivot.performed += instance.OnMoveCameraPivot;
+                @MoveCameraPivot.canceled += instance.OnMoveCameraPivot;
                 @Zoom.started += instance.OnZoom;
                 @Zoom.performed += instance.OnZoom;
                 @Zoom.canceled += instance.OnZoom;
-                @DragView.started += instance.OnDragView;
-                @DragView.performed += instance.OnDragView;
-                @DragView.canceled += instance.OnDragView;
+                @DragCamera.started += instance.OnDragCamera;
+                @DragCamera.performed += instance.OnDragCamera;
+                @DragCamera.canceled += instance.OnDragCamera;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
             }
         }
     }
-    public BuildingModeCameraActions @BuildingModeCamera => new BuildingModeCameraActions(this);
+    public BuildingModeActions @BuildingMode => new BuildingModeActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -433,12 +462,13 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_XRSchemeIndex];
         }
     }
-    public interface IBuildingModeCameraActions
+    public interface IBuildingModeActions
     {
         void OnLook(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
-        void OnMovePivot(InputAction.CallbackContext context);
+        void OnMoveCameraPivot(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
-        void OnDragView(InputAction.CallbackContext context);
+        void OnDragCamera(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
     }
 }

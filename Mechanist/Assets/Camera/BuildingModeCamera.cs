@@ -28,20 +28,20 @@ public class BuildingModeCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        inputManager.BuildingModeCameraRotateEvent += OnRotate;
-        inputManager.BuildingModeCameraDragViewEvent += OnDrag;
-        inputManager.BuildingModeCameraZoomEvent += OnZoom;
-        inputManager.BuildingModeCameraMovePivotEvent += OnPivotMove;
-        inputManager.BuildingModeCameraLookEvent += OnLook;
+        inputManager.BuildingModeRotateCameraEvent += OnRotateCamera;
+        inputManager.BuildingModeDragCameraEvent += OnDragCamera;
+        inputManager.BuildingModeZoomEvent += OnZoom;
+        inputManager.BuildingModeMoveCameraPivotEvent += OnCameraPivotMoveCamera;
+        inputManager.BuildingModeLookEvent += OnLook;
     }
 
     private void OnDisable()
     {
-        inputManager.BuildingModeCameraRotateEvent -= OnRotate;
-        inputManager.BuildingModeCameraDragViewEvent -= OnDrag;
-        inputManager.BuildingModeCameraZoomEvent -= OnZoom;
-        inputManager.BuildingModeCameraMovePivotEvent -= OnPivotMove;
-        inputManager.BuildingModeCameraLookEvent -= OnLook;
+        inputManager.BuildingModeRotateCameraEvent -= OnRotateCamera;
+        inputManager.BuildingModeDragCameraEvent -= OnDragCamera;
+        inputManager.BuildingModeZoomEvent -= OnZoom;
+        inputManager.BuildingModeMoveCameraPivotEvent -= OnCameraPivotMoveCamera;
+        inputManager.BuildingModeLookEvent -= OnLook;
     }
 
     public void Update()
@@ -78,25 +78,25 @@ public class BuildingModeCamera : MonoBehaviour
         _lookDelta = v;
     }
 
-    public void OnRotate(float val)
-    {
-        _rotating = val > 0.001;
-    }
-
-    public void OnDrag(float val)
-    {
-        _dragging = !_rotating && val > 0.001;
-    }
-
-    public void OnPivotMove(Vector3 v)
-    {
-        _pivotMoveDelta = v;
-    }
-
     public void OnZoom(float zoom)
     {
         zoom = Mathf.Clamp(zoom, -10f, 10f);
         distance -= zoom * zoomSpeed;
         distance = Mathf.Clamp(distance, minDistance, maxDistance);
+    }
+
+    public void OnCameraPivotMoveCamera(Vector3 v)
+    {
+        _pivotMoveDelta = v;
+    }
+
+    public void OnRotateCamera(float val)
+    {
+        _rotating = val > 0.001;
+    }
+
+    public void OnDragCamera(float val)
+    {
+        _dragging = !_rotating && val > 0.001;
     }
 }

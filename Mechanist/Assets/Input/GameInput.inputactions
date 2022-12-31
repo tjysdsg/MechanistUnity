@@ -1,8 +1,8 @@
 {
-    "name": "CameraMovement",
+    "name": "GameInput",
     "maps": [
         {
-            "name": "BuildingModeCamera",
+            "name": "BuildingMode",
             "id": "028c605f-29c8-4bd8-8cde-704ffcfd3855",
             "actions": [
                 {
@@ -16,15 +16,15 @@
                 },
                 {
                     "name": "RotateCamera",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "044d363c-5ba6-47f4-a251-ee60ff721141",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
-                    "name": "MovePivot",
+                    "name": "MoveCameraPivot",
                     "type": "Value",
                     "id": "a9686e8c-9ad5-4e82-b9d9-79d9265253b5",
                     "expectedControlType": "Vector3",
@@ -42,13 +42,22 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "DragView",
-                    "type": "Value",
+                    "name": "DragCamera",
+                    "type": "Button",
                     "id": "da35ee6b-cad8-42d8-a934-12ec5462a272",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "a443427d-9b0b-4070-a650-b6a2018ec41b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -81,7 +90,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -92,7 +101,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -103,7 +112,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -114,7 +123,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -125,7 +134,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -136,7 +145,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -147,7 +156,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MovePivot",
+                    "action": "MoveCameraPivot",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -169,7 +178,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "DragView",
+                    "action": "DragCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b2931c2b-049d-47ae-bbb8-3e874ebc7c90",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

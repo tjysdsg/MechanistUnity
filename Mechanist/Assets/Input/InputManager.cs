@@ -1,25 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "Input/Input Manager")]
-public class InputManager : ScriptableObject, GameInput.IBuildingModeCameraActions
+public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
 {
     private GameInput _gameInput;
 
-    public event UnityAction<float> BuildingModeCameraRotateEvent = delegate { };
-    public event UnityAction<float> BuildingModeCameraZoomEvent = delegate { };
-    public event UnityAction<float> BuildingModeCameraDragViewEvent = delegate { };
-    public event UnityAction<Vector3> BuildingModeCameraMovePivotEvent = delegate { };
-    public event UnityAction<Vector2> BuildingModeCameraLookEvent = delegate { };
+    public event UnityAction<Vector2> BuildingModeLookEvent = delegate { };
+    public event UnityAction<float> BuildingModeZoomEvent = delegate { };
+    public event UnityAction<Vector3> BuildingModeMoveCameraPivotEvent = delegate { };
+    public event UnityAction<float> BuildingModeRotateCameraEvent = delegate { };
+    public event UnityAction<float> BuildingModeDragCameraEvent = delegate { };
+    public event UnityAction<float> BuildingModeFireEvent = delegate { };
 
     private void OnEnable()
     {
         if (_gameInput == null)
         {
             _gameInput = new GameInput();
-            _gameInput.BuildingModeCamera.SetCallbacks(this);
-            _gameInput.BuildingModeCamera.Enable();
+            _gameInput.BuildingMode.SetCallbacks(this);
+            _gameInput.BuildingMode.Enable();
         }
     }
 
@@ -30,36 +32,44 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeCameraActio
 
     public void DisableAllInput()
     {
-        _gameInput.BuildingModeCamera.Disable();
+        _gameInput.BuildingMode.Disable();
     }
 
-    public void EnableBuildingModeCameraInput()
+    public void EnableBuildingModeInput()
     {
-        _gameInput.BuildingModeCamera.Enable();
+        _gameInput.BuildingMode.Enable();
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        BuildingModeCameraLookEvent.Invoke(context.ReadValue<Vector2>());
+        BuildingModeLookEvent.Invoke(context.ReadValue<Vector2>());
     }
 
-    public void OnRotateCamera(InputAction.CallbackContext context)
+    public void OnMoveCameraPivot(InputAction.CallbackContext context)
     {
-        BuildingModeCameraRotateEvent.Invoke(context.ReadValue<float>());
-    }
-
-    public void OnMovePivot(InputAction.CallbackContext context)
-    {
-        BuildingModeCameraMovePivotEvent.Invoke(context.ReadValue<Vector3>());
+        BuildingModeMoveCameraPivotEvent.Invoke(context.ReadValue<Vector3>());
     }
 
     public void OnZoom(InputAction.CallbackContext context)
     {
-        BuildingModeCameraZoomEvent.Invoke(context.ReadValue<float>());
+        BuildingModeZoomEvent.Invoke(context.ReadValue<float>());
     }
 
-    public void OnDragView(InputAction.CallbackContext context)
+    public void OnRotateCamera(InputAction.CallbackContext context)
     {
-        BuildingModeCameraDragViewEvent.Invoke(context.ReadValue<float>());
+        if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
+            BuildingModeRotateCameraEvent.Invoke(context.ReadValue<float>());
+    }
+
+    public void OnDragCamera(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
+            BuildingModeDragCameraEvent.Invoke(context.ReadValue<float>());
+    }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
+            Debug.Log(context.phase);
     }
 }
