@@ -10,7 +10,8 @@ public class BuildingModeCamera : MonoBehaviour
     public float moveSpeed = 0.1f;
     public float slideSpeed = 0.1f;
 
-    [SerializeField] private RayEventChannelSO rayEventChannel;
+    [SerializeField] private RayEventChannelSO screenPickEventChannel;
+    [SerializeField] private RayEventChannelSO doubleFireEventChannel;
 
     private bool _rotating = false;
     private bool _dragging = false;
@@ -32,6 +33,7 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeZoomEvent += OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent += OnCameraPivotMoveCamera;
         inputManager.BuildingModeFireEvent += OnFire;
+        inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
     }
 
     private void OnDisable()
@@ -40,7 +42,7 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeDragCameraEvent -= OnDragCamera;
         inputManager.BuildingModeZoomEvent -= OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent -= OnCameraPivotMoveCamera;
-        inputManager.BuildingModeFireEvent -= OnFire;
+        inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
     }
 
     public void Update()
@@ -94,12 +96,26 @@ public class BuildingModeCamera : MonoBehaviour
         _dragging = !_rotating && val > 0.001;
     }
 
-    public void OnFire(float val)
+    public void OnFire()
     {
-        if (val > 0.01f)
-        {
-            Vector2 pointer = inputManager.GetBuildModePointerInput();
-            rayEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
-        }
+        Vector2 pointer = inputManager.GetBuildModePointerInput();
+        screenPickEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
+    }
+
+    public void OnDoubleFire()
+    {
+        Vector2 pointer = inputManager.GetBuildModePointerInput();
+        doubleFireEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
+    }
+
+    /// <summary>
+    /// Move pivot to <paramref name="pos"/>
+    /// Raised by <see cref="BuildModeManager"/>
+    /// </summary>
+    public void OnMoveTo(Vector3 pos)
+    {
+        Vector3 delta = pos - cameraPivot.position;
+        _transform.position += delta;
+        cameraPivot.position = delta;
     }
 }

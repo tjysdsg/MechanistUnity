@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DoubleFire",
+                    "type": "Button",
+                    "id": "bdd5dc17-3c61-4719-908e-343790f0c179",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -210,6 +219,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse;Touch",
                     "action": "PointerDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "60ddea0b-3787-4858-8ebb-978d869fffbe",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DoubleFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

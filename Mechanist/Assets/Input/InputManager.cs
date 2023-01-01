@@ -12,7 +12,8 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     public event UnityAction<Vector3> BuildingModeMoveCameraPivotEvent = delegate { };
     public event UnityAction<float> BuildingModeRotateCameraEvent = delegate { };
     public event UnityAction<float> BuildingModeDragCameraEvent = delegate { };
-    public event UnityAction<float> BuildingModeFireEvent = delegate { };
+    public event UnityAction BuildingModeFireEvent = delegate { };
+    public event UnityAction BuildingModeDoubleFireEvent = delegate { };
 
     private void OnEnable()
     {
@@ -75,8 +76,14 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
-            BuildingModeFireEvent.Invoke(context.ReadValue<float>());
+        if (context.phase == InputActionPhase.Performed)
+            BuildingModeFireEvent.Invoke();
+    }
+
+    public void OnDoubleFire(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            BuildingModeDoubleFireEvent.Invoke();
     }
 
     public Vector2 GetBuildModePointerInput()

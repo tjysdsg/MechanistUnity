@@ -89,6 +89,15 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoubleFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""bdd5dc17-3c61-4719-908e-343790f0c179"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -234,6 +243,17 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""PointerDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60ddea0b-3787-4858-8ebb-978d869fffbe"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""DoubleFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -310,6 +330,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_BuildingMode_Zoom = m_BuildingMode.FindAction("Zoom", throwIfNotFound: true);
         m_BuildingMode_DragCamera = m_BuildingMode.FindAction("DragCamera", throwIfNotFound: true);
         m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
+        m_BuildingMode_DoubleFire = m_BuildingMode.FindAction("DoubleFire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -376,6 +397,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_BuildingMode_Zoom;
     private readonly InputAction m_BuildingMode_DragCamera;
     private readonly InputAction m_BuildingMode_Fire;
+    private readonly InputAction m_BuildingMode_DoubleFire;
     public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
@@ -387,6 +409,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         public InputAction @Zoom => m_Wrapper.m_BuildingMode_Zoom;
         public InputAction @DragCamera => m_Wrapper.m_BuildingMode_DragCamera;
         public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
+        public InputAction @DoubleFire => m_Wrapper.m_BuildingMode_DoubleFire;
         public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -417,6 +440,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
+                @DoubleFire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
+                @DoubleFire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
+                @DoubleFire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
             }
             m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
@@ -442,6 +468,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
+                @DoubleFire.started += instance.OnDoubleFire;
+                @DoubleFire.performed += instance.OnDoubleFire;
+                @DoubleFire.canceled += instance.OnDoubleFire;
             }
         }
     }
@@ -500,5 +529,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         void OnZoom(InputAction.CallbackContext context);
         void OnDragCamera(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnDoubleFire(InputAction.CallbackContext context);
     }
 }
