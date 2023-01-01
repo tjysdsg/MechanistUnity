@@ -116,6 +116,6 @@ public class BuildingModeCamera : MonoBehaviour
     {
         Vector3 delta = pos - cameraPivot.position;
         _transform.position += delta;
-        cameraPivot.position = delta;
+        cameraPivot.position = pos;
     }
 }
