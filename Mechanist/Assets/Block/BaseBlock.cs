@@ -14,6 +14,7 @@ namespace Block
 
         /// <summary>
         /// Initialize the block.
+        /// </summary>
         ///
         /// <remarks>
         /// You should always add <code>base.Initialize()</code> to the beginning if overridden.
@@ -21,8 +22,6 @@ namespace Block
         /// This function is called in <see cref="BaseBlock.Start()"/> function.
         /// It's also intended to be called multiple times, so make sure to check for repeated initialization.
         /// </remarks>
-        /// 
-        /// </summary>
         public virtual void Initialize()
         {
             if (_go == null)

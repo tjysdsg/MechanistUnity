@@ -1,0 +1,1 @@
+# Adapted from https://github.com/UnityTechnologies/open-project-1/tree/devlogs/3-input/UOP1_Project/Assets/Scripts/StateMachine
