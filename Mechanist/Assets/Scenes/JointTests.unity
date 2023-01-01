@@ -1113,6 +1113,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1996632422442030133, guid: 5bd295109e7057446929926aa5ede2d4, type: 3}
+      propertyPath: zoomSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1996632423569557860, guid: 5bd295109e7057446929926aa5ede2d4, type: 3}
       propertyPath: m_Name
       value: BuildingModeCameraRig

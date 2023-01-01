@@ -39,9 +39,17 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
         _gameInput.BuildingMode.Enable();
     }
 
-    public void OnLook(InputAction.CallbackContext context)
+    #region Empty Handlers
+
+    public void OnPointerDelta(InputAction.CallbackContext context)
     {
     }
+
+    public void OnPointer(InputAction.CallbackContext context)
+    {
+    }
+
+    #endregion
 
     public void OnMoveCameraPivot(InputAction.CallbackContext context)
     {
@@ -71,10 +79,6 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
             BuildingModeFireEvent.Invoke(context.ReadValue<float>());
     }
 
-    public void OnPointer(InputAction.CallbackContext context)
-    {
-    }
-
     public Vector2 GetBuildModePointerInput()
     {
         return _gameInput.BuildingMode.Pointer.ReadValue<Vector2>();
@@ -82,6 +86,6 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
 
     public Vector2 GetBuildModePointerDeltaInput()
     {
-        return _gameInput.BuildingMode.Look.ReadValue<Vector2>();
+        return _gameInput.BuildingMode.PointerDelta.ReadValue<Vector2>();
     }
 }

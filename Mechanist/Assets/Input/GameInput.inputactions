@@ -6,7 +6,16 @@
             "id": "028c605f-29c8-4bd8-8cde-704ffcfd3855",
             "actions": [
                 {
-                    "name": "Look",
+                    "name": "Pointer",
+                    "type": "Value",
+                    "id": "b1ac2924-4e84-4459-8373-01f7fa2bfe16",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PointerDelta",
                     "type": "Value",
                     "id": "79e35e97-ba88-4a16-b38c-4a28a05fd155",
                     "expectedControlType": "Vector2",
@@ -58,29 +67,9 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Pointer",
-                    "type": "Value",
-                    "id": "b1ac2924-4e84-4459-8373-01f7fa2bfe16",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "9233bb34-114c-481c-9d43-003ec446615c",
@@ -210,6 +199,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Touch",
+                    "action": "PointerDelta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

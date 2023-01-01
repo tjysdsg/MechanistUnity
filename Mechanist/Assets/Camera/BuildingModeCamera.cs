@@ -7,12 +7,8 @@ public class BuildingModeCamera : MonoBehaviour
     public float cameraRotateSpeed = 0.2f;
 
     public float distance = 10;
-    public float minDistance = 2;
-    public float maxDistance = 30;
-
     public float moveSpeed = 0.1f;
     public float slideSpeed = 0.1f;
-    public float zoomSpeed = 0.2f;
 
     [SerializeField] private RayEventChannelSO rayEventChannel;
 
@@ -80,8 +76,7 @@ public class BuildingModeCamera : MonoBehaviour
     public void OnZoom(float zoom)
     {
         zoom = Mathf.Clamp(zoom, -10f, 10f);
-        distance -= zoom * zoomSpeed;
-        distance = Mathf.Clamp(distance, minDistance, maxDistance);
+        _pivotMoveDelta = Vector3.forward * zoom;
     }
 
     public void OnCameraPivotMoveCamera(Vector3 v)

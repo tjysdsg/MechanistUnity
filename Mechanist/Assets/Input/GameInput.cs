@@ -28,7 +28,16 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
             ""id"": ""028c605f-29c8-4bd8-8cde-704ffcfd3855"",
             ""actions"": [
                 {
-                    ""name"": ""Look"",
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""b1ac2924-4e84-4459-8373-01f7fa2bfe16"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerDelta"",
                     ""type"": ""Value"",
                     ""id"": ""79e35e97-ba88-4a16-b38c-4a28a05fd155"",
                     ""expectedControlType"": ""Vector2"",
@@ -80,29 +89,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Pointer"",
-                    ""type"": ""Value"",
-                    ""id"": ""b1ac2924-4e84-4459-8373-01f7fa2bfe16"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""9233bb34-114c-481c-9d43-003ec446615c"",
@@ -234,6 +223,17 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""Pointer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -303,13 +303,13 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
 }");
         // BuildingMode
         m_BuildingMode = asset.FindActionMap("BuildingMode", throwIfNotFound: true);
-        m_BuildingMode_Look = m_BuildingMode.FindAction("Look", throwIfNotFound: true);
+        m_BuildingMode_Pointer = m_BuildingMode.FindAction("Pointer", throwIfNotFound: true);
+        m_BuildingMode_PointerDelta = m_BuildingMode.FindAction("PointerDelta", throwIfNotFound: true);
         m_BuildingMode_RotateCamera = m_BuildingMode.FindAction("RotateCamera", throwIfNotFound: true);
         m_BuildingMode_MoveCameraPivot = m_BuildingMode.FindAction("MoveCameraPivot", throwIfNotFound: true);
         m_BuildingMode_Zoom = m_BuildingMode.FindAction("Zoom", throwIfNotFound: true);
         m_BuildingMode_DragCamera = m_BuildingMode.FindAction("DragCamera", throwIfNotFound: true);
         m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
-        m_BuildingMode_Pointer = m_BuildingMode.FindAction("Pointer", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -369,24 +369,24 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     // BuildingMode
     private readonly InputActionMap m_BuildingMode;
     private IBuildingModeActions m_BuildingModeActionsCallbackInterface;
-    private readonly InputAction m_BuildingMode_Look;
+    private readonly InputAction m_BuildingMode_Pointer;
+    private readonly InputAction m_BuildingMode_PointerDelta;
     private readonly InputAction m_BuildingMode_RotateCamera;
     private readonly InputAction m_BuildingMode_MoveCameraPivot;
     private readonly InputAction m_BuildingMode_Zoom;
     private readonly InputAction m_BuildingMode_DragCamera;
     private readonly InputAction m_BuildingMode_Fire;
-    private readonly InputAction m_BuildingMode_Pointer;
     public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
         public BuildingModeActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Look => m_Wrapper.m_BuildingMode_Look;
+        public InputAction @Pointer => m_Wrapper.m_BuildingMode_Pointer;
+        public InputAction @PointerDelta => m_Wrapper.m_BuildingMode_PointerDelta;
         public InputAction @RotateCamera => m_Wrapper.m_BuildingMode_RotateCamera;
         public InputAction @MoveCameraPivot => m_Wrapper.m_BuildingMode_MoveCameraPivot;
         public InputAction @Zoom => m_Wrapper.m_BuildingMode_Zoom;
         public InputAction @DragCamera => m_Wrapper.m_BuildingMode_DragCamera;
         public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
-        public InputAction @Pointer => m_Wrapper.m_BuildingMode_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -396,9 +396,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_BuildingModeActionsCallbackInterface != null)
             {
-                @Look.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
-                @Look.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
-                @Look.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnLook;
+                @Pointer.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
+                @Pointer.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
+                @Pointer.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
+                @PointerDelta.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
+                @PointerDelta.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
+                @PointerDelta.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
                 @RotateCamera.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
@@ -414,16 +417,16 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
-                @Pointer.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
-                @Pointer.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
-                @Pointer.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
             }
             m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Look.started += instance.OnLook;
-                @Look.performed += instance.OnLook;
-                @Look.canceled += instance.OnLook;
+                @Pointer.started += instance.OnPointer;
+                @Pointer.performed += instance.OnPointer;
+                @Pointer.canceled += instance.OnPointer;
+                @PointerDelta.started += instance.OnPointerDelta;
+                @PointerDelta.performed += instance.OnPointerDelta;
+                @PointerDelta.canceled += instance.OnPointerDelta;
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
@@ -439,9 +442,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
-                @Pointer.started += instance.OnPointer;
-                @Pointer.performed += instance.OnPointer;
-                @Pointer.canceled += instance.OnPointer;
             }
         }
     }
@@ -493,12 +493,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     }
     public interface IBuildingModeActions
     {
-        void OnLook(InputAction.CallbackContext context);
+        void OnPointer(InputAction.CallbackContext context);
+        void OnPointerDelta(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
         void OnMoveCameraPivot(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
         void OnDragCamera(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
-        void OnPointer(InputAction.CallbackContext context);
     }
 }
