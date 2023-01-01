@@ -1,10 +1,8 @@
 {
-    "name": "BuildModeAssembly",
-    "rootNamespace": "BuildMode",
+    "name": "BlockAssembly",
+    "rootNamespace": "Block",
     "references": [
-        "GUID:7dd599cbc1212d140aeb9125b247934d",
-        "GUID:df74dd5b91e04c9438a377d97c4ffb60",
-        "GUID:30ea6d31b2469244ab446696923d5e05"
+        "GUID:dc33fa7330069db4d84741f09c72daad"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

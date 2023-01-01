@@ -1,4 +1,5 @@
 using UnityEngine;
+using Block;
 
 namespace BuildMode
 {
@@ -10,6 +11,12 @@ namespace BuildMode
         [SerializeField] private BuildModeStateSO state;
 
         [SerializeField] private InputManager inputManager;
+
+        // TODO: use state machine
+        private bool _buildingBrace = false;
+        private Brace _currBrace;
+        private AttachableBlock _attachingBlock; // the first block to attach the brace to
+        [SerializeField] private GameObject bracePrefab;
 
         public void OnEnable()
         {
@@ -28,8 +35,40 @@ namespace BuildMode
         {
             if (state.state == BuildModeState.Placement && Physics.Raycast(ray, out RaycastHit info))
             {
-                var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                go.transform.position = info.point;
+                if (!_buildingBrace)
+                {
+                    AttachableBlock selectedBlock = info.transform.GetComponent<AttachableBlock>();
+                    if (selectedBlock != null)
+                    {
+                        _buildingBrace = true;
+                        _attachingBlock = selectedBlock;
+
+                        // don't create the brace until the two selections are confirmed
+                    }
+                }
+                else
+                {
+                    AttachableBlock selectedBlock = info.transform.GetComponent<AttachableBlock>();
+                    if (selectedBlock != null)
+                    {
+                        _buildingBrace = false;
+
+                        // instantiate brace prefab
+                        var go = Instantiate(bracePrefab);
+                        _currBrace = go.GetComponent<Brace>();
+                        _currBrace.block1 = _attachingBlock.transform;
+                        _currBrace.block2 = info.transform;
+                        _currBrace.Initialize();
+
+                        // notify two attached blocks
+                        var attachment = new BlockAttachment
+                        {
+                            obj = _currBrace, point = info.point
+                        };
+                        _attachingBlock.OnAttach(attachment);
+                        selectedBlock.OnAttach(attachment);
+                    }
+                }
             }
         }
 

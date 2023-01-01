@@ -1,5 +1,5 @@
 using UnityEditor;
-using UnityEngine;
+using Block;
 
 [CustomEditor(typeof(Brace))]
 public class BraceCustomInspector : Editor
