@@ -1,9 +1,7 @@
 {
-    "name": "RuntimeTransformHandle",
-    "rootNamespace": "RuntimeTransformHandle",
-    "references": [
-        "GUID:dc33fa7330069db4d84741f09c72daad"
-    ],
+    "name": "MeshUtils",
+    "rootNamespace": "MeshUtils",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

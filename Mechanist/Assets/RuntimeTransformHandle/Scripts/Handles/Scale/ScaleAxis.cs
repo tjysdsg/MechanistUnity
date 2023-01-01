@@ -1,4 +1,5 @@
 using UnityEngine;
+using MeshUtils;
 
 namespace RuntimeTransformHandle
 {
@@ -27,9 +28,9 @@ namespace RuntimeTransformHandle
             MeshRenderer mr = o.AddComponent<MeshRenderer>();
             mr.material = _material;
             MeshFilter mf = o.AddComponent<MeshFilter>();
-            mf.mesh = MeshUtils.CreateCone(p_axis.magnitude * SIZE, .02f, .02f, 8, 1);
+            mf.mesh = MeshFactory.CreateCone(p_axis.magnitude * SIZE, .02f, .02f, 8, 1);
             MeshCollider mc = o.AddComponent<MeshCollider>();
-            mc.sharedMesh = MeshUtils.CreateCone(p_axis.magnitude * SIZE, .1f, .02f, 8, 1);
+            mc.sharedMesh = MeshFactory.CreateCone(p_axis.magnitude * SIZE, .1f, .02f, 8, 1);
             o.transform.localRotation = Quaternion.FromToRotation(Vector3.up, p_axis);
 
             o = new GameObject();
@@ -37,7 +38,7 @@ namespace RuntimeTransformHandle
             mr = o.AddComponent<MeshRenderer>();
             mr.material = _material;
             mf = o.AddComponent<MeshFilter>();
-            mf.mesh = MeshUtils.CreateBox(.25f, .25f, .25f);
+            mf.mesh = MeshFactory.CreateBox(.25f, .25f, .25f);
             mc = o.AddComponent<MeshCollider>();
             o.transform.localRotation = Quaternion.FromToRotation(Vector3.up, p_axis);
             o.transform.localPosition = p_axis * SIZE;

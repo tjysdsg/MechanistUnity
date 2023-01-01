@@ -1,3 +1,4 @@
+using MeshUtils;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]

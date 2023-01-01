@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
-// TODO: merge this with procedural mesh I wrote
-
-namespace RuntimeTransformHandle
+namespace MeshUtils
 {
-    public class MeshUtils
+    public static class MeshFactory
     {
         public static Mesh CreateArc(Vector3 p_center, Vector3 p_startPoint, Vector3 p_axis, float p_radius,
             float p_angle, int p_segmentCount)

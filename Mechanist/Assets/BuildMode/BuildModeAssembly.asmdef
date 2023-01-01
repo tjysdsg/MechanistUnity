@@ -1,8 +1,9 @@
 {
-    "name": "RuntimeTransformHandle",
-    "rootNamespace": "RuntimeTransformHandle",
+    "name": "BuildModeAssembly",
+    "rootNamespace": "BuildMode",
     "references": [
-        "GUID:dc33fa7330069db4d84741f09c72daad"
+        "GUID:7dd599cbc1212d140aeb9125b247934d",
+        "GUID:df74dd5b91e04c9438a377d97c4ffb60"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

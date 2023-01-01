@@ -1,4 +1,5 @@
 using UnityEngine;
+using MeshUtils;
 
 namespace RuntimeTransformHandle
 {
@@ -29,9 +30,9 @@ namespace RuntimeTransformHandle
             MeshRenderer mr = o.AddComponent<MeshRenderer>();
             mr.material = _material;
             MeshFilter mf = o.AddComponent<MeshFilter>();
-            mf.mesh = MeshUtils.CreateTorus(2f, .02f, 32, 6);
+            mf.mesh = MeshFactory.CreateTorus(2f, .02f, 32, 6);
             MeshCollider mc = o.AddComponent<MeshCollider>();
-            mc.sharedMesh = MeshUtils.CreateTorus(2f, .1f, 32, 6);
+            mc.sharedMesh = MeshFactory.CreateTorus(2f, .1f, 32, 6);
             o.transform.localRotation = Quaternion.FromToRotation(Vector3.up, _axis);
             return this;
         }
@@ -72,7 +73,7 @@ namespace RuntimeTransformHandle
                     _startRotation * Quaternion.AngleAxis(angleDegrees, invertedRotatedAxis);
             }
 
-            _arcMesh = MeshUtils.CreateArc(transform.position, _hitPoint, _rotatedAxis, 2, angleRadians,
+            _arcMesh = MeshFactory.CreateArc(transform.position, _hitPoint, _rotatedAxis, 2, angleRadians,
                 Mathf.Abs(Mathf.CeilToInt(angleDegrees)) + 1);
             DrawArc();
 

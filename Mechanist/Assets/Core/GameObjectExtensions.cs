@@ -1,4 +1,4 @@
-namespace ProceduralPrimitives
+namespace Core
 {
     using UnityEngine;
 
@@ -48,42 +48,6 @@ namespace ProceduralPrimitives
             MeshFilter meshFilter = gameObject.AddMeshFilter(mesh);
             meshFilter.sharedMesh = mesh;
             return (meshFilter, gameObject.AddMeshRenderer(material));
-        }
-
-        public static void CreateCircle(this GameObject gameObject, float radius, int segments, float startAngle,
-            float angularSize)
-        {
-            Mesh mesh = new Mesh();
-            mesh.CreateCircle(radius, segments, startAngle, angularSize);
-
-            //gameObject.name = "Circle";
-
-            Shader shader = Shader.Find("Standard");
-            gameObject.AddMeshFilterAndRenderer(new Material(shader), mesh);
-        }
-
-        public static void CreatePlane(this GameObject gameObject, float width, float height, int widthSegments,
-            int heightSegments)
-        {
-            Mesh mesh = new Mesh();
-            mesh.CreatePlane(width, height, widthSegments, heightSegments);
-
-            //gameObject.name = "Plane";
-
-            Shader shader = Shader.Find("Standard");
-            gameObject.AddMeshFilterAndRenderer(new Material(shader), mesh);
-        }
-
-        public static void CreateBox(this GameObject gameObject, float width, float height, float depth,
-            int widthSegments, int heightSegments, int depthSegments)
-        {
-            Mesh mesh = new Mesh();
-            mesh.CreateBox(width, height, depth, widthSegments, heightSegments, depthSegments);
-
-            //gameObject.name = "Box";
-
-            Shader shader = Shader.Find("Standard");
-            gameObject.AddMeshFilterAndRenderer(new Material(shader), mesh);
         }
     }
 }

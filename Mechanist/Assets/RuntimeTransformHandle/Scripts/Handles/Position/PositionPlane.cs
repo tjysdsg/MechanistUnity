@@ -1,4 +1,5 @@
 using UnityEngine;
+using MeshUtils;
 
 namespace RuntimeTransformHandle
 {
@@ -30,7 +31,7 @@ namespace RuntimeTransformHandle
             MeshRenderer mr = _handle.AddComponent<MeshRenderer>();
             mr.material = _material;
             MeshFilter mf = _handle.AddComponent<MeshFilter>();
-            mf.mesh = MeshUtils.CreateBox(.02f, .5f, 0.5f);
+            mf.mesh = MeshFactory.CreateBox(.02f, .5f, 0.5f);
             MeshCollider mc = _handle.AddComponent<MeshCollider>();
             _handle.transform.localRotation = Quaternion.FromToRotation(Vector3.up, _perp);
             _handle.transform.localPosition = (_axis1 + _axis2) * .25f;

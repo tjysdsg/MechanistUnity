@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public enum BuildModeState
+namespace BuildMode
 {
-    None,
-    Placement,
-}
+    public enum BuildModeState
+    {
+        None,
+        Placement,
+    }
 
-[CreateAssetMenu(menuName = "Game/BuildModeStateSO")]
-public class BuildModeStateSO : ScriptableObject
-{
-    public BuildModeState state = BuildModeState.None;
+    [CreateAssetMenu(menuName = "Game/BuildModeStateSO")]
+    public class BuildModeStateSO : ScriptableObject
+    {
+        public BuildModeState state = BuildModeState.None;
+    }
 }

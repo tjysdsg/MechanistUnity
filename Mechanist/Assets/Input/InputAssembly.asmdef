@@ -1,8 +1,8 @@
 {
-    "name": "RuntimeTransformHandle",
-    "rootNamespace": "RuntimeTransformHandle",
+    "name": "InputAssembly",
+    "rootNamespace": "",
     "references": [
-        "GUID:dc33fa7330069db4d84741f09c72daad"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

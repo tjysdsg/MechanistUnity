@@ -1,4 +1,5 @@
 using UnityEngine;
+using MeshUtils;
 
 namespace RuntimeTransformHandle
 {
@@ -22,7 +23,7 @@ namespace RuntimeTransformHandle
             MeshRenderer mr = o.AddComponent<MeshRenderer>();
             mr.material = _material;
             MeshFilter mf = o.AddComponent<MeshFilter>();
-            mf.mesh = MeshUtils.CreateBox(.35f, .35f, .35f);
+            mf.mesh = MeshFactory.CreateBox(.35f, .35f, .35f);
             MeshCollider mc = o.AddComponent<MeshCollider>();
 
             return this;
