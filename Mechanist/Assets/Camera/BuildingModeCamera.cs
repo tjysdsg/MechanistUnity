@@ -14,15 +14,19 @@ public class BuildingModeCamera : MonoBehaviour
     public float slideSpeed = 0.1f;
     public float zoomSpeed = 0.2f;
 
+    [SerializeField] private RayEventChannelSO rayEventChannel;
+
     private bool _rotating = false;
     private bool _dragging = false;
-    private Vector2 _lookDelta;
     private Transform _transform;
     private Vector3 _pivotMoveDelta = Vector2.zero;
+
+    private Camera _camera;
 
     public void Start()
     {
         _transform = GetComponent<Transform>();
+        _camera = GetComponent<Camera>();
     }
 
     private void OnEnable()
@@ -31,7 +35,6 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeDragCameraEvent += OnDragCamera;
         inputManager.BuildingModeZoomEvent += OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent += OnCameraPivotMoveCamera;
-        inputManager.BuildingModeLookEvent += OnLook;
         inputManager.BuildingModeFireEvent += OnFire;
     }
 
@@ -41,7 +44,6 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeDragCameraEvent -= OnDragCamera;
         inputManager.BuildingModeZoomEvent -= OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent -= OnCameraPivotMoveCamera;
-        inputManager.BuildingModeLookEvent -= OnLook;
         inputManager.BuildingModeFireEvent -= OnFire;
     }
 
@@ -53,15 +55,16 @@ public class BuildingModeCamera : MonoBehaviour
         _transform.Translate(translation, Space.World);
 
         // rotate camera based on input
+        Vector2 lookDelta = inputManager.GetBuildModePointerDeltaInput();
         if (_rotating)
         {
-            Vector3 axis = _transform.TransformDirection(Vector3.Cross(Vector3.forward, _lookDelta));
+            Vector3 axis = _transform.TransformDirection(Vector3.Cross(Vector3.forward, lookDelta));
 
-            _transform.RotateAround(cameraPivot.position, axis, _lookDelta.magnitude * cameraRotateSpeed);
+            _transform.RotateAround(cameraPivot.position, axis, lookDelta.magnitude * cameraRotateSpeed);
         }
         else if (_dragging)
         {
-            Vector3 delta = -_lookDelta;
+            Vector3 delta = -lookDelta;
             _transform.Translate(delta * slideSpeed, Space.Self);
             cameraPivot.Translate(_transform.TransformDirection(delta) * slideSpeed, Space.World);
         }
@@ -72,11 +75,6 @@ public class BuildingModeCamera : MonoBehaviour
 
         // always look at the target
         _transform.LookAt(cameraPivot);
-    }
-
-    public void OnLook(Vector2 v)
-    {
-        _lookDelta = v;
     }
 
     public void OnZoom(float zoom)
@@ -105,11 +103,8 @@ public class BuildingModeCamera : MonoBehaviour
     {
         if (val > 0.01f)
         {
-            // screenPickData.Value = new ScreenPickData()
-            // {
-            //     direction = Vector3.up,
-            //     origin = Vector3.down,
-            // };
+            Vector2 pointer = inputManager.GetBuildModePointerInput();
+            rayEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
         }
     }
 }

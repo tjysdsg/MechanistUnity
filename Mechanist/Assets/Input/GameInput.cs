@@ -80,6 +80,15 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""b1ac2924-4e84-4459-8373-01f7fa2bfe16"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f023d934-1634-4d83-b4d7-c8f4b3f4311c"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -289,6 +309,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_BuildingMode_Zoom = m_BuildingMode.FindAction("Zoom", throwIfNotFound: true);
         m_BuildingMode_DragCamera = m_BuildingMode.FindAction("DragCamera", throwIfNotFound: true);
         m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
+        m_BuildingMode_Pointer = m_BuildingMode.FindAction("Pointer", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -354,6 +375,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_BuildingMode_Zoom;
     private readonly InputAction m_BuildingMode_DragCamera;
     private readonly InputAction m_BuildingMode_Fire;
+    private readonly InputAction m_BuildingMode_Pointer;
     public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
@@ -364,6 +386,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         public InputAction @Zoom => m_Wrapper.m_BuildingMode_Zoom;
         public InputAction @DragCamera => m_Wrapper.m_BuildingMode_DragCamera;
         public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
+        public InputAction @Pointer => m_Wrapper.m_BuildingMode_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -391,6 +414,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
+                @Pointer.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
+                @Pointer.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
+                @Pointer.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
             }
             m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
@@ -413,6 +439,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
+                @Pointer.started += instance.OnPointer;
+                @Pointer.performed += instance.OnPointer;
+                @Pointer.canceled += instance.OnPointer;
             }
         }
     }
@@ -470,5 +499,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         void OnZoom(InputAction.CallbackContext context);
         void OnDragCamera(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnPointer(InputAction.CallbackContext context);
     }
 }

@@ -107,10 +107,7 @@ MonoBehaviour:
   moveSpeed: 0.1
   slideSpeed: 0.1
   zoomSpeed: 0.2
-  screenPickData:
-    _useConstant: 0
-    _constantValue: {fileID: 0}
-    _variable: {fileID: 11400000, guid: 64873b96bc49d8b4093156f16533a9be, type: 2}
+  rayEventChannel: {fileID: 11400000, guid: 78e2fb7f498241148a389fafa67f9d51, type: 2}
 --- !u!114 &40081146
 MonoBehaviour:
   m_ObjectHideFlags: 0
