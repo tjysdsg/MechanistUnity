@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -14,6 +13,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     public event UnityAction<float> BuildingModeDragCameraEvent = delegate { };
     public event UnityAction BuildingModeFireEvent = delegate { };
     public event UnityAction BuildingModeDoubleFireEvent = delegate { };
+    public event UnityAction BuildingModeEnterPlacementEvent = delegate { };
 
     private void OnEnable()
     {
@@ -84,6 +84,12 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     {
         if (context.phase == InputActionPhase.Performed)
             BuildingModeDoubleFireEvent.Invoke();
+    }
+
+    public void OnEnterPlacementMode(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) 
+            BuildingModeEnterPlacementEvent.Invoke();
     }
 
     public Vector2 GetBuildModePointerInput()

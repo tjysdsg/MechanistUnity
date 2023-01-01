@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98235913a42412e80c0557f8dbc4d12, type: 3}
-  m_Name: BuildModeScreenPickEventChannel
+  m_Script: {fileID: 11500000, guid: a6d24edd8391e9141ab3a3912895dbec, type: 3}
+  m_Name: BuildModeState
   m_EditorClassIdentifier: 
+  state: 0

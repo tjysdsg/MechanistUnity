@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
+  state: {fileID: 11400000, guid: cdf6e7c86e3559c4b8d4c5d3e37277b9, type: 2}
+  inputManager: {fileID: 11400000, guid: f6267ef17b14bde4abbc58500e9560fd, type: 2}
 --- !u!114 &1375659367209373793
 MonoBehaviour:
   m_ObjectHideFlags: 0
