@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "InputManager", menuName = "Input/Input Manager")]
+[CreateAssetMenu(fileName = "InputManager", menuName = "Game/Input Manager")]
 public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
 {
     private GameInput _gameInput;
@@ -70,6 +70,6 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
-            Debug.Log(context.phase);
+            BuildingModeFireEvent.Invoke(context.ReadValue<float>());
     }
 }

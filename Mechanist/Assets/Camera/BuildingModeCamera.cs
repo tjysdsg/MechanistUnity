@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BuildingModeCamera : MonoBehaviour
 {
@@ -33,6 +32,7 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeZoomEvent += OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent += OnCameraPivotMoveCamera;
         inputManager.BuildingModeLookEvent += OnLook;
+        inputManager.BuildingModeFireEvent += OnFire;
     }
 
     private void OnDisable()
@@ -42,6 +42,7 @@ public class BuildingModeCamera : MonoBehaviour
         inputManager.BuildingModeZoomEvent -= OnZoom;
         inputManager.BuildingModeMoveCameraPivotEvent -= OnCameraPivotMoveCamera;
         inputManager.BuildingModeLookEvent -= OnLook;
+        inputManager.BuildingModeFireEvent -= OnFire;
     }
 
     public void Update()
@@ -98,5 +99,17 @@ public class BuildingModeCamera : MonoBehaviour
     public void OnDragCamera(float val)
     {
         _dragging = !_rotating && val > 0.001;
+    }
+
+    public void OnFire(float val)
+    {
+        if (val > 0.01f)
+        {
+            // screenPickData.Value = new ScreenPickData()
+            // {
+            //     direction = Vector3.up,
+            //     origin = Vector3.down,
+            // };
+        }
     }
 }
