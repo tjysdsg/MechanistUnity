@@ -106,6 +106,7 @@ MonoBehaviour:
   moveSpeed: 0.1
   slideSpeed: 0.1
   currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
+  buildModePivotSO: {fileID: 11400000, guid: c4ab4c3bde05df040abf2e5e236f998c, type: 2}
 --- !u!114 &40081146
 MonoBehaviour:
   m_ObjectHideFlags: 0

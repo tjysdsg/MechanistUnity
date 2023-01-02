@@ -54,22 +54,24 @@ namespace BuildMode.SM
             var selectionTransform = selectionHitInfo.transform;
 
             // instantiate brace prefab
-            var go = GameObject.Instantiate(_buildManager.currBlockPrefab);
-            var brace = go.GetComponent<Brace>();
-            brace.block1 = _firstBlock.transform;
-            brace.block2 = selectionTransform;
-            brace.Initialize();
+            var go = GameObject.Instantiate(_buildManager.currentBlockType.GetPrefab());
+            var b = go.GetComponent<TwoClickBuildBlock>();
+            b.block1 = _firstBlock.transform;
+            b.block2 = selectionTransform;
+            b.Initialize();
 
             // notify two attached blocks
             var attachment = new BlockAttachment
             {
-                obj = brace, point = selectionHitInfo.point
+                obj = b, point = selectionHitInfo.point
             };
             _firstBlock.OnAttach(attachment);
             selectedBlock.OnAttach(attachment);
 
+            _buildManager.AddCreatedBlock(b);
+
             // reset build manager
-            _buildManager.twoClickBuilding = false;
+            _buildManager.isBuilding = false;
             _firstBlockSelected = false;
             _buildManager.selectionHitInfo = null;
         }

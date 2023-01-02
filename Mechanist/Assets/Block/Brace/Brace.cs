@@ -1,13 +1,10 @@
-using System;
 using UnityEngine;
 using MeshUtils;
 
 namespace Block
 {
-    public class Brace : BaseBlock
+    public class Brace : TwoClickBuildBlock
     {
-        [SerializeField] public Transform block1;
-        [SerializeField] public Transform block2;
         [SerializeField] public GameObject cylinderModelPrefab;
 
         private float _length;
@@ -16,6 +13,14 @@ namespace Block
         private GameObject _cylinderModel;
         private ProceduralCylinder _proceduralCylinder;
         private ProceduralCylinderMesh _gizmoMesh;
+
+        public override void EnterPlayMode()
+        {
+        }
+
+        public override void EnterBuildMode()
+        {
+        }
 
         public override void Initialize()
         {
@@ -79,7 +84,8 @@ namespace Block
 
             // update transform
             transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
-            _cylinderModel.transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+            _cylinderModel.transform.SetPositionAndRotation(center,
+                Quaternion.FromToRotation(Vector3.forward, direction));
 
             // generate/update cylinder mesh
             _length = direction.magnitude;

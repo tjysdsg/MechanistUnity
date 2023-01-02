@@ -15,6 +15,8 @@ namespace Block
     /// </summary>
     public class Hinge : AttachableBlock
     {
+        private Joint _joint = default;
+
         public override void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(connectedRigidbodies.Count < 2);
@@ -28,10 +30,16 @@ namespace Block
         public override void EnterPlayMode()
         {
             var go = connectedRigidbodies[0].gameObject;
-            HingeJoint joint = go.AddComponent<HingeJoint>();
-            joint.connectedBody = connectedRigidbodies[1].GetComponent<Rigidbody>();
-            joint.anchor = go.transform.InverseTransformPoint(transform.TransformPoint(Vector3.zero));
-            joint.axis = go.transform.InverseTransformDirection(transform.TransformDirection(Vector3.up));
+            _joint = go.AddComponent<HingeJoint>();
+            _joint.connectedBody = connectedRigidbodies[1].GetComponent<Rigidbody>();
+            _joint.anchor = go.transform.InverseTransformPoint(transform.TransformPoint(Vector3.zero));
+            _joint.axis = go.transform.InverseTransformDirection(transform.TransformDirection(Vector3.up));
+        }
+
+        // TODO: reset position
+        public override void EnterBuildMode()
+        {
+            Destroy(_joint);
         }
     }
 }

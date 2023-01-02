@@ -17,14 +17,9 @@ namespace Block
     /// During gameplay, we initialize the physics (creating relevant joints, rigidbodies, etc.) based on the specific
     /// type of block
     /// </summary>
-    public abstract class AttachableBlock : BaseBlock
+    public abstract class AttachableBlock : SingleClickBuildBlock
     {
         [SerializeField] protected List<Rigidbody> connectedRigidbodies = default;
-
-        /// <summary>
-        /// Enter game play mode, should create relevant components such as joints)
-        /// </summary>
-        public abstract void EnterPlayMode();
 
         public virtual void OnAttach(BlockAttachment attachment)
         {

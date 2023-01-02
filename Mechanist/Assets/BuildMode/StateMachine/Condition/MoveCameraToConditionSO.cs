@@ -17,7 +17,7 @@ namespace BuildMode.SM
 
         protected override bool Statement()
         {
-            return !_buildManager.twoClickBuilding && _buildManager.cameraPivotPos.HasValue;
+            return !_buildManager.isBuilding && _buildManager.cameraPivotPos.HasValue;
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace Block
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class BaseBlock : MonoBehaviour
+    public abstract class BaseBlock : MonoBehaviour
     {
         protected GameObject _go;
 
@@ -11,6 +11,16 @@ namespace Block
         {
             Initialize();
         }
+
+        /// <summary>
+        /// Enter game play mode, should create relevant components such as joints
+        /// </summary>
+        public abstract void EnterPlayMode();
+
+        /// <summary>
+        /// Enter build mode, should disable physics components
+        /// </summary>
+        public abstract void EnterBuildMode();
 
         /// <summary>
         /// Initialize the block.
@@ -27,5 +37,19 @@ namespace Block
             if (_go == null)
                 _go = gameObject;
         }
+
+        public virtual void OnBuildModeSelected()
+        {
+        }
+    }
+
+    public abstract class SingleClickBuildBlock : BaseBlock
+    {
+    }
+
+    public abstract class TwoClickBuildBlock : BaseBlock
+    {
+        [SerializeField] public Transform block1;
+        [SerializeField] public Transform block2;
     }
 }

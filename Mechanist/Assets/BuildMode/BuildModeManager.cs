@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Block;
 using UnityEngine;
 using GameState;
 
@@ -6,17 +8,25 @@ namespace BuildMode
     [RequireComponent(typeof(StateMachine.StateMachine))]
     public class BuildModeManager : MonoBehaviour
     {
-        [Tooltip("The event channel used to tell the build mode camera to move to a certain object")] [SerializeField]
+        [Header("Configs")] [SerializeField] private GameModeSO gameMode;
+        [SerializeField] private InputManager inputManager;
+
+        [Header("Camera")] public BuildModePivotSO buildModePivotSO;
+        [SerializeField] private CurrentCameraSO currentCamera;
+
+        [Header("Building Block")] [SerializeField]
+        public BlockTypeSO currentBlockType;
+
+        [Header("Event Channels")]
+        [Tooltip("The event channel used to tell the build mode camera to move to a certain object")]
+        [SerializeField]
         public Vector3EventChannelSO moveToEventChannel;
 
-        [SerializeField] private InputManager inputManager;
-        [SerializeField] private CurrentCameraSO currentCamera;
-        [SerializeField] private GameModeSO gameMode;
-        [SerializeField] public GameObject currBlockPrefab;
-
-        [HideInInspector] public bool twoClickBuilding = false;
+        [HideInInspector] public bool isBuilding = false;
         [HideInInspector] public RaycastHit? selectionHitInfo;
         [HideInInspector] public Vector3? cameraPivotPos = null;
+
+        private readonly List<BaseBlock> _createdBlocks = new List<BaseBlock>();
 
         public void OnEnable()
         {
@@ -41,7 +51,7 @@ namespace BuildMode
         {
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
-            if (twoClickBuilding && Physics.Raycast(ray, out RaycastHit info))
+            if (isBuilding && Physics.Raycast(ray, out RaycastHit info))
                 selectionHitInfo = info;
             else
                 selectionHitInfo = null;
@@ -54,7 +64,7 @@ namespace BuildMode
         {
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
-            if (!twoClickBuilding && Physics.Raycast(ray, out RaycastHit info))
+            if (!isBuilding && Physics.Raycast(ray, out RaycastHit info))
             {
                 cameraPivotPos = info.point;
             }
@@ -62,21 +72,38 @@ namespace BuildMode
 
         public void OnEnterPlacementMode()
         {
-            twoClickBuilding = !twoClickBuilding;
+            isBuilding = !isBuilding;
+        }
+
+        public void AddCreatedBlock(BaseBlock block)
+        {
+            _createdBlocks.Add(block);
         }
 
         public void OnGameModeChange(GameMode mode)
         {
             // we always reset no matter what game mode we entered
-            twoClickBuilding = false;
+            isBuilding = false;
             selectionHitInfo = null;
             cameraPivotPos = null;
 
             // enable/disable this game object
             if (mode == GameMode.BuildMode)
+            {
                 gameObject.SetActive(true);
+                foreach (var block in _createdBlocks)
+                {
+                    block.EnterBuildMode();
+                }
+            }
             else
+            {
                 gameObject.SetActive(false);
+                foreach (var block in _createdBlocks)
+                {
+                    block.EnterPlayMode();
+                }
+            }
         }
     }
 }

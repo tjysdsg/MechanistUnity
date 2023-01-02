@@ -1,7 +1,5 @@
-using System;
 using GameState;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -16,6 +14,7 @@ namespace BuildMode
         public float slideSpeed = 0.1f;
 
         [SerializeField] private CurrentCameraSO currentCamera;
+        [SerializeField] private BuildModePivotSO buildModePivotSO;
 
         private bool _rotating = false;
         private bool _dragging = false;
@@ -75,6 +74,8 @@ namespace BuildMode
 
             // always look at the target
             _transform.LookAt(cameraPivot);
+
+            buildModePivotSO.pivot = targetPos;
         }
 
         public void OnZoom(float zoom)
