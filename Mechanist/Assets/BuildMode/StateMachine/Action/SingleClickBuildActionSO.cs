@@ -18,24 +18,33 @@ namespace BuildMode.SM
 
         public override void OnUpdate()
         {
-            if (_buildManager.selectionHitInfo == null) return;
-            var selectionHitInfo = _buildManager.selectionHitInfo.Value;
+            if (!_buildManager.isFired) return;
 
-            var selectionTransform = selectionHitInfo.transform;
-            AttachableBlock selectedBlock = selectionTransform.GetComponent<AttachableBlock>();
+            Vector3 targetPos = Vector3.zero;
 
-            if (selectedBlock == null) return;
+            // find a point on the sphere surface where the camera pivot is on
+            Camera camera = _buildManager.currentCamera.camera;
+            float distance = camera.GetComponent<BuildModeCamera>().distance;
+            Vector3 camPosition = camera.transform.position;
+            Vector3 displacement = _buildManager.selectionRay.direction.normalized * distance;
+            targetPos = camPosition + displacement;
+
+            // find an empty spot if something blocks us
+            if (_buildManager.selectionHitInfo != null)
+            {
+                var selectionHitInfo = _buildManager.selectionHitInfo.Value;
+                if (selectionHitInfo.distance <= distance)
+                    targetPos = selectionHitInfo.transform.position; // TODO: avoid overlap
+            }
 
             // instantiate brace prefab
-            var go = GameObject.Instantiate(_buildManager.currentBlockType.GetPrefab());
+            var go = GameObject.Instantiate(_buildManager.currentBlockType.GetPrefab(), targetPos, Quaternion.identity);
             var b = go.GetComponent<SingleClickBuildBlock>();
             b.Initialize();
 
             _buildManager.AddCreatedBlock(b);
 
-            // reset build manager
-            _buildManager.isBuilding = false;
-            _buildManager.selectionHitInfo = null;
+            _buildManager.ResetStateMachine(true);
         }
     }
 }

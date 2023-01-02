@@ -21,7 +21,7 @@ namespace BuildMode.SM
 
         public override void OnUpdate()
         {
-            if (_buildManager.selectionHitInfo == null) return;
+            if (!_buildManager.isFired || _buildManager.selectionHitInfo == null) return;
 
             AttachableBlock selectedBlock =
                 _buildManager.selectionHitInfo.Value.transform.GetComponent<AttachableBlock>();
@@ -29,9 +29,16 @@ namespace BuildMode.SM
             if (selectedBlock == null) return;
 
             if (!_firstBlockSelected)
+            {
                 step1(selectedBlock);
+                _buildManager.ResetStateMachine(false);
+            }
             else
+            {
                 step2(selectedBlock);
+                _firstBlockSelected = false;
+                _buildManager.ResetStateMachine(true);
+            }
         }
 
         /// <summary>
@@ -41,7 +48,6 @@ namespace BuildMode.SM
         {
             _firstBlockSelected = true;
             _firstBlock = selectedBlock;
-            _buildManager.selectionHitInfo = null;
         }
 
         /// <summary>
@@ -69,11 +75,6 @@ namespace BuildMode.SM
             selectedBlock.OnAttach(attachment);
 
             _buildManager.AddCreatedBlock(b);
-
-            // reset build manager
-            _buildManager.isBuilding = false;
-            _firstBlockSelected = false;
-            _buildManager.selectionHitInfo = null;
         }
     }
 }

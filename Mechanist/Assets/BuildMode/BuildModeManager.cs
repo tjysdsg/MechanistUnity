@@ -10,9 +10,7 @@ namespace BuildMode
     {
         [Header("Configs")] [SerializeField] private GameModeSO gameMode;
         [SerializeField] private InputManager inputManager;
-
-        [Header("Camera")] public BuildModePivotSO buildModePivotSO;
-        [SerializeField] private CurrentCameraSO currentCamera;
+        [SerializeField] public CurrentCameraSO currentCamera;
 
         [Header("Building Block")] [SerializeField]
         public BlockTypeSO currentBlockType;
@@ -22,13 +20,31 @@ namespace BuildMode
         [SerializeField]
         public Vector3EventChannelSO moveToEventChannel;
 
-        [HideInInspector] public bool isBuilding = false;
-        [HideInInspector] public RaycastHit? selectionHitInfo;
+        [HideInInspector] public bool isPlacing = false;
+
+        /// <summary>
+        /// Did user left-clicked the mouse to build something
+        /// </summary>
+        [HideInInspector] public bool isFired = false;
+
+        /// <summary>
+        /// The pivot for the camera to go to
+        /// </summary>
         [HideInInspector] public Vector3? cameraPivotPos = null;
+
+        /// <summary>
+        /// The ray fired when user left-clicked the mouse to build something
+        /// </summary>
+        [HideInInspector] public Ray selectionRay;
+
+        /// <summary>
+        /// The hit result of <see cref="selectionRay"/> at the time of firing
+        /// </summary>
+        [HideInInspector] public RaycastHit? selectionHitInfo = null;
 
         private readonly List<BaseBlock> _createdBlocks = new List<BaseBlock>();
 
-        public void OnEnable()
+        private void OnEnable()
         {
             inputManager.BuildingModeEnterPlacementEvent += OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent += OnFire;
@@ -37,21 +53,41 @@ namespace BuildMode
             gameMode.OnEventRaised += OnGameModeChange;
         }
 
-        public void OnDisable()
+        private void OnDisable()
         {
             inputManager.BuildingModeEnterPlacementEvent -= OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent -= OnFire;
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
         }
 
+        public void AddCreatedBlock(BaseBlock block)
+        {
+            _createdBlocks.Add(block);
+        }
+
+        public void ResetStateMachine(bool exitPlacement)
+        {
+            if (exitPlacement)
+                isPlacing = false;
+
+            isFired = false;
+            selectionHitInfo = null;
+            selectionRay = new Ray(Vector3.zero, Vector3.zero);
+        }
+
+        #region Input Handling
+
         /// <summary>
         /// User clicked left mouse button and the BuildingModeCamera dispatch the event to us
         /// </summary>
         public void OnFire()
         {
+            if (!isPlacing) return;
+
+            isFired = true;
             Vector2 pointer = inputManager.GetBuildModePointerInput();
-            Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
-            if (isBuilding && Physics.Raycast(ray, out RaycastHit info))
+            selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
+            if (isPlacing && Physics.Raycast(selectionRay, out RaycastHit info))
                 selectionHitInfo = info;
             else
                 selectionHitInfo = null;
@@ -64,7 +100,7 @@ namespace BuildMode
         {
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
-            if (!isBuilding && Physics.Raycast(ray, out RaycastHit info))
+            if (!isPlacing && Physics.Raycast(ray, out RaycastHit info))
             {
                 cameraPivotPos = info.point;
             }
@@ -72,18 +108,15 @@ namespace BuildMode
 
         public void OnEnterPlacementMode()
         {
-            isBuilding = !isBuilding;
+            isPlacing = !isPlacing;
         }
 
-        public void AddCreatedBlock(BaseBlock block)
-        {
-            _createdBlocks.Add(block);
-        }
+        #endregion
 
         public void OnGameModeChange(GameMode mode)
         {
             // we always reset no matter what game mode we entered
-            isBuilding = false;
+            isPlacing = false;
             selectionHitInfo = null;
             cameraPivotPos = null;
 
