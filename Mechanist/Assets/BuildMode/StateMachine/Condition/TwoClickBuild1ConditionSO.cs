@@ -1,28 +1,23 @@
-﻿using BuildMode;
-using UnityEngine;
+﻿using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "TwoClickBuild1Condition",
-    menuName = "State Machines/Conditions/Two Click Build1Condition")]
-public class TwoClickBuild1ConditionSO : StateConditionSO<TwoClickBuild1Condition>
+namespace BuildMode.SM
 {
-    protected override Condition CreateCondition() => new TwoClickBuild1Condition();
-}
-
-public class TwoClickBuild1Condition : Condition
-{
-    protected new TwoClickBuild1ConditionSO OriginSO => (TwoClickBuild1ConditionSO)base.OriginSO;
-
-    private BuildModeManager _buildManager;
-
-    public override void Awake(StateMachine.StateMachine stateMachine)
+    [CreateAssetMenu(fileName = "TwoClickBuild1Condition",
+        menuName = "State Machines/Conditions/Two Click Build1Condition")]
+    public class TwoClickBuild1ConditionSO : StateConditionSO<TwoClickBuild1Condition>
     {
-        _buildManager = stateMachine.GetComponent<BuildModeManager>();
+        protected override Condition CreateCondition() => new TwoClickBuild1Condition();
     }
 
-    protected override bool Statement()
+    public class TwoClickBuild1Condition : BuildModeBaseCondition
     {
-        return _buildManager.twoClickBuilding && _buildManager.twoClickBuildFirstBlock == null;
+        protected new TwoClickBuild1ConditionSO OriginSO => (TwoClickBuild1ConditionSO)base.OriginSO;
+
+        protected override bool Statement()
+        {
+            return _buildManager.twoClickBuilding && _buildManager.twoClickBuildFirstBlock == null;
+        }
     }
 }

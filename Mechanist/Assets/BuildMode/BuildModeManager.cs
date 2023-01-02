@@ -1,11 +1,10 @@
 using UnityEngine;
 using Block;
 using JetBrains.Annotations;
-using SM = StateMachine.StateMachine;
 
 namespace BuildMode
 {
-    [RequireComponent(typeof(SM))]
+    [RequireComponent(typeof(StateMachine.StateMachine))]
     public class BuildModeManager : MonoBehaviour
     {
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")] [SerializeField]
