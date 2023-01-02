@@ -14,11 +14,11 @@ namespace Block
         private ProceduralCylinder _proceduralCylinder;
         private ProceduralCylinderMesh _gizmoMesh;
 
-        public override void EnterPlayMode()
+        protected override void OnEnterPlayMode()
         {
         }
 
-        public override void EnterBuildMode()
+        protected override void OnEnterBuildMode()
         {
         }
 

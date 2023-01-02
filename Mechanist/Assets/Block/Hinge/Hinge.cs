@@ -27,7 +27,7 @@ namespace Block
             connectedRigidbodies.Add(body);
         }
 
-        public override void EnterPlayMode()
+        protected override void OnEnterPlayMode()
         {
             var go = connectedRigidbodies[0].gameObject;
             _joint = go.AddComponent<HingeJoint>();
@@ -37,9 +37,10 @@ namespace Block
         }
 
         // TODO: reset position
-        public override void EnterBuildMode()
+        protected override void OnEnterBuildMode()
         {
-            Destroy(_joint);
+            if (_joint != null)
+                Destroy(_joint);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Block
 {
@@ -14,11 +13,10 @@ namespace Block
     /// </remarks>
     public class WieldPoint : AttachableBlock
     {
-        private List<Joint> _joints;
+        private List<Joint> _joints = new List<Joint>();
 
-        public override void EnterPlayMode()
+        protected override void OnEnterPlayMode()
         {
-            Assert.AreEqual(0, _joints.Count);
             foreach (var body in connectedRigidbodies)
             {
                 FixedJoint joint = _go.AddComponent<FixedJoint>();
@@ -28,7 +26,7 @@ namespace Block
         }
 
         // TODO: reset position
-        public override void EnterBuildMode()
+        protected override void OnEnterBuildMode()
         {
             foreach (var joint in _joints)
             {

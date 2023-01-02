@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Block
 {
@@ -6,21 +7,42 @@ namespace Block
     public abstract class BaseBlock : MonoBehaviour
     {
         protected GameObject _go;
+        protected Rigidbody _rigidbody;
+        private Vector3 _origPos;
+        private Quaternion _origRotation;
 
         protected virtual void Start()
         {
             Initialize();
         }
 
+        protected abstract void OnEnterPlayMode();
+        protected abstract void OnEnterBuildMode();
+
         /// <summary>
         /// Enter game play mode, should create relevant components such as joints
         /// </summary>
-        public abstract void EnterPlayMode();
+        public void EnterPlayMode()
+        {
+            _origPos = transform.position;
+            _origRotation = transform.rotation;
+
+            _rigidbody.isKinematic = false;
+            OnEnterPlayMode();
+        }
 
         /// <summary>
         /// Enter build mode, should disable physics components
         /// </summary>
-        public abstract void EnterBuildMode();
+        public void EnterBuildMode()
+        {
+            transform.SetPositionAndRotation(_origPos, _origRotation);
+
+            _rigidbody.isKinematic = true;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            OnEnterBuildMode();
+        }
 
         /// <summary>
         /// Initialize the block.
@@ -36,10 +58,10 @@ namespace Block
         {
             if (_go == null)
                 _go = gameObject;
-        }
+            if (_rigidbody == null)
+                _rigidbody = GetComponent<Rigidbody>();
 
-        public virtual void OnBuildModeSelected()
-        {
+            Assert.IsNotNull(_rigidbody);
         }
     }
 
