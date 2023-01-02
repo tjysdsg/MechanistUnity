@@ -32,8 +32,6 @@ namespace BuildMode
             inputManager.BuildingModeEnterPlacementEvent -= OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent -= OnFire;
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
-
-            gameMode.OnEventRaised -= OnGameModeChange;
         }
 
         /// <summary>

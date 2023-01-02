@@ -78,9 +78,8 @@ namespace Block
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
 
             // update transform
-            _cylinderModel.transform.localScale = Vector3.one;
-            _cylinderModel.transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
             transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+            _cylinderModel.transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
 
             // generate/update cylinder mesh
             _length = direction.magnitude;

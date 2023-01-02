@@ -29,8 +29,8 @@ namespace GameState
             }
 
             // register handlers for input that changes the game mode
-            inputManager.PlayModeToBuildModeEvent += OnEnterBuildMode;
-            inputManager.BuildModeToPlayModeEvent += OnEnterPlayMode;
+            inputManager.EnterBuildModeEvent += OnEnterBuildMode;
+            inputManager.EnterPlayModeEvent += OnEnterPlayMode;
         }
 
         public void OnEnterPlayMode()

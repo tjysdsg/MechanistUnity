@@ -15,10 +15,14 @@ namespace Block
     /// </summary>
     public class Hinge : AttachableBlock
     {
-        protected override void AttachRigidBody(Rigidbody body)
+        public override void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(connectedRigidbodies.Count < 2);
-            base.AttachRigidBody(body);
+
+            Transform t = attachment.obj.transform;
+            Rigidbody body = t.GetComponent<Rigidbody>();
+
+            connectedRigidbodies.Add(body);
         }
 
         public override void EnterPlayMode()

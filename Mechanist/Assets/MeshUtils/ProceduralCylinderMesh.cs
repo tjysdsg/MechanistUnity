@@ -81,8 +81,8 @@ namespace MeshUtils
                     int vertIdx = row * _vertCols + col;
                     _vertices[vertIdx] = new Vector3(
                         radius * Mathf.Cos(angle),
-                        row * heightStep - _height / 2,
-                        radius * Mathf.Sin(angle)
+                        radius * Mathf.Sin(angle),
+                        row * heightStep - _height / 2
                     );
                     _uvs[vertIdx] = new Vector2(
                         col * uvStepH, row * uvStepV
@@ -93,19 +93,19 @@ namespace MeshUtils
                         continue;
 
                     int triIdx = ((row - 1) * _nRadialSegments * 6 + col * 6);
-                    _triangles[triIdx + 0] = row * _vertCols + col;
-                    _triangles[triIdx + 1] = row * _vertCols + col + 1;
+                    _triangles[triIdx + 0] = row * _vertCols + col + 1;
+                    _triangles[triIdx + 1] = row * _vertCols + col;
                     _triangles[triIdx + 2] = (row - 1) * _vertCols + col;
 
-                    _triangles[triIdx + 3] = (row - 1) * _vertCols + col;
+                    _triangles[triIdx + 3] = (row - 1) * _vertCols + col + 1;
                     _triangles[triIdx + 4] = row * _vertCols + col + 1;
-                    _triangles[triIdx + 5] = (row - 1) * _vertCols + col + 1;
+                    _triangles[triIdx + 5] = (row - 1) * _vertCols + col;
                 }
             }
 
             // Draw caps
-            _vertices[_numVerts - 2] = new Vector3(0, _height / 2, 0); // top center
-            _vertices[_numVerts - 1] = new Vector3(0, -_height / 2, 0); // bottom center
+            _vertices[_numVerts - 2] = new Vector3(0, 0, _height / 2); // top center
+            _vertices[_numVerts - 1] = new Vector3(0, 0, -_height / 2); // bottom center
             _uvs[_numVerts - 2] = new Vector2(0.5f, 0.5f);
             _uvs[_numVerts - 1] = new Vector2(0.5f, 0.5f);
 
@@ -117,13 +117,13 @@ namespace MeshUtils
                 float angle = i * angleStep;
                 _vertices[topPerimeterVertIdxOffset + i] = new Vector3(
                     _topRadius * Mathf.Cos(angle),
-                    _height / 2,
-                    _topRadius * Mathf.Sin(angle)
+                    _topRadius * Mathf.Sin(angle),
+                    _height / 2
                 );
                 _vertices[bottomPerimeterVertIdxOffset + i] = new Vector3(
                     _bottomRadius * Mathf.Cos(angle),
-                    -_height / 2,
-                    _bottomRadius * Mathf.Sin(angle)
+                    _bottomRadius * Mathf.Sin(angle),
+                    -_height / 2
                 );
                 _uvs[topPerimeterVertIdxOffset + i] = new Vector2(
                     0.5f + 0.5f * Mathf.Cos(angle), 0.5f + 0.5f * Mathf.Sin(angle)
@@ -140,13 +140,13 @@ namespace MeshUtils
             {
                 // top
                 _triangles[topTriIdxOffset + 0] = _numVerts - 2;
-                _triangles[topTriIdxOffset + 1] = topPerimeterVertIdxOffset + i + 1;
-                _triangles[topTriIdxOffset + 2] = topPerimeterVertIdxOffset + i;
+                _triangles[topTriIdxOffset + 1] = topPerimeterVertIdxOffset + i;
+                _triangles[topTriIdxOffset + 2] = topPerimeterVertIdxOffset + i + 1;
 
                 // bottom
                 _triangles[bottomTriIdxOffset + 0] = _numVerts - 1;
-                _triangles[bottomTriIdxOffset + 1] = bottomPerimeterVertIdxOffset + i;
-                _triangles[bottomTriIdxOffset + 2] = bottomPerimeterVertIdxOffset + i + 1;
+                _triangles[bottomTriIdxOffset + 1] = bottomPerimeterVertIdxOffset + i + 1;
+                _triangles[bottomTriIdxOffset + 2] = bottomPerimeterVertIdxOffset + i;
 
                 topTriIdxOffset += 3;
                 bottomTriIdxOffset += 3;

@@ -21,12 +21,6 @@ namespace Block
     {
         [SerializeField] protected List<Rigidbody> connectedRigidbodies = default;
 
-        protected virtual void AttachRigidBody(Rigidbody body)
-        {
-            connectedRigidbodies.Add(body);
-        }
-
-
         /// <summary>
         /// Enter game play mode, should create relevant components such as joints)
         /// </summary>
@@ -35,7 +29,7 @@ namespace Block
         public virtual void OnAttach(BlockAttachment attachment)
         {
             Rigidbody body = attachment.obj.GetComponent<Rigidbody>();
-            AttachRigidBody(body);
+            connectedRigidbodies.Add(body);
         }
     }
 }

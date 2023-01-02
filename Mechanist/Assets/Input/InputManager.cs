@@ -14,8 +14,8 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
     public event UnityAction BuildingModeFireEvent = delegate { };
     public event UnityAction BuildingModeDoubleFireEvent = delegate { };
     public event UnityAction BuildingModeEnterPlacementEvent = delegate { };
-    public event UnityAction BuildModeToPlayModeEvent = delegate { };
-    public event UnityAction PlayModeToBuildModeEvent = delegate { };
+    public event UnityAction EnterPlayModeEvent = delegate { };
+    public event UnityAction EnterBuildModeEvent = delegate { };
 
     private void OnEnable()
     {
@@ -124,7 +124,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
             Debug.Log("InputManager: Enter Play Mode");
             DisableAllInput();
             EnablePlayModeInput();
-            BuildModeToPlayModeEvent.Invoke();
+            EnterPlayModeEvent.Invoke();
         }
     }
 
@@ -135,7 +135,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
             Debug.Log("InputManager: Enter Build Mode");
             DisableAllInput();
             EnableBuildingModeInput();
-            PlayModeToBuildModeEvent.Invoke();
+            EnterBuildModeEvent.Invoke();
         }
     }
 
