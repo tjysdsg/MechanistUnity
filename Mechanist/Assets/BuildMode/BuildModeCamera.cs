@@ -1,4 +1,7 @@
+using System;
+using GameState;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -12,8 +15,7 @@ namespace BuildMode
         public float moveSpeed = 0.1f;
         public float slideSpeed = 0.1f;
 
-        [SerializeField] private RayEventChannelSO screenPickEventChannel;
-        [SerializeField] private RayEventChannelSO doubleFireEventChannel;
+        [SerializeField] private CurrentCameraSO currentCamera;
 
         private bool _rotating = false;
         private bool _dragging = false;
@@ -22,10 +24,11 @@ namespace BuildMode
 
         private Camera _camera;
 
-        public void Start()
+        private void Awake()
         {
             _transform = GetComponent<Transform>();
             _camera = GetComponent<Camera>();
+            currentCamera.camera = _camera;
         }
 
         private void OnEnable()
@@ -34,8 +37,6 @@ namespace BuildMode
             inputManager.BuildingModeDragCameraEvent += OnDragCamera;
             inputManager.BuildingModeZoomEvent += OnZoom;
             inputManager.BuildingModeMoveCameraPivotEvent += OnCameraPivotMoveCamera;
-            inputManager.BuildingModeFireEvent += OnFire;
-            inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
         }
 
         private void OnDisable()
@@ -44,7 +45,6 @@ namespace BuildMode
             inputManager.BuildingModeDragCameraEvent -= OnDragCamera;
             inputManager.BuildingModeZoomEvent -= OnZoom;
             inputManager.BuildingModeMoveCameraPivotEvent -= OnCameraPivotMoveCamera;
-            inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
         }
 
         public void Update()
@@ -96,18 +96,6 @@ namespace BuildMode
         public void OnDragCamera(float val)
         {
             _dragging = !_rotating && val > 0.001;
-        }
-
-        public void OnFire()
-        {
-            Vector2 pointer = inputManager.GetBuildModePointerInput();
-            screenPickEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
-        }
-
-        public void OnDoubleFire()
-        {
-            Vector2 pointer = inputManager.GetBuildModePointerInput();
-            doubleFireEventChannel.RaiseEvent(_camera.ScreenPointToRay(pointer));
         }
 
         /// <summary>

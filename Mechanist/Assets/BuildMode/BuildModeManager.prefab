@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5408695836323250764}
   - component: {fileID: 5408695836323250771}
-  - component: {fileID: 5408695836323250770}
-  - component: {fileID: 5408695836323250769}
   - component: {fileID: 2862434262636868990}
   m_Layer: 0
   m_Name: BuildModeManager
@@ -49,65 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
   inputManager: {fileID: 11400000, guid: f6267ef17b14bde4abbc58500e9560fd, type: 2}
+  currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
   currBlockPrefab: {fileID: 751573031158777533, guid: ff7482bf4729c1c419705fd31d2b14fb, type: 3}
   twoClickBuilding: 0
-  twoClickBuildFirstBlock: {fileID: 0}
---- !u!114 &5408695836323250770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5408695836323250768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9b3ef1da52444f8160705aba4b966e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  channel: {fileID: 11400000, guid: 78e2fb7f498241148a389fafa67f9d51, type: 2}
-  onEventRaised:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5408695836323250771}
-        m_TargetAssemblyTypeName: BuildModeManager, Assembly-CSharp
-        m_MethodName: OnCameraFire
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &5408695836323250769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5408695836323250768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9b3ef1da52444f8160705aba4b966e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  channel: {fileID: 11400000, guid: 267d53b6e1a90c14686fcd6d6bf8f9f0, type: 2}
-  onEventRaised:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5408695836323250771}
-        m_TargetAssemblyTypeName: BuildModeManager, Assembly-CSharp
-        m_MethodName: OnCameraDoubleFire
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2862434262636868990
 MonoBehaviour:
   m_ObjectHideFlags: 0

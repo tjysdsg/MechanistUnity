@@ -105,8 +105,7 @@ MonoBehaviour:
   distance: 10
   moveSpeed: 0.1
   slideSpeed: 0.1
-  screenPickEventChannel: {fileID: 11400000, guid: 78e2fb7f498241148a389fafa67f9d51, type: 2}
-  doubleFireEventChannel: {fileID: 11400000, guid: 267d53b6e1a90c14686fcd6d6bf8f9f0, type: 2}
+  currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
 --- !u!114 &40081146
 MonoBehaviour:
   m_ObjectHideFlags: 0

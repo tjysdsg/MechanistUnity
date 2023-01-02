@@ -1,6 +1,7 @@
 using UnityEngine;
-using Block;
+using GameState;
 using JetBrains.Annotations;
+using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -11,6 +12,7 @@ namespace BuildMode
         public Vector3EventChannelSO moveToEventChannel;
 
         [SerializeField] private InputManager inputManager;
+        [SerializeField] private CurrentCameraSO currentCamera;
         [SerializeField] public GameObject currBlockPrefab;
 
         [HideInInspector] public bool twoClickBuilding = false;
@@ -22,18 +24,24 @@ namespace BuildMode
         public void OnEnable()
         {
             inputManager.BuildingModeEnterPlacementEvent += OnEnterPlacementMode;
+            inputManager.BuildingModeFireEvent += OnFire;
+            inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
         }
 
         public void OnDisable()
         {
             inputManager.BuildingModeEnterPlacementEvent -= OnEnterPlacementMode;
+            inputManager.BuildingModeFireEvent -= OnFire;
+            inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
         }
 
         /// <summary>
         /// User clicked left mouse button and the BuildingModeCamera dispatch the event to us
         /// </summary>
-        public void OnCameraFire(Ray ray)
+        public void OnFire()
         {
+            Vector2 pointer = inputManager.GetBuildModePointerInput();
+            Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
             if (twoClickBuilding && Physics.Raycast(ray, out RaycastHit info))
                 selectionHitInfo = info;
             else
@@ -43,8 +51,10 @@ namespace BuildMode
         /// <summary>
         /// User double clicked left mouse button and the BuildingModeCamera dispatch the event to us
         /// </summary>
-        public void OnCameraDoubleFire(Ray ray)
+        public void OnDoubleFire()
         {
+            Vector2 pointer = inputManager.GetBuildModePointerInput();
+            Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
             if (!twoClickBuilding && Physics.Raycast(ray, out RaycastHit info))
             {
                 cameraPivotPos = info.point;
