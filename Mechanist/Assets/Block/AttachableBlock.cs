@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Block
@@ -12,8 +13,27 @@ namespace Block
 
     public class AttachableBlock : BaseBlock
     {
+        [SerializeField] protected List<Rigidbody> connectedRigidbodies = new List<Rigidbody>();
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            foreach (var body in connectedRigidbodies)
+            {
+                AttachRigidBody(body);
+            }
+        }
+
+        protected virtual void AttachRigidBody(Rigidbody body)
+        {
+        }
+
         public virtual void OnAttach(BlockAttachment attachment)
         {
+            Rigidbody body = attachment.obj.GetComponent<Rigidbody>();
+            AttachRigidBody(body);
+            connectedRigidbodies.Add(body);
         }
     }
 }
