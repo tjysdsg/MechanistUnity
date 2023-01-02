@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using MeshUtils;
 
@@ -43,7 +44,7 @@ namespace Block
             Gizmos.color = Color.gray;
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
             Gizmos.DrawMesh(_gizmoMesh.UpdateMesh(0.2f, 0.2f, direction.magnitude), center,
-                Quaternion.FromToRotation(Vector3.up, direction));
+                Quaternion.FromToRotation(Vector3.forward, direction));
         }
 
         private (Vector3, Vector3) CalculatePositionAndDirectionVectors()
@@ -55,6 +56,15 @@ namespace Block
             Vector3 direction = pos1 - pos2;
 
             return (position, direction);
+        }
+
+        private void OnValidate()
+        {
+            if (block1 != null && block2 != null)
+            {
+                (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
+                transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+            }
         }
 
         // Update the position and the mesh of the cylinder based on the two connected objects
@@ -69,7 +79,8 @@ namespace Block
 
             // update transform
             _cylinderModel.transform.localScale = Vector3.one;
-            _cylinderModel.transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.up, direction));
+            _cylinderModel.transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+            transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
 
             // generate/update cylinder mesh
             _length = direction.magnitude;
