@@ -62,10 +62,11 @@ namespace Block
                 _go = gameObject;
             if (_rigidbody == null)
                 _rigidbody = GetComponent<Rigidbody>();
-
-            allBlocks.blocks.Add(this);
-
             Assert.IsNotNull(_rigidbody);
+
+            _origPos = transform.position;
+            _origRotation = transform.rotation;
+            allBlocks.blocks.Add(this);
         }
     }
 

@@ -13,11 +13,15 @@ namespace Console
         private FileSystemWatcher _watcher;
         private FileStream _fileStream;
         private StreamReader _reader;
-        private string _content = "GameConsole\n";
+        private string _content = "";
         private bool _changed = false;
 
         private void OnEnable()
         {
+            text.text = _content;
+            if (Application.isEditor) return;
+
+            // set up file watcher
             var (logDir, logFile) = GetLogFilePath();
             string path = Path.Combine(logDir, logFile);
             if (!File.Exists(path))
@@ -30,6 +34,7 @@ namespace Console
             // _watcher.Error += (object sender, ErrorEventArgs e) => { Debug.Log("BIG SHIT"); };
             _watcher.EnableRaisingEvents = true;
 
+            // set up file reader
             _fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Delete | FileShare.ReadWrite);
             _reader = new StreamReader(_fileStream);
         }
@@ -85,6 +90,8 @@ namespace Console
 
         private void Update()
         {
+            if (Application.isEditor) return;
+
             if (_changed)
             {
                 _content += _reader.ReadToEnd();
