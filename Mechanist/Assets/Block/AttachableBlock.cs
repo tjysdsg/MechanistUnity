@@ -11,29 +11,31 @@ namespace Block
         public Vector3 point;
     }
 
-    public class AttachableBlock : BaseBlock
+    /// <summary>
+    /// During build mode, this class only remembers which object(s) are connected.
+    /// 
+    /// During gameplay, we initialize the physics (creating relevant joints, rigidbodies, etc.) based on the specific
+    /// type of block
+    /// </summary>
+    public abstract class AttachableBlock : BaseBlock
     {
-        [SerializeField] protected List<Rigidbody> connectedRigidbodies = new List<Rigidbody>();
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            foreach (var body in connectedRigidbodies)
-            {
-                AttachRigidBody(body);
-            }
-        }
+        [SerializeField] protected List<Rigidbody> connectedRigidbodies = default;
 
         protected virtual void AttachRigidBody(Rigidbody body)
         {
+            connectedRigidbodies.Add(body);
         }
+
+
+        /// <summary>
+        /// Enter game play mode, should create relevant components such as joints)
+        /// </summary>
+        public abstract void EnterPlayMode();
 
         public virtual void OnAttach(BlockAttachment attachment)
         {
             Rigidbody body = attachment.obj.GetComponent<Rigidbody>();
             AttachRigidBody(body);
-            connectedRigidbodies.Add(body);
         }
     }
 }

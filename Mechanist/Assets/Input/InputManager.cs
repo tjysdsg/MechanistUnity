@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "Game/Input Manager")]
-public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
+public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, GameInput.IPlayModeActions
 {
     private GameInput _gameInput;
 
@@ -14,6 +14,8 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     public event UnityAction BuildingModeFireEvent = delegate { };
     public event UnityAction BuildingModeDoubleFireEvent = delegate { };
     public event UnityAction BuildingModeEnterPlacementEvent = delegate { };
+    public event UnityAction BuildModeToPlayModeEvent = delegate { };
+    public event UnityAction PlayModeToBuildModeEvent = delegate { };
 
     private void OnEnable()
     {
@@ -21,7 +23,8 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
         {
             _gameInput = new GameInput();
             _gameInput.BuildingMode.SetCallbacks(this);
-            _gameInput.BuildingMode.Enable();
+            _gameInput.PlayMode.SetCallbacks(this);
+            DisableAllInput();
         }
     }
 
@@ -33,11 +36,17 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     public void DisableAllInput()
     {
         _gameInput.BuildingMode.Disable();
+        _gameInput.PlayMode.Disable();
     }
 
     public void EnableBuildingModeInput()
     {
         _gameInput.BuildingMode.Enable();
+    }
+
+    public void EnablePlayModeInput()
+    {
+        _gameInput.PlayMode.Enable();
     }
 
     #region Empty Handlers
@@ -51,6 +60,8 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     }
 
     #endregion
+
+    #region BuildMode
 
     public void OnMoveCameraPivot(InputAction.CallbackContext context)
     {
@@ -88,7 +99,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
 
     public void OnEnterPlacementMode(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed) 
+        if (context.phase == InputActionPhase.Performed)
             BuildingModeEnterPlacementEvent.Invoke();
     }
 
@@ -101,4 +112,32 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions
     {
         return _gameInput.BuildingMode.PointerDelta.ReadValue<Vector2>();
     }
+
+    #endregion
+
+    #region ModeSwitching
+
+    public void OnEnterPlayMode(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("InputManager: Enter Play Mode");
+            DisableAllInput();
+            EnablePlayModeInput();
+            BuildModeToPlayModeEvent.Invoke();
+        }
+    }
+
+    public void OnEnterBuildMode(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("InputManager: Enter Build Mode");
+            DisableAllInput();
+            EnableBuildingModeInput();
+            PlayModeToBuildModeEvent.Invoke();
+        }
+    }
+
+    #endregion
 }

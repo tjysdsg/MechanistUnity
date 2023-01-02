@@ -48,6 +48,7 @@ MonoBehaviour:
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
   inputManager: {fileID: 11400000, guid: f6267ef17b14bde4abbc58500e9560fd, type: 2}
   currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
+  gameMode: {fileID: 11400000, guid: 31f3a58267f11734d979f0ca6346b069, type: 2}
   currBlockPrefab: {fileID: 751573031158777533, guid: ff7482bf4729c1c419705fd31d2b14fb, type: 3}
   twoClickBuilding: 0
 --- !u!114 &2862434262636868990

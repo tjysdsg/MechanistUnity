@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "EnterPlayMode",
+                    "type": "Button",
+                    "id": "b668b1cb-0900-4f3a-be6e-1579a6ecbbb8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -250,6 +259,45 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "EnterPlacementMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2efeac7-f972-4d4f-9fc3-adb4442c26bb",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "EnterPlayMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayMode",
+            "id": "5043d184-f28c-4bcf-ab37-21eec592cb9a",
+            "actions": [
+                {
+                    "name": "EnterBuildMode",
+                    "type": "Button",
+                    "id": "1916eb49-d3db-42cd-bcbf-34cf0303431f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6d42b653-e555-41e4-b61d-fcd17e63ae5e",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "EnterBuildMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

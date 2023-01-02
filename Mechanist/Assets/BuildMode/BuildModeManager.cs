@@ -1,7 +1,5 @@
 using UnityEngine;
 using GameState;
-using JetBrains.Annotations;
-using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -13,12 +11,11 @@ namespace BuildMode
 
         [SerializeField] private InputManager inputManager;
         [SerializeField] private CurrentCameraSO currentCamera;
+        [SerializeField] private GameModeSO gameMode;
         [SerializeField] public GameObject currBlockPrefab;
 
         [HideInInspector] public bool twoClickBuilding = false;
-
-        [HideInInspector] [CanBeNull] public RaycastHit? selectionHitInfo;
-
+        [HideInInspector] public RaycastHit? selectionHitInfo;
         [HideInInspector] public Vector3? cameraPivotPos = null;
 
         public void OnEnable()
@@ -26,6 +23,8 @@ namespace BuildMode
             inputManager.BuildingModeEnterPlacementEvent += OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent += OnFire;
             inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
+
+            gameMode.OnEventRaised += OnGameModeChange;
         }
 
         public void OnDisable()
@@ -33,6 +32,8 @@ namespace BuildMode
             inputManager.BuildingModeEnterPlacementEvent -= OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent -= OnFire;
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
+
+            gameMode.OnEventRaised -= OnGameModeChange;
         }
 
         /// <summary>
@@ -64,6 +65,20 @@ namespace BuildMode
         public void OnEnterPlacementMode()
         {
             twoClickBuilding = !twoClickBuilding;
+        }
+
+        public void OnGameModeChange(GameMode mode)
+        {
+            // we always reset no matter what game mode we entered
+            twoClickBuilding = false;
+            selectionHitInfo = null;
+            cameraPivotPos = null;
+
+            // enable/disable this game object
+            if (mode == GameMode.BuildMode)
+                gameObject.SetActive(true);
+            else
+                gameObject.SetActive(false);
         }
     }
 }

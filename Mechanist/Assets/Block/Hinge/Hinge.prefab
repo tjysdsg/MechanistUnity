@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7071452360406441045}
   - component: {fileID: 7071452360406441044}
   - component: {fileID: 7071452360406441043}
-  - component: {fileID: 7071452360406441042}
   - component: {fileID: 1801619343}
   - component: {fileID: 1801619344}
+  - component: {fileID: 1145842035}
   m_Layer: 0
   m_Name: Hinge
   m_TagString: Untagged
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7071452360406441042
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7071452360406441041}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &1801619343
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -128,4 +114,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f02ba96b41f948adf79cc004539d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectedRigidbodies: []
+  wieldedRigidbodies: []
+--- !u!64 &1145842035
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7071452360406441041}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
