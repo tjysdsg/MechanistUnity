@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3001905546444002216}
   - component: {fileID: 539138054}
   - component: {fileID: 539138053}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WieldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,4 +127,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708d3199edb3c544fabdc45b6eef427a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
   connectedRigidbodies: []

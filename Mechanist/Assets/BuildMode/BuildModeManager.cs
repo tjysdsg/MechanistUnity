@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Block;
 using UnityEngine;
 using GameState;
@@ -11,6 +10,8 @@ namespace BuildMode
         [Header("Configs")] [SerializeField] private GameModeSO gameMode;
         [SerializeField] private InputManager inputManager;
         [SerializeField] public CurrentCameraSO currentCamera;
+        [SerializeField] private LayerMask attachableBlockMask;
+        [SerializeField] private BlockListSO allBlocks;
 
         [Header("Building Block")] [SerializeField]
         public BlockTypeSO currentBlockType;
@@ -42,14 +43,14 @@ namespace BuildMode
         /// </summary>
         [HideInInspector] public RaycastHit? selectionHitInfo = null;
 
-        private readonly List<BaseBlock> _createdBlocks = new List<BaseBlock>();
-
         private void OnEnable()
         {
             inputManager.BuildingModeEnterPlacementEvent += OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent += OnFire;
             inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
 
+            // avoid being called multiple times
+            gameMode.OnEventRaised -= OnGameModeChange;
             gameMode.OnEventRaised += OnGameModeChange;
         }
 
@@ -62,7 +63,7 @@ namespace BuildMode
 
         public void AddCreatedBlock(BaseBlock block)
         {
-            _createdBlocks.Add(block);
+            allBlocks.blocks.Add(block);
         }
 
         public void ResetStateMachine(bool exitPlacement)
@@ -87,7 +88,10 @@ namespace BuildMode
             isFired = true;
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
-            if (isPlacing && Physics.Raycast(selectionRay, out RaycastHit info))
+            if (isPlacing && Physics.Raycast(
+                    ray: selectionRay, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
+                    layerMask: attachableBlockMask
+                ))
                 selectionHitInfo = info;
             else
                 selectionHitInfo = null;
@@ -124,7 +128,7 @@ namespace BuildMode
             if (mode == GameMode.BuildMode)
             {
                 gameObject.SetActive(true);
-                foreach (var block in _createdBlocks)
+                foreach (var block in allBlocks.blocks)
                 {
                     block.EnterBuildMode();
                 }
@@ -132,7 +136,7 @@ namespace BuildMode
             else
             {
                 gameObject.SetActive(false);
-                foreach (var block in _createdBlocks)
+                foreach (var block in allBlocks.blocks)
                 {
                     block.EnterPlayMode();
                 }

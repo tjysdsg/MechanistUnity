@@ -12,7 +12,6 @@ namespace GameState
         {
             // initial game mode entrance
             gameMode.ChangeMode(gameMode.CurrentMode);
-            Debug.Log($"Initial game mode: {gameMode.CurrentMode}");
 
             // enable relevant input mapping
             switch (gameMode.CurrentMode)
@@ -35,11 +34,13 @@ namespace GameState
 
         public void OnEnterPlayMode()
         {
+            Debug.Log("GameStateManager: OnEnterPlayMode");
             gameMode.ChangeMode(GameMode.PlayMode);
         }
 
         public void OnEnterBuildMode()
         {
+            Debug.Log("GameStateManager: OnEnterBuildMode");
             gameMode.ChangeMode(GameMode.BuildMode);
         }
     }

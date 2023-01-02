@@ -21,11 +21,11 @@ namespace Block
             {
                 FixedJoint joint = _go.AddComponent<FixedJoint>();
                 joint.connectedBody = body;
+                joint.enableCollision = false;
                 _joints.Add(joint);
             }
         }
 
-        // TODO: reset position
         protected override void OnEnterBuildMode()
         {
             foreach (var joint in _joints)

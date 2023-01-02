@@ -15,7 +15,8 @@ namespace Block
     /// </summary>
     public class Hinge : AttachableBlock
     {
-        private Joint _joint = default;
+        private HingeJoint _hingeJoint = null;
+        private FixedJoint _fixedJoint = null;
 
         public override void OnAttach(BlockAttachment attachment)
         {
@@ -29,18 +30,25 @@ namespace Block
 
         protected override void OnEnterPlayMode()
         {
+            if (connectedRigidbodies.Count != 2) return;
+
             var go = connectedRigidbodies[0].gameObject;
-            _joint = go.AddComponent<HingeJoint>();
-            _joint.connectedBody = connectedRigidbodies[1].GetComponent<Rigidbody>();
-            _joint.anchor = go.transform.InverseTransformPoint(transform.TransformPoint(Vector3.zero));
-            _joint.axis = go.transform.InverseTransformDirection(transform.TransformDirection(Vector3.up));
+            _hingeJoint = go.AddComponent<HingeJoint>();
+            _hingeJoint.connectedBody = connectedRigidbodies[1].GetComponent<Rigidbody>();
+            _hingeJoint.anchor = go.transform.InverseTransformPoint(transform.TransformPoint(Vector3.zero));
+            _hingeJoint.axis = go.transform.InverseTransformDirection(transform.TransformDirection(Vector3.up));
+            _hingeJoint.enableCollision = false;
+
+            _fixedJoint = _go.AddComponent<FixedJoint>();
+            _fixedJoint.connectedBody = connectedRigidbodies[0];
         }
 
-        // TODO: reset position
         protected override void OnEnterBuildMode()
         {
-            if (_joint != null)
-                Destroy(_joint);
+            if (_hingeJoint != null)
+                Destroy(_hingeJoint);
+            if (_fixedJoint != null)
+                Destroy(_fixedJoint);
         }
     }
 }

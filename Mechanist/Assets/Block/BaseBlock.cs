@@ -6,6 +6,8 @@ namespace Block
     [RequireComponent(typeof(Rigidbody))]
     public abstract class BaseBlock : MonoBehaviour
     {
+        [SerializeField] private BlockListSO allBlocks;
+
         protected GameObject _go;
         protected Rigidbody _rigidbody;
         private Vector3 _origPos;
@@ -60,6 +62,8 @@ namespace Block
                 _go = gameObject;
             if (_rigidbody == null)
                 _rigidbody = GetComponent<Rigidbody>();
+
+            allBlocks.blocks.Add(this);
 
             Assert.IsNotNull(_rigidbody);
         }

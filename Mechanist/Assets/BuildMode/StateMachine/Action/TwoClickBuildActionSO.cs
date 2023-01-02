@@ -69,7 +69,7 @@ namespace BuildMode.SM
             // notify two attached blocks
             var attachment = new BlockAttachment
             {
-                obj = b, point = selectionHitInfo.point
+                obj = b, point = selectionHitInfo.point // TODO: point is incorrect
             };
             _firstBlock.OnAttach(attachment);
             selectedBlock.OnAttach(attachment);

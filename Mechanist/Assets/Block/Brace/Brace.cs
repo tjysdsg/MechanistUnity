@@ -3,16 +3,15 @@ using MeshUtils;
 
 namespace Block
 {
+    [RequireComponent(typeof(MeshCollider))]
     public class Brace : TwoClickBuildBlock
     {
-        [SerializeField] public GameObject cylinderModelPrefab;
-
         private float _length;
         public float Length => _length;
 
-        private GameObject _cylinderModel;
         private ProceduralCylinder _proceduralCylinder;
         private ProceduralCylinderMesh _gizmoMesh;
+        private MeshCollider _meshCollider;
 
         protected override void OnEnterPlayMode()
         {
@@ -26,11 +25,12 @@ namespace Block
         {
             base.Initialize();
 
-            if (_cylinderModel == null)
+            if (_meshCollider == null)
+                _meshCollider = GetComponent<MeshCollider>();
+
+            if (_proceduralCylinder == null)
             {
-                _cylinderModel = Instantiate(cylinderModelPrefab, Vector3.zero, Quaternion.identity);
-                _cylinderModel.transform.parent = transform;
-                _proceduralCylinder = _cylinderModel.GetComponent<ProceduralCylinder>();
+                _proceduralCylinder = GetComponent<ProceduralCylinder>();
                 UpdateProceduralModel();
             }
         }
@@ -84,12 +84,12 @@ namespace Block
 
             // update transform
             transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
-            _cylinderModel.transform.SetPositionAndRotation(center,
-                Quaternion.FromToRotation(Vector3.forward, direction));
 
             // generate/update cylinder mesh
             _length = direction.magnitude;
             _proceduralCylinder.SetHeight(_length);
+
+            _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
         }
     }
 }

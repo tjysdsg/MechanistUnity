@@ -40,7 +40,7 @@ public class ProceduralCylinder : MonoBehaviour
 
     public void SetHeight(float h, bool updateMesh = true)
     {
-        this.height = h;
+        height = h;
         if (updateMesh) UpdateMesh();
     }
 }
