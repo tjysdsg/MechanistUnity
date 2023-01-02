@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b89136dfd25d544fbb75e6fb7434a4b, type: 3}
-  m_Name: TwoClickBuildAction1
+  m_Script: {fileID: 11500000, guid: b8de76432c7f1c948b043d7bfb98c589, type: 3}
+  m_Name: TwoClickBuildCondition
   m_EditorClassIdentifier: 
-  description: 

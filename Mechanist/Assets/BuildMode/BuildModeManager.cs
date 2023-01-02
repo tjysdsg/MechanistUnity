@@ -15,9 +15,6 @@ namespace BuildMode
 
         [HideInInspector] public bool twoClickBuilding = false;
 
-        [HideInInspector] [CanBeNull]
-        public AttachableBlock twoClickBuildFirstBlock = null; // the first block to attach the brace to
-
         [HideInInspector] [CanBeNull] public RaycastHit? selectionHitInfo;
 
         [HideInInspector] public Vector3? cameraPivotPos = null;
