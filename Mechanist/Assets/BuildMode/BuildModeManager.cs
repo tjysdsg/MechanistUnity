@@ -8,7 +8,7 @@ namespace BuildMode
     public class BuildModeManager : MonoBehaviour
     {
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")] [SerializeField]
-        private Vector3EventChannelSO moveToEventChannel;
+        public Vector3EventChannelSO moveToEventChannel;
 
         [SerializeField] private InputManager inputManager;
         [SerializeField] public GameObject currBlockPrefab;
@@ -19,6 +19,8 @@ namespace BuildMode
         public AttachableBlock twoClickBuildFirstBlock = null; // the first block to attach the brace to
 
         [HideInInspector] [CanBeNull] public RaycastHit? selectionHitInfo;
+
+        [HideInInspector] public Vector3? cameraPivotPos = null;
 
         public void OnEnable()
         {
@@ -48,7 +50,7 @@ namespace BuildMode
         {
             if (!twoClickBuilding && Physics.Raycast(ray, out RaycastHit info))
             {
-                moveToEventChannel.RaiseEvent(info.point);
+                cameraPivotPos = info.point;
             }
         }
 

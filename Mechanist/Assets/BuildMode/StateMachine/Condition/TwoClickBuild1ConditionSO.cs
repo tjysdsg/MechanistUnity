@@ -5,7 +5,7 @@ using StateMachine.ScriptableObjects;
 namespace BuildMode.SM
 {
     [CreateAssetMenu(fileName = "TwoClickBuild1Condition",
-        menuName = "State Machines/Conditions/Two Click Build1Condition")]
+        menuName = "State Machines/Conditions/TwoClickBuild1Condition")]
     public class TwoClickBuild1ConditionSO : StateConditionSO<TwoClickBuild1Condition>
     {
         protected override Condition CreateCondition() => new TwoClickBuild1Condition();

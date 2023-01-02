@@ -5,7 +5,7 @@ using StateMachine.ScriptableObjects;
 
 namespace BuildMode.SM
 {
-    [CreateAssetMenu(fileName = "TwoClickBuildAction1", menuName = "State Machines/Actions/Two Click Build Action1")]
+    [CreateAssetMenu(fileName = "TwoClickBuildAction1", menuName = "State Machines/Actions/TwoClickBuildAction1")]
     public class TwoClickBuildAction1SO : StateActionSO<TwoClickBuildAction1>
     {
         protected override StateAction CreateAction() => new TwoClickBuildAction1();

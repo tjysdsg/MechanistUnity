@@ -122,7 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _transitionTableSO: {fileID: 11400000, guid: a25d855d5b5e964499e4b75bfb0ef291, type: 2}
   _debugger:
-    debugTransitions: 0
+    debugTransitions: 1
     appendConditionsInfo: 1
     appendActionsInfo: 1
     currentState: 
