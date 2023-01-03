@@ -1,3 +1,4 @@
 {
-	"name": "Events"
+	"name": "Events",
+	"references":[ "GUID:350d614a8f0c58845a5da546655eea15" ]
 }

@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Core;
 
 namespace Block
 {
-    public enum BlockType
-    {
-        Brace,
-        Hinge,
-        WieldPoint,
-    }
-
     [CreateAssetMenu(menuName = "Game/BlockTypeSO")]
     public class BlockTypeSO : ScriptableObject
     {
-        public BlockType type;
+        public BlockType type = BlockType.None;
 
         [SerializeField] private List<BlockTypeToPrefab> _blockTypePrefabs;
 
         public GameObject GetPrefab()
         {
+            if (type == BlockType.None)
+                throw new Exception($"{type} selected you pig");
+
             GameObject ret = null;
             foreach (var e in _blockTypePrefabs)
             {

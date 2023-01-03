@@ -15,8 +15,10 @@ MonoBehaviour:
   type: 0
   _blockTypePrefabs:
   - type: 0
-    prefab: {fileID: 751573031158777533, guid: ff7482bf4729c1c419705fd31d2b14fb, type: 3}
+    prefab: {fileID: 0}
   - type: 1
-    prefab: {fileID: 6765289666285938618, guid: 4c8f7005d1bd653498b80bf9fb760593, type: 3}
+    prefab: {fileID: 751573031158777533, guid: ff7482bf4729c1c419705fd31d2b14fb, type: 3}
   - type: 2
+    prefab: {fileID: 6765289666285938618, guid: 4c8f7005d1bd653498b80bf9fb760593, type: 3}
+  - type: 3
     prefab: {fileID: 3001905546444002217, guid: e9da07c828c4df64f904f8ab392cdc2e, type: 3}

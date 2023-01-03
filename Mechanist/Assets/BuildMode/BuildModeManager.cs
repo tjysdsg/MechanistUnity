@@ -1,4 +1,5 @@
 using Block;
+using Core;
 using UnityEngine;
 using GameState;
 
@@ -20,6 +21,10 @@ namespace BuildMode
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")]
         [SerializeField]
         public Vector3EventChannelSO moveToEventChannel;
+
+        [Tooltip("The event channel is for UI controller to tell us what current block type we're building")]
+        [SerializeField]
+        private BlockTypeEventChannelSO BlockTypeUISelectionEventChannel;
 
         [HideInInspector] public bool isPlacing = false;
 
@@ -49,9 +54,13 @@ namespace BuildMode
             inputManager.BuildingModeFireEvent += OnFire;
             inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
 
-            // avoid being called multiple times
+            // use -= then += to avoid being called multiple times after switching the game mode
+
             gameMode.OnEventRaised -= OnGameModeChange;
             gameMode.OnEventRaised += OnGameModeChange;
+
+            BlockTypeUISelectionEventChannel.OnEventRaised -= OnBlockTypeSelected;
+            BlockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
         }
 
         private void OnDisable()
@@ -60,6 +69,8 @@ namespace BuildMode
             inputManager.BuildingModeFireEvent -= OnFire;
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
         }
+
+        #region APIs Used by State Actions
 
         public void AddCreatedBlock(BaseBlock block)
         {
@@ -75,6 +86,8 @@ namespace BuildMode
             selectionHitInfo = null;
             selectionRay = new Ray(Vector3.zero, Vector3.zero);
         }
+
+        #endregion
 
         #region Input Handling
 
@@ -117,6 +130,20 @@ namespace BuildMode
 
         #endregion
 
+        #region UI Event Handling
+
+        private void OnBlockTypeSelected(BlockType blockType)
+        {
+            // changing block type cancels the current build action
+            if (currentBlockType.type != blockType)
+            {
+                currentBlockType.type = blockType;
+                ResetStateMachine(true);
+            }
+        }
+
+        #endregion
+
         public void OnGameModeChange(GameMode mode)
         {
             // we always reset no matter what game mode we entered
@@ -132,6 +159,9 @@ namespace BuildMode
                 {
                     block.EnterBuildMode();
                 }
+
+                // notify UI the current block type
+                BlockTypeUISelectionEventChannel.RaiseEvent(currentBlockType.type);
             }
             else
             {

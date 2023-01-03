@@ -76,5 +76,11 @@ namespace BuildMode.SM
 
             _buildManager.AddCreatedBlock(b);
         }
+
+        public override void OnStateExit()
+        {
+            _firstBlockSelected = false;
+            _firstBlock = null;
+        }
     }
 }
