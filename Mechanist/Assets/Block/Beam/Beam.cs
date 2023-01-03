@@ -4,7 +4,7 @@ using MeshUtils;
 namespace Block
 {
     [RequireComponent(typeof(MeshCollider))]
-    public class Brace : TwoClickBuildBlock
+    public class Beam : TwoClickBuildBlock
     {
         private float _length;
         public float Length => _length;

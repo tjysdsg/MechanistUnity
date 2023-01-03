@@ -1,18 +1,18 @@
 using UnityEditor;
 using Block;
 
-[CustomEditor(typeof(Brace))]
+[CustomEditor(typeof(Beam))]
 public class BraceCustomInspector : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        Brace brace = (Brace)target;
+        Beam beam = (Beam)target;
 
-        EditorGUILayout.LabelField("Length", brace.Length.ToString());
+        EditorGUILayout.LabelField("Length", beam.Length.ToString());
 
         // if (GUILayout.Button("Refresh"))
-        //     brace.OnValidate();
+        //     beam.OnValidate();
     }
 }

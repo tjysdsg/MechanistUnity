@@ -32,9 +32,9 @@ namespace Block
             return ret;
         }
 
-        public bool IsTwoClickBuild() => type == BlockType.Brace;
+        public bool IsTwoClickBuild() => type == BlockType.Beam;
 
-        public bool IsSingleClickBuild() => type is BlockType.Hinge or BlockType.WieldPoint;
+        public bool IsSingleClickBuild() => type is BlockType.Hinge or BlockType.Ball;
 
         public bool IsNone() => type == BlockType.None;
     }

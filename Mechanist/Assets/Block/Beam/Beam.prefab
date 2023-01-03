@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 846139533}
   - component: {fileID: 846139536}
   m_Layer: 7
-  m_Name: Brace
+  m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751573031158777533}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
 --- !u!23 &846139534
 MeshRenderer:
   m_ObjectHideFlags: 0

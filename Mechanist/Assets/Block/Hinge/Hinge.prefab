@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6765289666285938620}
   - component: {fileID: 6765289666285938619}
   m_Layer: 6
-  m_Name: HingePrefab
+  m_Name: Hinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

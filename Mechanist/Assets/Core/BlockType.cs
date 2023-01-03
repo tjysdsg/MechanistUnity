@@ -3,8 +3,8 @@
     public enum BlockType
     {
         None,
-        Brace,
+        Beam,
         Hinge,
-        WieldPoint,
+        Ball,
     }
 }

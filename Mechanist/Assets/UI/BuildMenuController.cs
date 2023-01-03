@@ -31,8 +31,8 @@ public class BuildMenuController : MonoBehaviour
         _hingeButton = _root.Q<Button>("hinge-button");
         _currentBlockTypeLabel = _root.Q<Label>("current-block-type");
 
-        _braceButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Brace); };
-        _wieldPointButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.WieldPoint); };
+        _braceButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Beam); };
+        _wieldPointButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Ball); };
         _hingeButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Hinge); };
 
         blockTypeSelectionEventChannel.OnEventRaised += ChangeCurrentBlockTypeLabel;

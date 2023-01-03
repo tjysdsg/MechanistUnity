@@ -19,6 +19,7 @@ namespace Block
     /// </summary>
     public abstract class AttachableBlock : SingleClickBuildBlock
     {
+        // TODO: remove this
         [SerializeField] protected List<Rigidbody> connectedRigidbodies = default;
 
         public virtual void OnAttach(BlockAttachment attachment)
