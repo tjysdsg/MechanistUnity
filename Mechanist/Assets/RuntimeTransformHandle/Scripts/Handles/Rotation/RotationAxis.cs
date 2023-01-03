@@ -26,6 +26,7 @@ namespace RuntimeTransformHandle
             transform.SetParent(p_runtimeHandle.transform, false);
 
             GameObject o = new GameObject();
+            o.layer = p_runtimeHandle.gameObject.layer;
             o.transform.SetParent(transform, false);
             MeshRenderer mr = o.AddComponent<MeshRenderer>();
             mr.material = _material;

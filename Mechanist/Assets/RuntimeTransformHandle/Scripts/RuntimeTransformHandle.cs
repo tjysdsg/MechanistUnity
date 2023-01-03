@@ -4,7 +4,7 @@ namespace RuntimeTransformHandle
 {
     public class RuntimeTransformHandle : MonoBehaviour
     {
-        public HandleAxes axes = HandleAxes.XYZ;
+        [Header("Configs")] public HandleAxes axes = HandleAxes.XYZ;
         public HandleSpace space = HandleSpace.LOCAL;
         public HandleType type = HandleType.POSITION;
         public HandleSnappingType snappingType = HandleSnappingType.RELATIVE;
@@ -15,7 +15,9 @@ namespace RuntimeTransformHandle
 
         public bool autoScale = false;
         public float autoScaleFactor = 1;
-        public Camera handleCamera;
+
+        [Header("Target")] public Camera handleCamera;
+        public Transform target;
 
         private Vector3 _previousMousePosition;
         private HandleBase _previousAxis;
@@ -29,11 +31,10 @@ namespace RuntimeTransformHandle
         private RotationHandle _rotationHandle;
         private ScaleHandle _scaleHandle;
 
-        public Transform target;
-
         private void Start()
         {
             _previousType = type;
+            handleCamera = Camera.main;
             CreateHandles();
         }
 
@@ -131,7 +132,7 @@ namespace RuntimeTransformHandle
 
         private void GetHandle(ref HandleBase p_handle, ref Vector3 p_hitPoint)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = handleCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
             if (hits.Length == 0)
                 return;
