@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Block
 {
@@ -9,10 +10,11 @@ namespace Block
         public void DestroyPhysicalConnection();
     }
 
+    [Serializable]
     public abstract class BallBeamConnection : IJointConnection
     {
-        protected TheBall _ball = null;
-        protected Beam _beam = null;
+        [SerializeField] protected TheBall _ball = null;
+        [SerializeField] protected Beam _beam = null;
 
         public abstract Joint CreatePhysicalConnection();
         public abstract void DestroyPhysicalConnection();
@@ -36,6 +38,29 @@ namespace Block
         {
             _joint = _ball.gameObject.AddComponent<FixedJoint>();
             _joint.connectedBody = _beam.GetComponent<Rigidbody>();
+            return _joint;
+        }
+
+        public override void DestroyPhysicalConnection()
+        {
+            GameObject.Destroy(_joint);
+        }
+    }
+
+    public class HingeBallBeamConnection : BallBeamConnection
+    {
+        private HingeJoint _joint = null;
+
+        public HingeBallBeamConnection(TheBall ball, Beam beam) : base(ball, beam)
+        {
+        }
+
+        public override Joint CreatePhysicalConnection()
+        {
+            _joint = _ball.gameObject.AddComponent<HingeJoint>();
+            _joint.connectedBody = _beam.GetComponent<Rigidbody>();
+            _joint.axis = Vector3.up;
+            _joint.anchor = Vector3.zero;
             return _joint;
         }
 

@@ -19,13 +19,24 @@ namespace Block
     /// </summary>
     public abstract class AttachableBlock : SingleClickBuildBlock
     {
-        // TODO: remove this
-        [SerializeField] protected List<Rigidbody> connectedRigidbodies = default;
+        [SerializeReference] protected List<BallBeamConnection> connections = new List<BallBeamConnection>();
 
-        public virtual void OnAttach(BlockAttachment attachment)
+        public abstract void OnAttach(BlockAttachment attachment);
+
+        protected override void OnEnterPlayMode()
         {
-            Rigidbody body = attachment.obj.GetComponent<Rigidbody>();
-            connectedRigidbodies.Add(body);
+            foreach (var conn in connections)
+            {
+                conn.CreatePhysicalConnection();
+            }
+        }
+
+        protected override void OnEnterBuildMode()
+        {
+            foreach (var conn in connections)
+            {
+                conn.DestroyPhysicalConnection();
+            }
         }
     }
 }

@@ -26,8 +26,8 @@ public class BuildMenuController : MonoBehaviour
         _document = GetComponent<UIDocument>();
         _root = _document.rootVisualElement;
 
-        _braceButton = _root.Q<Button>("brace-button");
-        _wieldPointButton = _root.Q<Button>("wield-point-button");
+        _braceButton = _root.Q<Button>("beam-button");
+        _wieldPointButton = _root.Q<Button>("ball-button");
         _hingeButton = _root.Q<Button>("hinge-button");
         _currentBlockTypeLabel = _root.Q<Label>("current-block-type");
 

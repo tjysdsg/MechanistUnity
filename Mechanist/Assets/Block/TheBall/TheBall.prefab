@@ -129,3 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
   connectedRigidbodies: []
+  connections: []
+  references:
+    version: 2
+    RefIds: []
