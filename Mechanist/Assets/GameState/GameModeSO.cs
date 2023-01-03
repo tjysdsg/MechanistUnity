@@ -18,8 +18,8 @@ namespace GameState
 
         public void ChangeMode(GameMode m)
         {
-            Debug.Log($"GameModeSO: {mode}");
             mode = m;
+            Debug.Log($"GameModeSO: {mode}");
             RaiseEvent(mode);
         }
     }
