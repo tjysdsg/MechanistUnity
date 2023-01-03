@@ -22,11 +22,10 @@ namespace BuildMode
         [SerializeField]
         public Vector3EventChannelSO moveToEventChannel;
 
-        [Tooltip("The event channel is for UI controller to tell us what current block type we're building")]
+        [Tooltip("The event channel is for UI controller to tell us what current block user selected, " +
+                 "and for us to tell UI what we're building")]
         [SerializeField]
         private BlockTypeEventChannelSO BlockTypeUISelectionEventChannel;
-
-        [HideInInspector] public bool isPlacing = false;
 
         /// <summary>
         /// Did user left-clicked the mouse to build something
@@ -50,7 +49,6 @@ namespace BuildMode
 
         private void OnEnable()
         {
-            inputManager.BuildingModeEnterPlacementEvent += OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent += OnFire;
             inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
 
@@ -65,9 +63,14 @@ namespace BuildMode
 
         private void OnDisable()
         {
-            inputManager.BuildingModeEnterPlacementEvent -= OnEnterPlacementMode;
             inputManager.BuildingModeFireEvent -= OnFire;
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
+        }
+
+        private void ChangeCurrentBlockTypeAndNotifyUI(BlockType type)
+        {
+            currentBlockType.type = type;
+            BlockTypeUISelectionEventChannel.RaiseEvent(type);
         }
 
         #region APIs Used by State Actions
@@ -77,10 +80,10 @@ namespace BuildMode
             allBlocks.blocks.Add(block);
         }
 
-        public void ResetStateMachine(bool exitPlacement)
+        public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
         {
-            if (exitPlacement)
-                isPlacing = false;
+            if (clearCurrentBlockTypeSelection)
+                ChangeCurrentBlockTypeAndNotifyUI(BlockType.None);
 
             isFired = false;
             selectionHitInfo = null;
@@ -96,12 +99,12 @@ namespace BuildMode
         /// </summary>
         public void OnFire()
         {
-            if (!isPlacing) return;
+            if (currentBlockType.IsNone()) return;
 
             isFired = true;
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
-            if (isPlacing && Physics.Raycast(
+            if (Physics.Raycast(
                     ray: selectionRay, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
                     layerMask: attachableBlockMask
                 ))
@@ -115,17 +118,14 @@ namespace BuildMode
         /// </summary>
         public void OnDoubleFire()
         {
+            if (!currentBlockType.IsNone()) return;
+
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
-            if (!isPlacing && Physics.Raycast(ray, out RaycastHit info))
+            if (Physics.Raycast(ray, out RaycastHit info))
             {
                 cameraPivotPos = info.point;
             }
-        }
-
-        public void OnEnterPlacementMode()
-        {
-            isPlacing = !isPlacing;
         }
 
         #endregion
@@ -138,7 +138,7 @@ namespace BuildMode
             if (currentBlockType.type != blockType)
             {
                 currentBlockType.type = blockType;
-                ResetStateMachine(true);
+                ResetStateMachine(false);
             }
         }
 
@@ -147,7 +147,7 @@ namespace BuildMode
         public void OnGameModeChange(GameMode mode)
         {
             // we always reset no matter what game mode we entered
-            isPlacing = false;
+            ChangeCurrentBlockTypeAndNotifyUI(BlockType.None);
             selectionHitInfo = null;
             cameraPivotPos = null;
 

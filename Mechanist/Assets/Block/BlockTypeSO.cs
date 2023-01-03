@@ -35,6 +35,8 @@ namespace Block
         public bool IsTwoClickBuild() => type == BlockType.Brace;
 
         public bool IsSingleClickBuild() => type is BlockType.Hinge or BlockType.WieldPoint;
+
+        public bool IsNone() => type == BlockType.None;
     }
 
     /// <summary>
