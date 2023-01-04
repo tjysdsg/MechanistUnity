@@ -11,8 +11,5 @@ public class BraceCustomInspector : Editor
         Beam beam = (Beam)target;
 
         EditorGUILayout.LabelField("Length", beam.Length.ToString());
-
-        // if (GUILayout.Button("Refresh"))
-        //     beam.OnValidate();
     }
 }
