@@ -2,7 +2,7 @@ using UnityEditor;
 using Block;
 
 [CustomEditor(typeof(Beam))]
-public class BraceCustomInspector : Editor
+public class BeamCustomInspector : Editor
 {
     public override void OnInspectorGUI()
     {

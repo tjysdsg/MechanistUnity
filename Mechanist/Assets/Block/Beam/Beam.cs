@@ -10,7 +10,6 @@ namespace Block
         public float Length => _length;
 
         private ProceduralCylinder _proceduralCylinder;
-        private ProceduralCylinderMesh _gizmoMesh;
         private MeshCollider _meshCollider;
 
         protected override void OnEnterPlayMode()
@@ -42,13 +41,12 @@ namespace Block
                 return;
             }
 
-            if (_gizmoMesh == null)
-                _gizmoMesh = new ProceduralCylinderMesh(0.2f, 0.2f, 1, 4, 1);
+            var gizmoMesh = new ProceduralCylinderMesh(0.2f, 0.2f, 1, 4, 1);
 
             // draw gizmo mesh
             Gizmos.color = Color.gray;
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
-            Gizmos.DrawMesh(_gizmoMesh.UpdateMesh(0.2f, 0.2f, direction.magnitude), center,
+            Gizmos.DrawMesh(gizmoMesh.UpdateMesh(0.2f, 0.2f, direction.magnitude), center,
                 Quaternion.FromToRotation(Vector3.forward, direction));
         }
 

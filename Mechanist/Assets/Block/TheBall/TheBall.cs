@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
@@ -17,10 +18,18 @@ namespace Block
             connections.Add(new FixBallBeamConnection(this, (Beam)attachment.obj));
         }
 
-        // public void ChangeConnectionType(Beam beam)
-        // {
-        //     int i = _beam2Connection[beam];
-        //     connections[i].xxx = xxx;
-        // }
+        public BallBeamConnection GetConnectionOfBeam(Beam beam)
+        {
+            int i = _beam2Connection[beam];
+            return connections[i];
+        }
+
+        private void OnDrawGizmos()
+        {
+            foreach (var conn in connections)
+            {
+                conn.OnDrawGizmos();
+            }
+        }
     }
 }
