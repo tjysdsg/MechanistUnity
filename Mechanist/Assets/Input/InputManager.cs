@@ -3,7 +3,8 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "Game/Input Manager")]
-public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, GameInput.IPlayModeActions
+public class InputManager : ScriptableObject,
+    GameInput.ICommonActions, GameInput.IBuildingModeActions, GameInput.IPlayModeActions
 {
     private GameInput _gameInput;
 
@@ -11,8 +12,9 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
     public event UnityAction<Vector3> BuildingModeMoveCameraPivotEvent = delegate { };
     public event UnityAction<float> BuildingModeRotateCameraEvent = delegate { };
     public event UnityAction<float> BuildingModeDragCameraEvent = delegate { };
-    public event UnityAction BuildingModeFireEvent = delegate { };
-    public event UnityAction BuildingModeDoubleFireEvent = delegate { };
+    public event UnityAction FireEvent = delegate { };
+    public event UnityAction DoubleFireEvent = delegate { };
+    public event UnityAction<InputActionPhase> HoldFireEvent = delegate { };
     public event UnityAction EnterPlayModeEvent = delegate { };
     public event UnityAction EnterBuildModeEvent = delegate { };
     public event UnityAction EscPressedEvent = delegate { };
@@ -22,9 +24,12 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
         if (_gameInput == null)
         {
             _gameInput = new GameInput();
+            _gameInput.Common.SetCallbacks(this);
             _gameInput.BuildingMode.SetCallbacks(this);
             _gameInput.PlayMode.SetCallbacks(this);
+
             DisableAllInput();
+            _gameInput.Common.Enable();
         }
     }
 
@@ -35,6 +40,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
 
     public void DisableAllInput()
     {
+        _gameInput.Common.Disable();
         _gameInput.BuildingMode.Disable();
         _gameInput.PlayMode.Disable();
     }
@@ -49,7 +55,21 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
         _gameInput.PlayMode.Enable();
     }
 
-    #region Empty Handlers
+    #region APIs
+
+    public Vector2 GetPointerScreenPosition()
+    {
+        return _gameInput.Common.Pointer.ReadValue<Vector2>();
+    }
+
+    public Vector2 GetPointerDeltaPosition()
+    {
+        return _gameInput.Common.PointerDelta.ReadValue<Vector2>();
+    }
+
+    #endregion
+
+    #region Common
 
     public void OnPointerDelta(InputAction.CallbackContext context)
     {
@@ -57,6 +77,23 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
 
     public void OnPointer(InputAction.CallbackContext context)
     {
+    }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            FireEvent.Invoke();
+    }
+
+    public void OnDoubleFire(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            DoubleFireEvent.Invoke();
+    }
+
+    public void OnHoldFire(InputAction.CallbackContext context)
+    {
+        HoldFireEvent.Invoke(context.phase);
     }
 
     #endregion
@@ -85,28 +122,6 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
             BuildingModeDragCameraEvent.Invoke(context.ReadValue<float>());
     }
 
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-            BuildingModeFireEvent.Invoke();
-    }
-
-    public void OnDoubleFire(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-            BuildingModeDoubleFireEvent.Invoke();
-    }
-
-    public Vector2 GetBuildModePointerInput()
-    {
-        return _gameInput.BuildingMode.Pointer.ReadValue<Vector2>();
-    }
-
-    public Vector2 GetBuildModePointerDeltaInput()
-    {
-        return _gameInput.BuildingMode.PointerDelta.ReadValue<Vector2>();
-    }
-
     #endregion
 
     #region ModeSwitching
@@ -117,6 +132,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
         {
             Debug.Log("InputManager: Enter Play Mode");
             DisableAllInput();
+            _gameInput.Common.Enable();
             EnablePlayModeInput();
             EnterPlayModeEvent.Invoke();
         }
@@ -134,6 +150,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
         {
             Debug.Log("InputManager: Enter Build Mode");
             DisableAllInput();
+            _gameInput.Common.Enable();
             EnableBuildingModeInput();
             EnterBuildModeEvent.Invoke();
         }

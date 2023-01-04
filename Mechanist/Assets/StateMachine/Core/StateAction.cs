@@ -20,6 +20,13 @@ namespace StateMachine
         public abstract void OnUpdate();
 
         /// <summary>
+        /// Called every fixed update the <see cref="StateMachine"/> is in a <see cref="State"/> with this <see cref="StateAction"/>.
+        /// </summary>
+        public virtual void OnFixedUpdate()
+        {
+        }
+
+        /// <summary>
         /// Awake is called when creating a new instance. Use this method to cache the components needed for the action.
         /// </summary>
         /// <param name="stateMachine">The <see cref="StateMachine"/> this instance belongs to.</param>

@@ -43,6 +43,12 @@ namespace StateMachine
                 _actions[i].OnUpdate();
         }
 
+        public void OnFixedUpdate()
+        {
+            for (int i = 0; i < _actions.Length; i++)
+                _actions[i].OnFixedUpdate();
+        }
+
         public void OnStateExit()
         {
             void OnStateExit(IStateComponent[] comps)

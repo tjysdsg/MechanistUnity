@@ -24,13 +24,40 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     ""name"": ""GameInput"",
     ""maps"": [
         {
-            ""name"": ""BuildingMode"",
-            ""id"": ""028c605f-29c8-4bd8-8cde-704ffcfd3855"",
+            ""name"": ""Common"",
+            ""id"": ""266d5681-d666-42b7-92af-c8d43382cafa"",
             ""actions"": [
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""68ec1118-2023-4bb1-8154-5ac2459d1b76"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoubleFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""428c6db9-9bc8-418e-b97f-3af4b0521e3a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HoldFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""30d2b27d-5937-4de3-a448-c72bc34a8272"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
                 {
                     ""name"": ""Pointer"",
                     ""type"": ""Value"",
-                    ""id"": ""b1ac2924-4e84-4459-8373-01f7fa2bfe16"",
+                    ""id"": ""4de3e089-23ff-48aa-b2fa-59b81590eb38"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -39,12 +66,95 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""PointerDelta"",
                     ""type"": ""Value"",
-                    ""id"": ""79e35e97-ba88-4a16-b38c-4a28a05fd155"",
+                    ""id"": ""c38d33bb-f173-465e-88bb-a99864ae82bd"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae682cfd-effe-4435-bec0-2678df2bed4b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""328403f6-e2ad-458e-b7ae-8cf3f53c2582"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7bc670a-8443-4969-b95c-2874eb540255"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""DoubleFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc5d722e-c173-4297-9f4d-1f1e5ef13083"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HoldFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8d920a6-7f9c-47f6-bd39-a797dda308c0"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7e62068-fbfd-4d9a-a1b9-7519bf293965"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f46e88a1-013c-4ec0-b52d-43bd564fb38e"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Esc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""BuildingMode"",
+            ""id"": ""028c605f-29c8-4bd8-8cde-704ffcfd3855"",
+            ""actions"": [
                 {
                     ""name"": ""RotateCamera"",
                     ""type"": ""Button"",
@@ -82,36 +192,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Fire"",
-                    ""type"": ""Button"",
-                    ""id"": ""a443427d-9b0b-4070-a650-b6a2018ec41b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DoubleFire"",
-                    ""type"": ""Button"",
-                    ""id"": ""bdd5dc17-3c61-4719-908e-343790f0c179"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""EnterPlayMode"",
                     ""type"": ""Button"",
                     ""id"": ""b668b1cb-0900-4f3a-be6e-1579a6ecbbb8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Esc"",
-                    ""type"": ""Button"",
-                    ""id"": ""3f641a12-2826-42ea-9261-da57059258a8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -231,67 +314,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b2931c2b-049d-47ae-bbb8-3e874ebc7c90"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f023d934-1634-4d83-b4d7-c8f4b3f4311c"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Touch"",
-                    ""action"": ""PointerDelta"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""60ddea0b-3787-4858-8ebb-978d869fffbe"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""DoubleFire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d2efeac7-f972-4d4f-9fc3-adb4442c26bb"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""EnterPlayMode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""735253ca-59cb-40fa-a3fe-929b8856e35e"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -389,18 +417,21 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         }
     ]
 }");
+        // Common
+        m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
+        m_Common_Fire = m_Common.FindAction("Fire", throwIfNotFound: true);
+        m_Common_DoubleFire = m_Common.FindAction("DoubleFire", throwIfNotFound: true);
+        m_Common_HoldFire = m_Common.FindAction("HoldFire", throwIfNotFound: true);
+        m_Common_Pointer = m_Common.FindAction("Pointer", throwIfNotFound: true);
+        m_Common_PointerDelta = m_Common.FindAction("PointerDelta", throwIfNotFound: true);
+        m_Common_Esc = m_Common.FindAction("Esc", throwIfNotFound: true);
         // BuildingMode
         m_BuildingMode = asset.FindActionMap("BuildingMode", throwIfNotFound: true);
-        m_BuildingMode_Pointer = m_BuildingMode.FindAction("Pointer", throwIfNotFound: true);
-        m_BuildingMode_PointerDelta = m_BuildingMode.FindAction("PointerDelta", throwIfNotFound: true);
         m_BuildingMode_RotateCamera = m_BuildingMode.FindAction("RotateCamera", throwIfNotFound: true);
         m_BuildingMode_MoveCameraPivot = m_BuildingMode.FindAction("MoveCameraPivot", throwIfNotFound: true);
         m_BuildingMode_Zoom = m_BuildingMode.FindAction("Zoom", throwIfNotFound: true);
         m_BuildingMode_DragCamera = m_BuildingMode.FindAction("DragCamera", throwIfNotFound: true);
-        m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
-        m_BuildingMode_DoubleFire = m_BuildingMode.FindAction("DoubleFire", throwIfNotFound: true);
         m_BuildingMode_EnterPlayMode = m_BuildingMode.FindAction("EnterPlayMode", throwIfNotFound: true);
-        m_BuildingMode_Esc = m_BuildingMode.FindAction("Esc", throwIfNotFound: true);
         // PlayMode
         m_PlayMode = asset.FindActionMap("PlayMode", throwIfNotFound: true);
         m_PlayMode_EnterBuildMode = m_PlayMode.FindAction("EnterBuildMode", throwIfNotFound: true);
@@ -460,33 +491,96 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
+    // Common
+    private readonly InputActionMap m_Common;
+    private ICommonActions m_CommonActionsCallbackInterface;
+    private readonly InputAction m_Common_Fire;
+    private readonly InputAction m_Common_DoubleFire;
+    private readonly InputAction m_Common_HoldFire;
+    private readonly InputAction m_Common_Pointer;
+    private readonly InputAction m_Common_PointerDelta;
+    private readonly InputAction m_Common_Esc;
+    public struct CommonActions
+    {
+        private @GameInput m_Wrapper;
+        public CommonActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Fire => m_Wrapper.m_Common_Fire;
+        public InputAction @DoubleFire => m_Wrapper.m_Common_DoubleFire;
+        public InputAction @HoldFire => m_Wrapper.m_Common_HoldFire;
+        public InputAction @Pointer => m_Wrapper.m_Common_Pointer;
+        public InputAction @PointerDelta => m_Wrapper.m_Common_PointerDelta;
+        public InputAction @Esc => m_Wrapper.m_Common_Esc;
+        public InputActionMap Get() { return m_Wrapper.m_Common; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CommonActions set) { return set.Get(); }
+        public void SetCallbacks(ICommonActions instance)
+        {
+            if (m_Wrapper.m_CommonActionsCallbackInterface != null)
+            {
+                @Fire.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnFire;
+                @DoubleFire.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnDoubleFire;
+                @DoubleFire.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnDoubleFire;
+                @DoubleFire.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnDoubleFire;
+                @HoldFire.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnHoldFire;
+                @HoldFire.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnHoldFire;
+                @HoldFire.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnHoldFire;
+                @Pointer.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointer;
+                @Pointer.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointer;
+                @Pointer.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointer;
+                @PointerDelta.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointerDelta;
+                @PointerDelta.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointerDelta;
+                @PointerDelta.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnPointerDelta;
+                @Esc.started -= m_Wrapper.m_CommonActionsCallbackInterface.OnEsc;
+                @Esc.performed -= m_Wrapper.m_CommonActionsCallbackInterface.OnEsc;
+                @Esc.canceled -= m_Wrapper.m_CommonActionsCallbackInterface.OnEsc;
+            }
+            m_Wrapper.m_CommonActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @DoubleFire.started += instance.OnDoubleFire;
+                @DoubleFire.performed += instance.OnDoubleFire;
+                @DoubleFire.canceled += instance.OnDoubleFire;
+                @HoldFire.started += instance.OnHoldFire;
+                @HoldFire.performed += instance.OnHoldFire;
+                @HoldFire.canceled += instance.OnHoldFire;
+                @Pointer.started += instance.OnPointer;
+                @Pointer.performed += instance.OnPointer;
+                @Pointer.canceled += instance.OnPointer;
+                @PointerDelta.started += instance.OnPointerDelta;
+                @PointerDelta.performed += instance.OnPointerDelta;
+                @PointerDelta.canceled += instance.OnPointerDelta;
+                @Esc.started += instance.OnEsc;
+                @Esc.performed += instance.OnEsc;
+                @Esc.canceled += instance.OnEsc;
+            }
+        }
+    }
+    public CommonActions @Common => new CommonActions(this);
+
     // BuildingMode
     private readonly InputActionMap m_BuildingMode;
     private IBuildingModeActions m_BuildingModeActionsCallbackInterface;
-    private readonly InputAction m_BuildingMode_Pointer;
-    private readonly InputAction m_BuildingMode_PointerDelta;
     private readonly InputAction m_BuildingMode_RotateCamera;
     private readonly InputAction m_BuildingMode_MoveCameraPivot;
     private readonly InputAction m_BuildingMode_Zoom;
     private readonly InputAction m_BuildingMode_DragCamera;
-    private readonly InputAction m_BuildingMode_Fire;
-    private readonly InputAction m_BuildingMode_DoubleFire;
     private readonly InputAction m_BuildingMode_EnterPlayMode;
-    private readonly InputAction m_BuildingMode_Esc;
     public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
         public BuildingModeActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Pointer => m_Wrapper.m_BuildingMode_Pointer;
-        public InputAction @PointerDelta => m_Wrapper.m_BuildingMode_PointerDelta;
         public InputAction @RotateCamera => m_Wrapper.m_BuildingMode_RotateCamera;
         public InputAction @MoveCameraPivot => m_Wrapper.m_BuildingMode_MoveCameraPivot;
         public InputAction @Zoom => m_Wrapper.m_BuildingMode_Zoom;
         public InputAction @DragCamera => m_Wrapper.m_BuildingMode_DragCamera;
-        public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
-        public InputAction @DoubleFire => m_Wrapper.m_BuildingMode_DoubleFire;
         public InputAction @EnterPlayMode => m_Wrapper.m_BuildingMode_EnterPlayMode;
-        public InputAction @Esc => m_Wrapper.m_BuildingMode_Esc;
         public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -496,12 +590,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_BuildingModeActionsCallbackInterface != null)
             {
-                @Pointer.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
-                @Pointer.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
-                @Pointer.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointer;
-                @PointerDelta.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
-                @PointerDelta.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
-                @PointerDelta.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnPointerDelta;
                 @RotateCamera.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnRotateCamera;
@@ -514,28 +602,13 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @DragCamera.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
                 @DragCamera.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
                 @DragCamera.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDragCamera;
-                @Fire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
-                @Fire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
-                @Fire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnFire;
-                @DoubleFire.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
-                @DoubleFire.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
-                @DoubleFire.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnDoubleFire;
                 @EnterPlayMode.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
                 @EnterPlayMode.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
                 @EnterPlayMode.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
-                @Esc.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
-                @Esc.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
-                @Esc.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
             }
             m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Pointer.started += instance.OnPointer;
-                @Pointer.performed += instance.OnPointer;
-                @Pointer.canceled += instance.OnPointer;
-                @PointerDelta.started += instance.OnPointerDelta;
-                @PointerDelta.performed += instance.OnPointerDelta;
-                @PointerDelta.canceled += instance.OnPointerDelta;
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
@@ -548,18 +621,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @DragCamera.started += instance.OnDragCamera;
                 @DragCamera.performed += instance.OnDragCamera;
                 @DragCamera.canceled += instance.OnDragCamera;
-                @Fire.started += instance.OnFire;
-                @Fire.performed += instance.OnFire;
-                @Fire.canceled += instance.OnFire;
-                @DoubleFire.started += instance.OnDoubleFire;
-                @DoubleFire.performed += instance.OnDoubleFire;
-                @DoubleFire.canceled += instance.OnDoubleFire;
                 @EnterPlayMode.started += instance.OnEnterPlayMode;
                 @EnterPlayMode.performed += instance.OnEnterPlayMode;
                 @EnterPlayMode.canceled += instance.OnEnterPlayMode;
-                @Esc.started += instance.OnEsc;
-                @Esc.performed += instance.OnEsc;
-                @Esc.canceled += instance.OnEsc;
             }
         }
     }
@@ -642,18 +706,22 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_XRSchemeIndex];
         }
     }
-    public interface IBuildingModeActions
+    public interface ICommonActions
     {
+        void OnFire(InputAction.CallbackContext context);
+        void OnDoubleFire(InputAction.CallbackContext context);
+        void OnHoldFire(InputAction.CallbackContext context);
         void OnPointer(InputAction.CallbackContext context);
         void OnPointerDelta(InputAction.CallbackContext context);
+        void OnEsc(InputAction.CallbackContext context);
+    }
+    public interface IBuildingModeActions
+    {
         void OnRotateCamera(InputAction.CallbackContext context);
         void OnMoveCameraPivot(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
         void OnDragCamera(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
-        void OnDoubleFire(InputAction.CallbackContext context);
         void OnEnterPlayMode(InputAction.CallbackContext context);
-        void OnEsc(InputAction.CallbackContext context);
     }
     public interface IPlayModeActions
     {

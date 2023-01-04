@@ -54,7 +54,7 @@ namespace BuildMode
             _transform.Translate(translation, Space.World);
 
             // rotate camera based on input
-            Vector2 lookDelta = inputManager.GetBuildModePointerDeltaInput();
+            Vector2 lookDelta = inputManager.GetPointerDeltaPosition();
             if (_rotating)
             {
                 Vector3 axis = _transform.TransformDirection(Vector3.Cross(Vector3.forward, lookDelta));

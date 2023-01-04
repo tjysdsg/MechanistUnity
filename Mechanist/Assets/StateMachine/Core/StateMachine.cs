@@ -90,6 +90,11 @@ namespace StateMachine
             _currentState.OnUpdate();
         }
 
+        private void FixedUpdate()
+        {
+            _currentState.OnFixedUpdate();
+        }
+
         private void Transition(State transitionState)
         {
             _currentState.OnStateExit();

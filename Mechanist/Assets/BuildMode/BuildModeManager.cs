@@ -3,6 +3,7 @@ using Block;
 using Core;
 using UnityEngine;
 using GameState;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace BuildMode
@@ -39,7 +40,7 @@ namespace BuildMode
         /// </summary>
         [HideInInspector] public bool isFired = false;
 
-        [FormerlySerializedAs("EscPressed")] [HideInInspector]
+        [HideInInspector]
         public bool escPressed = false;
 
         /// <summary>
@@ -72,11 +73,12 @@ namespace BuildMode
 
         private void OnEnable()
         {
-            inputManager.BuildingModeFireEvent += OnFire;
-            inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
-            inputManager.EscPressedEvent += () => { escPressed = true; };
+            inputManager.FireEvent += OnFire;
+            inputManager.DoubleFireEvent += OnDoubleFire;
+            inputManager.EscPressedEvent += OnEsc;
 
-            // use -= then += to avoid being called multiple times after switching the game mode
+            // we want to keep these callbacks below active even if this game object is disable
+            // but we need to make sure they're not registered for multiple times
 
             gameMode.OnEventRaised -= OnGameModeChange;
             gameMode.OnEventRaised += OnGameModeChange;
@@ -87,8 +89,9 @@ namespace BuildMode
 
         private void OnDisable()
         {
-            inputManager.BuildingModeFireEvent -= OnFire;
-            inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
+            inputManager.FireEvent -= OnFire;
+            inputManager.DoubleFireEvent -= OnDoubleFire;
+            inputManager.EscPressedEvent -= OnEsc;
         }
 
         private void Update()
@@ -124,6 +127,7 @@ namespace BuildMode
             isFired = false;
             selectionHitInfo = null;
             selectionRay = new Ray(Vector3.zero, Vector3.zero);
+            cameraPivotPos = null;
         }
 
         public void SelectBlockToEdit(BaseBlock block)
@@ -136,21 +140,25 @@ namespace BuildMode
 
         #region Input Handling
 
+        private void OnEsc()
+        {
+            escPressed = true;
+        }
+
         /// <summary>
         /// User clicked left mouse button and the BuildingModeCamera dispatch the event to us
         /// </summary>
         public void OnFire()
         {
             isFired = true;
-            Vector2 pointer = inputManager.GetBuildModePointerInput();
+            Vector2 pointer = inputManager.GetPointerScreenPosition();
             selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
+            selectionHitInfo = null;
             if (Physics.Raycast(
                     ray: selectionRay, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
                     layerMask: attachableBlockMask
                 ))
                 selectionHitInfo = info;
-            else
-                selectionHitInfo = null;
         }
 
         /// <summary>
@@ -160,7 +168,7 @@ namespace BuildMode
         {
             if (!currentBlockType.IsNone()) return;
 
-            Vector2 pointer = inputManager.GetBuildModePointerInput();
+            Vector2 pointer = inputManager.GetPointerScreenPosition();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
             if (Physics.Raycast(ray, out RaycastHit info))
             {
