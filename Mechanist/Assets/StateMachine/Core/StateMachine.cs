@@ -16,6 +16,8 @@ namespace StateMachine
         private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
         internal State _currentState;
 
+        public string CurrentStateName => _currentState._originSO.displayName;
+
         private void Awake()
         {
             _currentState = _transitionTableSO.GetInitialState(this);

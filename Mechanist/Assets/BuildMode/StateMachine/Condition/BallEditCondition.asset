@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35432205b9a6a374bbbfe6b7cac92179, type: 3}
-  m_Name: Normal
+  m_Script: {fileID: 11500000, guid: e91e4869e65a4c10884b87f3caa2d5d2, type: 3}
+  m_Name: BallEditCondition
   m_EditorClassIdentifier: 
-  _actions: []

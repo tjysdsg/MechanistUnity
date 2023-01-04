@@ -15,6 +15,7 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
     public event UnityAction BuildingModeDoubleFireEvent = delegate { };
     public event UnityAction EnterPlayModeEvent = delegate { };
     public event UnityAction EnterBuildModeEvent = delegate { };
+    public event UnityAction EscPressedEvent = delegate { };
 
     private void OnEnable()
     {
@@ -119,6 +120,12 @@ public class InputManager : ScriptableObject, GameInput.IBuildingModeActions, Ga
             EnablePlayModeInput();
             EnterPlayModeEvent.Invoke();
         }
+    }
+
+    public void OnEsc(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            EscPressedEvent.Invoke();
     }
 
     public void OnEnterBuildMode(InputAction.CallbackContext context)

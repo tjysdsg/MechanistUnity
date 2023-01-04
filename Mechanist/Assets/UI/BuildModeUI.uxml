@@ -1,12 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/style.uss?fileID=7433441132597879392&amp;guid=22aa97f35967a68499ebde0b5999ce5d&amp;type=3#style" />
     <ui:VisualElement name="block-selection-panel" style="width: 100%; height: 20%; justify-content: center; bottom: 0; position: absolute; flex-direction: column; align-items: center;">
         <ui:VisualElement name="VisualElement" style="flex-direction: row;">
             <ui:Button text="Ball" display-tooltip-when-elided="true" name="ball-button" />
             <ui:Button text="Hinge" display-tooltip-when-elided="true" name="hinge-button" />
             <ui:Button text="Beam" display-tooltip-when-elided="true" name="beam-button" style="flex-direction: column;" />
         </ui:VisualElement>
-        <ui:VisualElement name="VisualElement" style="background-color: rgb(255, 255, 255);">
-            <ui:Label text="block type" display-tooltip-when-elided="true" name="current-block-type" style="-unity-text-align: middle-center; justify-content: center; align-items: center;" />
+        <ui:VisualElement name="VisualElement" style="background-color: rgb(255, 255, 255); flex-direction: row;">
+            <ui:Label text="block type" display-tooltip-when-elided="true" name="current-block-type" class="label" />
+            <ui:Label text="build state" display-tooltip-when-elided="true" name="current-state" class="label" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

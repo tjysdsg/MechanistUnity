@@ -55,8 +55,9 @@ MonoBehaviour:
   currentBlockType: {fileID: 11400000, guid: c911d37afae21004799014d8d56afb4c, type: 2}
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
   BlockTypeUISelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
-  isPlacing: 0
+  CurrentBuildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}
   isFired: 0
+  blocksBeingEdited: []
 --- !u!114 &2862434262636868990
 MonoBehaviour:
   m_ObjectHideFlags: 0

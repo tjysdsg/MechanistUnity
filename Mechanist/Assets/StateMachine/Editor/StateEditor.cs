@@ -26,6 +26,7 @@ namespace StateMachine.Editor
 
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("displayName"));
             _list.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();

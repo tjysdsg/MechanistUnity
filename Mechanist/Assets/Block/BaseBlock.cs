@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Block
@@ -20,6 +21,8 @@ namespace Block
 
         protected abstract void OnEnterPlayMode();
         protected abstract void OnEnterBuildMode();
+
+        public abstract BlockType GetBlockType();
 
         /// <summary>
         /// Enter game play mode, should create relevant components such as joints

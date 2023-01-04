@@ -107,6 +107,15 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f641a12-2826-42ea-9261-da57059258a8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -274,6 +283,17 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""EnterPlayMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""735253ca-59cb-40fa-a3fe-929b8856e35e"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Esc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -380,6 +400,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_BuildingMode_Fire = m_BuildingMode.FindAction("Fire", throwIfNotFound: true);
         m_BuildingMode_DoubleFire = m_BuildingMode.FindAction("DoubleFire", throwIfNotFound: true);
         m_BuildingMode_EnterPlayMode = m_BuildingMode.FindAction("EnterPlayMode", throwIfNotFound: true);
+        m_BuildingMode_Esc = m_BuildingMode.FindAction("Esc", throwIfNotFound: true);
         // PlayMode
         m_PlayMode = asset.FindActionMap("PlayMode", throwIfNotFound: true);
         m_PlayMode_EnterBuildMode = m_PlayMode.FindAction("EnterBuildMode", throwIfNotFound: true);
@@ -451,6 +472,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_BuildingMode_Fire;
     private readonly InputAction m_BuildingMode_DoubleFire;
     private readonly InputAction m_BuildingMode_EnterPlayMode;
+    private readonly InputAction m_BuildingMode_Esc;
     public struct BuildingModeActions
     {
         private @GameInput m_Wrapper;
@@ -464,6 +486,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_BuildingMode_Fire;
         public InputAction @DoubleFire => m_Wrapper.m_BuildingMode_DoubleFire;
         public InputAction @EnterPlayMode => m_Wrapper.m_BuildingMode_EnterPlayMode;
+        public InputAction @Esc => m_Wrapper.m_BuildingMode_Esc;
         public InputActionMap Get() { return m_Wrapper.m_BuildingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -500,6 +523,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @EnterPlayMode.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
                 @EnterPlayMode.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
                 @EnterPlayMode.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEnterPlayMode;
+                @Esc.started -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
+                @Esc.performed -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
+                @Esc.canceled -= m_Wrapper.m_BuildingModeActionsCallbackInterface.OnEsc;
             }
             m_Wrapper.m_BuildingModeActionsCallbackInterface = instance;
             if (instance != null)
@@ -531,6 +557,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @EnterPlayMode.started += instance.OnEnterPlayMode;
                 @EnterPlayMode.performed += instance.OnEnterPlayMode;
                 @EnterPlayMode.canceled += instance.OnEnterPlayMode;
+                @Esc.started += instance.OnEsc;
+                @Esc.performed += instance.OnEsc;
+                @Esc.canceled += instance.OnEsc;
             }
         }
     }
@@ -624,6 +653,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnDoubleFire(InputAction.CallbackContext context);
         void OnEnterPlayMode(InputAction.CallbackContext context);
+        void OnEsc(InputAction.CallbackContext context);
     }
     public interface IPlayModeActions
     {

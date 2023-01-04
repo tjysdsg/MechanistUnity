@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using MeshUtils;
 
@@ -18,6 +19,11 @@ namespace Block
 
         protected override void OnEnterBuildMode()
         {
+        }
+
+        public override BlockType GetBlockType()
+        {
+            return BlockType.Beam;
         }
 
         public override void Initialize()

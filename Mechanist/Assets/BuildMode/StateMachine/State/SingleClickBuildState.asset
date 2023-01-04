@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35432205b9a6a374bbbfe6b7cac92179, type: 3}
   m_Name: SingleClickBuildState
   m_EditorClassIdentifier: 
+  displayName: SingleClickBuild
   _actions:
   - {fileID: 11400000, guid: b21836b1fd45bb74c96a9b82e33a0278, type: 2}

@@ -6,6 +6,9 @@ namespace StateMachine.ScriptableObjects
     [CreateAssetMenu(fileName = "New State", menuName = "State Machines/State")]
     public class StateSO : ScriptableObject
     {
+        [Tooltip("The name shown in UI")] [TextArea]
+        public string displayName = "NA";
+
         [SerializeField] private StateActionSO[] _actions = null;
 
         /// <summary>

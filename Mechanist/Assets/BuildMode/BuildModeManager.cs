@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using Block;
 using Core;
 using UnityEngine;
 using GameState;
+using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -27,10 +29,18 @@ namespace BuildMode
         [SerializeField]
         private BlockTypeEventChannelSO BlockTypeUISelectionEventChannel;
 
+        [Tooltip("The event channel is for us to tell UI controller what state we are in," +
+                 "such as placement, ball editor, ...")]
+        [SerializeField]
+        private StringEventChannelSO CurrentBuildStateEventChannel;
+
         /// <summary>
-        /// Did user left-clicked the mouse to build something
+        /// Did user left-clicked the mouse
         /// </summary>
         [HideInInspector] public bool isFired = false;
+
+        [FormerlySerializedAs("EscPressed")] [HideInInspector]
+        public bool escPressed = false;
 
         /// <summary>
         /// The pivot for the camera to go to
@@ -47,10 +57,24 @@ namespace BuildMode
         /// </summary>
         [HideInInspector] public RaycastHit? selectionHitInfo = null;
 
+        public List<BaseBlock> blocksBeingEdited = new List<BaseBlock>();
+
+        // =============================================
+
+        private string _prevState = "";
+        private BlockType _prevBlockType = BlockType.None;
+        StateMachine.StateMachine _sm;
+
+        private void Start()
+        {
+            _sm = GetComponent<StateMachine.StateMachine>();
+        }
+
         private void OnEnable()
         {
             inputManager.BuildingModeFireEvent += OnFire;
             inputManager.BuildingModeDoubleFireEvent += OnDoubleFire;
+            inputManager.EscPressedEvent += () => { escPressed = true; };
 
             // use -= then += to avoid being called multiple times after switching the game mode
 
@@ -67,10 +91,20 @@ namespace BuildMode
             inputManager.BuildingModeDoubleFireEvent -= OnDoubleFire;
         }
 
-        private void ChangeCurrentBlockTypeAndNotifyUI(BlockType type)
+        private void Update()
         {
-            currentBlockType.type = type;
-            BlockTypeUISelectionEventChannel.RaiseEvent(type);
+            // notify UI using event channels
+            if (_sm.CurrentStateName != _prevState)
+            {
+                _prevState = _sm.CurrentStateName;
+                CurrentBuildStateEventChannel.RaiseEvent(_prevState);
+            }
+
+            if (currentBlockType.type != _prevBlockType)
+            {
+                _prevBlockType = currentBlockType.type;
+                BlockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
+            }
         }
 
         #region APIs Used by State Actions
@@ -83,11 +117,19 @@ namespace BuildMode
         public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
         {
             if (clearCurrentBlockTypeSelection)
-                ChangeCurrentBlockTypeAndNotifyUI(BlockType.None);
+                currentBlockType.type = BlockType.None;
 
+            blocksBeingEdited.Clear();
+            escPressed = false;
             isFired = false;
             selectionHitInfo = null;
             selectionRay = new Ray(Vector3.zero, Vector3.zero);
+        }
+
+        public void SelectBlockToEdit(BaseBlock block)
+        {
+            blocksBeingEdited.Clear();
+            blocksBeingEdited.Add(block);
         }
 
         #endregion
@@ -99,8 +141,6 @@ namespace BuildMode
         /// </summary>
         public void OnFire()
         {
-            if (currentBlockType.IsNone()) return;
-
             isFired = true;
             Vector2 pointer = inputManager.GetBuildModePointerInput();
             selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
@@ -147,9 +187,7 @@ namespace BuildMode
         public void OnGameModeChange(GameMode mode)
         {
             // we always reset no matter what game mode we entered
-            ChangeCurrentBlockTypeAndNotifyUI(BlockType.None);
-            selectionHitInfo = null;
-            cameraPivotPos = null;
+            ResetStateMachine(true);
 
             // enable/disable this game object
             if (mode == GameMode.BuildMode)

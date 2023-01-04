@@ -62,3 +62,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockTypeSelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
+  buildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}

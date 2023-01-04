@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Core;
 using UnityEngine.Assertions;
 
 namespace Block
@@ -30,6 +30,11 @@ namespace Block
             {
                 conn.OnDrawGizmos();
             }
+        }
+
+        public override BlockType GetBlockType()
+        {
+            return BlockType.Ball;
         }
     }
 }

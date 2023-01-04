@@ -1,0 +1,9 @@
+.label {
+    -unity-text-align: middle-center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4px;
+    margin-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
