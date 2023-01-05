@@ -2,7 +2,8 @@
     "name": "RuntimeTransformHandle",
     "rootNamespace": "RuntimeTransformHandle",
     "references": [
-        "GUID:dc33fa7330069db4d84741f09c72daad"
+        "GUID:dc33fa7330069db4d84741f09c72daad",
+        "GUID:a2b94720b8b531c4889dae790ef70481"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

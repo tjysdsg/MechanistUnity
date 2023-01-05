@@ -1,7 +1,7 @@
 using UnityEngine;
 using MeshUtils;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public class RotationAxis : HandleBase
     {
@@ -49,7 +49,7 @@ namespace RuntimeTransformHandle
             }
 
             Vector3 hitPoint = cameraRay.GetPoint(hitT);
-            Vector3 hitDirection = (hitPoint - _parentTransformHandle.target.position).normalized;
+            Vector3 hitDirection = (hitPoint - _parentTransformHandle.TargetTransform.position).normalized;
             float x = Vector3.Dot(hitDirection, _tangent);
             float y = Vector3.Dot(hitDirection, _biTangent);
             float angleRadians = Mathf.Atan2(y, x);
@@ -64,13 +64,13 @@ namespace RuntimeTransformHandle
 
             if (_parentTransformHandle.space == HandleSpace.LOCAL)
             {
-                _parentTransformHandle.target.localRotation =
+                _parentTransformHandle.TargetTransform.localRotation =
                     _startRotation * Quaternion.AngleAxis(angleDegrees, _axis);
             }
             else
             {
                 Vector3 invertedRotatedAxis = Quaternion.Inverse(_startRotation) * _axis;
-                _parentTransformHandle.target.rotation =
+                _parentTransformHandle.TargetTransform.rotation =
                     _startRotation * Quaternion.AngleAxis(angleDegrees, invertedRotatedAxis);
             }
 
@@ -86,8 +86,8 @@ namespace RuntimeTransformHandle
             base.StartInteraction(p_hitPoint);
 
             _startRotation = _parentTransformHandle.space == HandleSpace.LOCAL
-                ? _parentTransformHandle.target.localRotation
-                : _parentTransformHandle.target.rotation;
+                ? _parentTransformHandle.TargetTransform.localRotation
+                : _parentTransformHandle.TargetTransform.rotation;
 
             _arcMaterial = new Material(Shader.Find("RuntimeTransformHandle/HandleShader"));
             _arcMaterial.color = new Color(1, 1, 0, .4f);
@@ -103,7 +103,7 @@ namespace RuntimeTransformHandle
                 _rotatedAxis = _axis;
             }
 
-            _axisPlane = new Plane(_rotatedAxis, _parentTransformHandle.target.position);
+            _axisPlane = new Plane(_rotatedAxis, _parentTransformHandle.TargetTransform.position);
 
             Vector3 startHitPoint;
             Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -116,7 +116,7 @@ namespace RuntimeTransformHandle
                 startHitPoint = _axisPlane.ClosestPointOnPlane(p_hitPoint);
             }
 
-            _tangent = (startHitPoint - _parentTransformHandle.target.position).normalized;
+            _tangent = (startHitPoint - _parentTransformHandle.TargetTransform.position).normalized;
             _biTangent = Vector3.Cross(_rotatedAxis, _tangent);
         }
 

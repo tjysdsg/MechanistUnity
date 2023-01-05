@@ -10,7 +10,7 @@ namespace PlayMode
     {
         [Header("Configs")] [SerializeField] private GameModeSO gameMode;
         [SerializeField] private InputManager inputManager;
-        [SerializeField] private CurrentCameraSO currentCamera;
+        [SerializeField] private CameraSO currentCamera;
         [SerializeField] private LayerMask raycastMask;
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace BuildMode
         public float moveSpeed = 0.1f;
         public float slideSpeed = 0.1f;
 
-        [SerializeField] private CurrentCameraSO currentCamera;
+        [SerializeField] private CameraSO currentCamera;
         [SerializeField] private BuildModePivotSO buildModePivotSO;
 
         private bool _rotating = false;

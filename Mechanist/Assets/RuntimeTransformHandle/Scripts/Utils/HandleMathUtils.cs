@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public static class HandleMathUtils
     {

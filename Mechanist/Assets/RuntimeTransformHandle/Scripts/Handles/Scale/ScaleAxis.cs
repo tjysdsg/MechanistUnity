@@ -1,7 +1,7 @@
 using UnityEngine;
 using MeshUtils;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public class ScaleAxis : HandleBase
     {
@@ -61,7 +61,7 @@ namespace RuntimeTransformHandle
             float closestT = HandleMathUtils.ClosestPointOnRay(_raxisRay, cameraRay);
             Vector3 hitPoint = _raxisRay.GetPoint(closestT);
 
-            float distance = Vector3.Distance(_parentTransformHandle.target.position, hitPoint);
+            float distance = Vector3.Distance(_parentTransformHandle.TargetTransform.position, hitPoint);
             float axisScaleDelta = distance / _interactionDistance - 1f;
 
             Vector3 snapping = _parentTransformHandle.scaleSnap;
@@ -82,7 +82,7 @@ namespace RuntimeTransformHandle
             delta = axisScaleDelta;
             Vector3 scale = Vector3.Scale(_startScale, _axis * axisScaleDelta + Vector3.one);
 
-            _parentTransformHandle.target.localScale = scale;
+            _parentTransformHandle.TargetTransform.localScale = scale;
 
             base.Interact(p_previousPosition);
         }
@@ -90,20 +90,20 @@ namespace RuntimeTransformHandle
         public override void StartInteraction(Vector3 p_hitPoint)
         {
             base.StartInteraction(p_hitPoint);
-            _startScale = _parentTransformHandle.target.localScale;
+            _startScale = _parentTransformHandle.TargetTransform.localScale;
 
             Vector3 raxis = _parentTransformHandle.space == HandleSpace.LOCAL
-                ? _parentTransformHandle.target.rotation * _axis
+                ? _parentTransformHandle.TargetTransform.rotation * _axis
                 : _axis;
 
-            _raxisRay = new Ray(_parentTransformHandle.target.position, raxis);
+            _raxisRay = new Ray(_parentTransformHandle.TargetTransform.position, raxis);
 
             Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             float closestT = HandleMathUtils.ClosestPointOnRay(_raxisRay, cameraRay);
             Vector3 hitPoint = _raxisRay.GetPoint(closestT);
 
-            _interactionDistance = Vector3.Distance(_parentTransformHandle.target.position, hitPoint);
+            _interactionDistance = Vector3.Distance(_parentTransformHandle.TargetTransform.position, hitPoint);
         }
     }
 }

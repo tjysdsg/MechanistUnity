@@ -1,7 +1,7 @@
 using UnityEngine;
 using MeshUtils;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public class PositionAxis : HandleBase
     {
@@ -71,7 +71,7 @@ namespace RuntimeTransformHandle
                 if (snapping.x != 0) position.z = Mathf.Round(position.z / snapping.z) * snapping.z;
             }
 
-            _parentTransformHandle.target.position = position;
+            _parentTransformHandle.TargetTransform.position = position;
 
             base.Interact(p_previousPosition);
         }
@@ -80,10 +80,10 @@ namespace RuntimeTransformHandle
         {
             base.StartInteraction(p_hitPoint);
 
-            _startPosition = _parentTransformHandle.target.position;
+            _startPosition = _parentTransformHandle.TargetTransform.position;
 
             Vector3 raxis = _parentTransformHandle.space == HandleSpace.LOCAL
-                ? _parentTransformHandle.target.rotation * _axis
+                ? _parentTransformHandle.TargetTransform.rotation * _axis
                 : _axis;
 
             _raxisRay = new Ray(_startPosition, raxis);

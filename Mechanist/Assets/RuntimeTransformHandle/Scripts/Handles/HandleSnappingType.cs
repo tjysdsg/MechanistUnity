@@ -1,4 +1,4 @@
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public enum HandleSnappingType
     {

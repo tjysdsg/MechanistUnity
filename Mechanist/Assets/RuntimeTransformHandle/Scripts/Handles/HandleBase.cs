@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public abstract class HandleBase : MonoBehaviour
     {

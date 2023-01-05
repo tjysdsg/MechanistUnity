@@ -3,6 +3,7 @@ using Block;
 using Core;
 using UnityEngine;
 using GameState;
+using TransformHandle;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
@@ -13,9 +14,10 @@ namespace BuildMode
     {
         [Header("Configs")] [SerializeField] private GameModeSO gameMode;
         [SerializeField] private InputManager inputManager;
-        [SerializeField] public CurrentCameraSO currentCamera;
+        [SerializeField] public CameraSO currentCamera;
         [SerializeField] private LayerMask attachableBlockMask;
         [SerializeField] private BlockListSO allBlocks;
+        [SerializeField] public GameObject transformHandlePrefab;
 
         [Header("Building Block")] [SerializeField]
         public BlockTypeSO currentBlockType;
@@ -40,8 +42,7 @@ namespace BuildMode
         /// </summary>
         [HideInInspector] public bool isFired = false;
 
-        [HideInInspector]
-        public bool escPressed = false;
+        [HideInInspector] public bool escPressed = false;
 
         /// <summary>
         /// The pivot for the camera to go to

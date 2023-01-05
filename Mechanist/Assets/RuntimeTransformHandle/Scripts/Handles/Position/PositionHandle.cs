@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public class PositionHandle : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     [CustomEditor(typeof(RuntimeTransformHandle))]
     public class TransformHandleCustomInspector : Editor

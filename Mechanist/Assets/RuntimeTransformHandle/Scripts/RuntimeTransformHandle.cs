@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using GameState;
+using UnityEngine;
 
-namespace RuntimeTransformHandle
+namespace TransformHandle
 {
     public class RuntimeTransformHandle : MonoBehaviour
     {
@@ -16,8 +17,11 @@ namespace RuntimeTransformHandle
         public bool autoScale = false;
         public float autoScaleFactor = 1;
 
-        [Header("Target")] public Camera handleCamera;
-        public Transform target;
+        [Header("Target")] [SerializeField] private CameraSO currentCamera;
+        [SerializeField] private Transform target;
+
+        public Camera CurrentCamera => currentCamera.camera;
+        public Transform TargetTransform => target;
 
         private Vector3 _previousMousePosition;
         private HandleBase _previousAxis;
@@ -34,7 +38,6 @@ namespace RuntimeTransformHandle
         private void Start()
         {
             _previousType = type;
-            handleCamera = Camera.main;
             CreateHandles();
         }
 
@@ -67,7 +70,7 @@ namespace RuntimeTransformHandle
         {
             if (autoScale)
                 transform.localScale =
-                    Vector3.one * (Vector3.Distance(handleCamera.transform.position, transform.position) *
+                    Vector3.one * (Vector3.Distance(CurrentCamera.transform.position, transform.position) *
                                    autoScaleFactor) / 15;
 
             if (_previousType != type || _previousAxes != axes)
@@ -132,7 +135,7 @@ namespace RuntimeTransformHandle
 
         private void GetHandle(ref HandleBase p_handle, ref Vector3 p_hitPoint)
         {
-            Ray ray = handleCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = CurrentCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(ray);
             if (hits.Length == 0)
                 return;
@@ -149,11 +152,19 @@ namespace RuntimeTransformHandle
             }
         }
 
-        public static RuntimeTransformHandle Create(Transform p_target, HandleType p_handleType)
+        public static RuntimeTransformHandle Create(
+            Transform p_target,
+            CameraSO currentCameraSO,
+            HandleType p_handleType,
+            int layer
+        )
         {
-            RuntimeTransformHandle runtimeTransformHandle = new GameObject().AddComponent<RuntimeTransformHandle>();
+            var go = new GameObject("TransformHandler");
+            go.layer = layer;
+            RuntimeTransformHandle runtimeTransformHandle = go.AddComponent<RuntimeTransformHandle>();
             runtimeTransformHandle.target = p_target;
             runtimeTransformHandle.type = p_handleType;
+            runtimeTransformHandle.currentCamera = currentCameraSO;
 
             return runtimeTransformHandle;
         }
