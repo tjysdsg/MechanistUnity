@@ -35,12 +35,28 @@ namespace BuildMode.SM
                     LayerMask.NameToLayer("Gizmos")
                 );
             _transformHandle.space = HandleSpace.WORLD;
+
+            _buildManager.usePositionTransformHandleEventChannel.OnEventRaised += SetTransformHandleTypeAsPosition;
+            _buildManager.useRotationTransformHandleEventChannel.OnEventRaised += SetTransformHandleTypeAsRotation;
         }
 
         public override void OnStateExit()
         {
+            _buildManager.usePositionTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsPosition;
+            _buildManager.useRotationTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsRotation;
+
             GameObject.Destroy(_transformHandle.gameObject);
             _transformHandle = null;
+        }
+
+        private void SetTransformHandleTypeAsPosition()
+        {
+            _transformHandle.type = HandleType.POSITION;
+        }
+
+        private void SetTransformHandleTypeAsRotation()
+        {
+            _transformHandle.type = HandleType.ROTATION;
         }
     }
 }

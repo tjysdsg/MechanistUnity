@@ -3,9 +3,6 @@ using Block;
 using Core;
 using UnityEngine;
 using GameState;
-using TransformHandle;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -17,7 +14,6 @@ namespace BuildMode
         [SerializeField] public CameraSO currentCamera;
         [SerializeField] private LayerMask attachableBlockMask;
         [SerializeField] private BlockListSO allBlocks;
-        [SerializeField] public GameObject transformHandlePrefab;
 
         [Header("Building Block")] [SerializeField]
         public BlockTypeSO currentBlockType;
@@ -27,15 +23,15 @@ namespace BuildMode
         [SerializeField]
         public Vector3EventChannelSO moveToEventChannel;
 
+        [Header("UI Event Channels")]
         [Tooltip("The event channel is for UI controller to tell us what current block user selected, " +
                  "and for us to tell UI what we're building")]
         [SerializeField]
-        private BlockTypeEventChannelSO BlockTypeUISelectionEventChannel;
+        private BlockTypeEventChannelSO blockTypeUISelectionEventChannel;
 
-        [Tooltip("The event channel is for us to tell UI controller what state we are in," +
-                 "such as placement, ball editor, ...")]
-        [SerializeField]
-        private StringEventChannelSO CurrentBuildStateEventChannel;
+        [SerializeField] public VoidEventChannelSO usePositionTransformHandleEventChannel;
+        [SerializeField] public VoidEventChannelSO useRotationTransformHandleEventChannel;
+        [SerializeField] private StringEventChannelSO currentBuildStateEventChannel;
 
         /// <summary>
         /// Did user left-clicked the mouse
@@ -84,8 +80,7 @@ namespace BuildMode
             gameMode.OnEventRaised -= OnGameModeChange;
             gameMode.OnEventRaised += OnGameModeChange;
 
-            BlockTypeUISelectionEventChannel.OnEventRaised -= OnBlockTypeSelected;
-            BlockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
+            blockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
         }
 
         private void OnDisable()
@@ -93,6 +88,8 @@ namespace BuildMode
             inputManager.FireEvent -= OnFire;
             inputManager.DoubleFireEvent -= OnDoubleFire;
             inputManager.EscPressedEvent -= OnEsc;
+
+            blockTypeUISelectionEventChannel.OnEventRaised -= OnBlockTypeSelected;
         }
 
         private void Update()
@@ -101,13 +98,13 @@ namespace BuildMode
             if (_sm.CurrentStateName != _prevState)
             {
                 _prevState = _sm.CurrentStateName;
-                CurrentBuildStateEventChannel.RaiseEvent(_prevState);
+                currentBuildStateEventChannel.RaiseEvent(_prevState);
             }
 
             if (currentBlockType.type != _prevBlockType)
             {
                 _prevBlockType = currentBlockType.type;
-                BlockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
+                blockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
             }
         }
 
@@ -208,7 +205,7 @@ namespace BuildMode
                 }
 
                 // notify UI the current block type
-                BlockTypeUISelectionEventChannel.RaiseEvent(currentBlockType.type);
+                blockTypeUISelectionEventChannel.RaiseEvent(currentBlockType.type);
             }
             else
             {

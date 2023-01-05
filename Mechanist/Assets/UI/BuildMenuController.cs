@@ -1,9 +1,16 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Core;
+using UI;
 
-public class BuildMenuController : MonoBehaviour
+public class BuildMenuController : BaseUIController
 {
+    #region Block type selection
+
+    private Button _braceButton;
+    private Button _wieldPointButton;
+    private Button _hingeButton;
+
     /// <summary>
     /// This channel is two-way.
     /// We want block type changes reflected in the UI.
@@ -13,18 +20,26 @@ public class BuildMenuController : MonoBehaviour
     /// </summary>
     [SerializeField] private BlockTypeEventChannelSO blockTypeSelectionEventChannel;
 
-    [SerializeField] private StringEventChannelSO buildStateEventChannel;
+    #endregion
 
-    private Button _braceButton;
-    private Button _wieldPointButton;
-    private Button _hingeButton;
+    #region Status
+
     private Label _currentBlockTypeLabel;
     private Label _currentStateLabel;
+    [SerializeField] private StringEventChannelSO buildStateEventChannel;
 
-    private UIDocument _document;
-    private VisualElement _root;
+    #endregion
 
-    private void OnEnable()
+    #region TransformHandle
+
+    private Button _positionToolButton;
+    private Button _rotationToolButton;
+    [SerializeField] private VoidEventChannelSO positionToolButtonEventChannel;
+    [SerializeField] private VoidEventChannelSO rotationToolButtonEventChannel;
+
+    #endregion
+
+    protected override void Initialize()
     {
         _document = GetComponent<UIDocument>();
         _root = _document.rootVisualElement;
@@ -41,6 +56,11 @@ public class BuildMenuController : MonoBehaviour
 
         blockTypeSelectionEventChannel.OnEventRaised += ChangeCurrentBlockTypeLabel;
         buildStateEventChannel.OnEventRaised += ChangeBuildState;
+
+        _positionToolButton = _root.Q("transform-handle-panel").Q<Button>("position");
+        _rotationToolButton = _root.Q("transform-handle-panel").Q<Button>("rotation");
+        _positionToolButton.clicked += () => { positionToolButtonEventChannel.RaiseEvent(); };
+        _rotationToolButton.clicked += () => { rotationToolButtonEventChannel.RaiseEvent(); };
     }
 
     private void NotifyBlockTypeSelectionChanged(BlockType type)
