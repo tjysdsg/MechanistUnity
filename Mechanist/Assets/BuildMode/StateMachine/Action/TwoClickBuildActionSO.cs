@@ -64,7 +64,6 @@ namespace BuildMode.SM
             var b = go.GetComponent<TwoClickBuildBlock>();
             b.block1 = _firstBlock.transform;
             b.block2 = selectionTransform;
-            b.Initialize();
             b.EnterBuildMode();
 
             // notify two attached blocks

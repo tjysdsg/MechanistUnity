@@ -2,7 +2,6 @@
 using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
-using UnityEngine.Assertions;
 
 namespace BuildMode.SM
 {
@@ -41,7 +40,6 @@ namespace BuildMode.SM
             var go = GameObject.Instantiate(_buildManager.blockConfig.GetPrefab(_buildManager.CurrentBlockType),
                 targetPos, Quaternion.identity);
             var b = go.GetComponent<SingleClickBuildBlock>();
-            b.Initialize();
             b.EnterBuildMode();
 
             _buildManager.AddCreatedBlock(b);

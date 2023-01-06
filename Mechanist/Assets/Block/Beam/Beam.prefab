@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
+  _gameModeEventChannel: {fileID: 11400000, guid: 31f3a58267f11734d979f0ca6346b069, type: 2}
   block1: {fileID: 0}
   block2: {fileID: 0}
   nRadialSegments: 20

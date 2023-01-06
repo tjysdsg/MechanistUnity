@@ -34,19 +34,42 @@ namespace Block
         public override BlockType GetBlockType() => BlockType.Beam;
         public override bool HasInterBlockCollision() => false;
 
-        public override void Initialize()
+        protected override void Initialize()
         {
-            base.Initialize();
-
             _meshCollider = GetComponent<MeshCollider>();
-
             _meshFilter = GetComponent<MeshFilter>();
+        }
 
-            if (_proceduralCylinderMesh == null)
-                _proceduralCylinderMesh =
-                    new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
+        protected override void LateInitialize()
+        {
+            if (block1 == null || block2 == null)
+                return;
 
+            AttachSelfToBlockIfHavent(block1);
+            AttachSelfToBlockIfHavent(block2);
+
+            _proceduralCylinderMesh =
+                new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
             UpdateProceduralModel();
+        }
+
+        /// <summary>
+        /// Attach self to an attachable block if haven't.
+        /// This is used for to insert missing connections to the attachable block during game initialization.
+        /// No need to call this when entering play mode from build mode since <see cref="AttachableBlock.OnAttach"/>
+        /// would have been called by then.
+        /// </summary>
+        private void AttachSelfToBlockIfHavent(Transform b)
+        {
+            AttachableBlock ab = b.GetComponent<AttachableBlock>();
+            if (ab.FindConnectionFromOther(this) == null)
+            {
+                ab.OnAttach(new BlockAttachment
+                {
+                    obj = this,
+                    point = transform.position,
+                });
+            }
         }
 
         private (Vector3, Vector3) CalculatePositionAndDirectionVectors()
@@ -63,9 +86,6 @@ namespace Block
         // Update the position and the mesh of the cylinder based on the two connected objects
         public void UpdateProceduralModel()
         {
-            if (block1 == null || block2 == null)
-                return;
-
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
 
             // update transform

@@ -22,6 +22,7 @@ namespace Block
         [SerializeReference] protected List<BallBeamConnection> connections = new List<BallBeamConnection>();
 
         public abstract void OnAttach(BlockAttachment attachment);
+        public abstract BallBeamConnection FindConnectionFromOther(BaseBlock other);
 
         protected override void OnEnterPlayMode()
         {
