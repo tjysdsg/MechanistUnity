@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
 using TransformHandle;
@@ -27,12 +28,15 @@ namespace BuildMode.SM
             // TODO: support grouped editing
             Assert.AreEqual(1, _buildManager.blocksBeingEdited.Count);
 
+            // highlight
+            _buildManager.blocksBeingEdited[0].gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
+
             _transformHandle =
                 RuntimeTransformHandle.Create(
                     _buildManager.blocksBeingEdited[0].transform,
                     _buildManager.currentCamera,
                     HandleType.POSITION,
-                    LayerMask.NameToLayer("Gizmos")
+                    ObjectLayer.GetGizmosLayerIndex()
                 );
             _transformHandle.space = HandleSpace.WORLD;
 
@@ -42,6 +46,9 @@ namespace BuildMode.SM
 
         public override void OnStateExit()
         {
+            // remove highlight
+            _buildManager.blocksBeingEdited[0].gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
+
             _buildManager.usePositionTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsPosition;
             _buildManager.useRotationTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsRotation;
 

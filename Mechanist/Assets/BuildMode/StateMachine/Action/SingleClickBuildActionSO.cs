@@ -41,6 +41,7 @@ namespace BuildMode.SM
             var go = GameObject.Instantiate(_buildManager.currentBlockType.GetPrefab(), targetPos, Quaternion.identity);
             var b = go.GetComponent<SingleClickBuildBlock>();
             b.Initialize();
+            b.EnterBuildMode();
 
             _buildManager.AddCreatedBlock(b);
 

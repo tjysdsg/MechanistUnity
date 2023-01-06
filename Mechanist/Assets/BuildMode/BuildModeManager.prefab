@@ -50,7 +50,7 @@ MonoBehaviour:
   currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
   attachableBlockMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
   allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
   currentBlockType: {fileID: 11400000, guid: c911d37afae21004799014d8d56afb4c, type: 2}
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}

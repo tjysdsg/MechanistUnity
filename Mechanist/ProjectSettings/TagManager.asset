@@ -11,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - AttachableBlock
+  - PhysicalBlock
   - BlockAttachment
   - Gizmos
-  - 
-  - 
+  - OutlinedBlock
+  - BuildModeBlock
   - 
   - 
   - 

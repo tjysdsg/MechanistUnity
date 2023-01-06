@@ -1,5 +1,6 @@
 using UnityEditor;
 using Block;
+using UnityEngine;
 
 [CustomEditor(typeof(Beam))]
 public class BeamCustomInspector : Editor
@@ -10,6 +11,7 @@ public class BeamCustomInspector : Editor
 
         Beam beam = (Beam)target;
 
-        EditorGUILayout.LabelField("Length", beam.Length.ToString());
+        if (GUILayout.Button("Refresh"))
+            beam.UpdateMeshInEditor();
     }
 }

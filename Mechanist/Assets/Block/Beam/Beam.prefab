@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4341153848359770937}
   - component: {fileID: 846139535}
   - component: {fileID: 846139534}
-  - component: {fileID: 846139533}
   - component: {fileID: 846139536}
   m_Layer: 7
   m_Name: Beam
@@ -30,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751573031158777533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 13.9, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -52,6 +51,11 @@ MonoBehaviour:
   allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
   block1: {fileID: 0}
   block2: {fileID: 0}
+  nRadialSegments: 20
+  nHeightSegments: 2
+  topRadius: 0.1
+  bottomRadius: 0.1
+  length: 1
 --- !u!54 &4341153848359770937
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -118,23 +122,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &846139533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 751573031158777533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a011c004051bda8478775ae42d6ab18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nRadialSegments: 4
-  nHeightSegments: 1
-  height: 1
-  topRadius: 0.1
-  bottomRadius: 0.1
 --- !u!64 &846139536
 MeshCollider:
   m_ObjectHideFlags: 0

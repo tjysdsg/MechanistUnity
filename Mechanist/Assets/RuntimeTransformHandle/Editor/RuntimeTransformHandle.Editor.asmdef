@@ -1,11 +1,12 @@
 {
-    "name": "RuntimeTransformHandle",
+    "name": "RuntimeTransformHandle.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:dc33fa7330069db4d84741f09c72daad",
-        "GUID:a2b94720b8b531c4889dae790ef70481"
+        "GUID:63449c7a69a984543a03a8c9c6e594c9"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

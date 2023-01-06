@@ -11,10 +11,13 @@ namespace Block
 
         protected GameObject _go;
         protected Rigidbody _rigidbody;
-        private Vector3 _origPos;
-        private Quaternion _origRotation;
+        private Vector3? _origPos = null;
+        private Quaternion? _origRotation = null;
 
-        protected virtual void Start()
+        /// <summary>
+        /// Must be before GameStateManager.start()
+        /// </summary>
+        protected virtual void OnEnable()
         {
             Initialize();
         }
@@ -32,6 +35,8 @@ namespace Block
             _origPos = transform.position;
             _origRotation = transform.rotation;
 
+            gameObject.layer = ObjectLayer.GetPhysicalBlockLayerIndex();
+
             _rigidbody.isKinematic = false;
             OnEnterPlayMode();
         }
@@ -41,7 +46,18 @@ namespace Block
         /// </summary>
         public void EnterBuildMode()
         {
-            transform.SetPositionAndRotation(_origPos, _origRotation);
+            if (_origPos.HasValue && _origRotation.HasValue)
+            {
+                transform.SetPositionAndRotation(_origPos.Value, _origRotation.Value);
+            }
+            else
+            {
+                _origPos = transform.position;
+                _origRotation = transform.rotation;
+            }
+
+            transform.SetPositionAndRotation(_origPos.Value, _origRotation.Value);
+            gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
 
             _rigidbody.isKinematic = true;
             _rigidbody.velocity = Vector3.zero;
@@ -67,8 +83,6 @@ namespace Block
                 _rigidbody = GetComponent<Rigidbody>();
             Assert.IsNotNull(_rigidbody);
 
-            _origPos = transform.position;
-            _origRotation = transform.rotation;
             allBlocks.blocks.Add(this);
         }
     }

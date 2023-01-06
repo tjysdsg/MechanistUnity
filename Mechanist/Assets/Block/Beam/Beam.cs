@@ -1,24 +1,36 @@
 using Core;
 using UnityEngine;
 using MeshUtils;
+using UnityEngine.Assertions;
 
 namespace Block
 {
     [RequireComponent(typeof(MeshCollider))]
+    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class Beam : TwoClickBuildBlock
     {
-        private float _length;
-        public float Length => _length;
+        private MeshCollider _meshCollider = null;
+        public Mesh Mesh => _proceduralCylinderMesh.Mesh;
 
-        private ProceduralCylinder _proceduralCylinder;
-        private MeshCollider _meshCollider;
+        private ProceduralCylinderMesh _proceduralCylinderMesh = null;
+        private MeshFilter _meshFilter = null;
+
+        [Header("Initial configs")] public int nRadialSegments = 10;
+        public int nHeightSegments = 2;
+        public float topRadius = 0.5f;
+        public float bottomRadius = 0.5f;
+        [SerializeField] private float length = 1;
+
 
         protected override void OnEnterPlayMode()
         {
+            gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();
         }
 
         protected override void OnEnterBuildMode()
         {
+            gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();
         }
 
         public override BlockType GetBlockType()
@@ -30,14 +42,63 @@ namespace Block
         {
             base.Initialize();
 
-            if (_meshCollider == null)
-                _meshCollider = GetComponent<MeshCollider>();
+            _meshCollider = GetComponent<MeshCollider>();
+            _meshFilter = GetComponent<MeshFilter>();
 
-            if (_proceduralCylinder == null)
+            if (_proceduralCylinderMesh == null)
+                _proceduralCylinderMesh =
+                    new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
+
+            UpdateProceduralModel();
+        }
+
+        private (Vector3, Vector3) CalculatePositionAndDirectionVectors()
+        {
+            Vector3 pos1 = block1.position;
+            Vector3 pos2 = block2.position;
+
+            Vector3 position = (pos1 + pos2) / 2;
+            Vector3 direction = pos1 - pos2;
+
+            return (position, direction);
+        }
+
+        // Update the position and the mesh of the cylinder based on the two connected objects
+        public void UpdateProceduralModel()
+        {
+            if (block1 == null || block2 == null)
             {
-                _proceduralCylinder = GetComponent<ProceduralCylinder>();
-                UpdateProceduralModel();
+                return;
             }
+
+            (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
+
+            // update transform
+            transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+
+            // generate/update cylinder mesh
+            length = direction.magnitude;
+            _meshFilter.sharedMesh = _proceduralCylinderMesh.UpdateMesh(topRadius, bottomRadius, length);
+            _meshCollider.sharedMesh = Mesh;
+        }
+
+        #region Editor related
+
+        private void OnValidate()
+        {
+            if (block1 != null && block2 != null)
+            {
+                (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
+                transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+            }
+        }
+
+
+        public void UpdateMeshInEditor()
+        {
+            ProceduralCylinderMesh mesh =
+                new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
+            GetComponent<MeshFilter>().sharedMesh = mesh.UpdateMesh();
         }
 
         public void OnDrawGizmos()
@@ -56,44 +117,6 @@ namespace Block
                 Quaternion.FromToRotation(Vector3.forward, direction));
         }
 
-        private (Vector3, Vector3) CalculatePositionAndDirectionVectors()
-        {
-            Vector3 pos1 = block1.position;
-            Vector3 pos2 = block2.position;
-
-            Vector3 position = (pos1 + pos2) / 2;
-            Vector3 direction = pos1 - pos2;
-
-            return (position, direction);
-        }
-
-        private void OnValidate()
-        {
-            if (block1 != null && block2 != null)
-            {
-                (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
-                transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
-            }
-        }
-
-        // Update the position and the mesh of the cylinder based on the two connected objects
-        public void UpdateProceduralModel()
-        {
-            if (block1 == null || block2 == null)
-            {
-                return;
-            }
-
-            (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
-
-            // update transform
-            transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
-
-            // generate/update cylinder mesh
-            _length = direction.magnitude;
-            _proceduralCylinder.SetHeight(_length);
-
-            _meshCollider.sharedMesh = _proceduralCylinder.Mesh;
-        }
+        #endregion
     }
 }

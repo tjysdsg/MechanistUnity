@@ -65,6 +65,7 @@ namespace BuildMode.SM
             b.block1 = _firstBlock.transform;
             b.block2 = selectionTransform;
             b.Initialize();
+            b.EnterBuildMode();
 
             // notify two attached blocks
             var attachment = new BlockAttachment
