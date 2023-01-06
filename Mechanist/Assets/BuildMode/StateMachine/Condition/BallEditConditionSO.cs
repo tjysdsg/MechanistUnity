@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System.Linq;
+using Core;
 using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
@@ -18,8 +19,9 @@ namespace BuildMode.SM
 
         protected override bool Statement()
         {
+            // TODO: support multiple selection
             return _buildManager.blocksBeingEdited.Count > 0 &&
-                   _buildManager.blocksBeingEdited[0].GetBlockType() == BlockType.Ball;
+                   _buildManager.blocksBeingEdited.ElementAt(0).GetBlockType() == BlockType.Ball;
         }
     }
 }

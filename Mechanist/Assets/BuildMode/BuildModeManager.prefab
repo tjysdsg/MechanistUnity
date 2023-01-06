@@ -52,7 +52,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   allBlocks: {fileID: 11400000, guid: ada07e70195d8a24baab069a2a1434f4, type: 2}
-  currentBlockType: {fileID: 11400000, guid: c911d37afae21004799014d8d56afb4c, type: 2}
+  currentBlockConfig: {fileID: 11400000, guid: c911d37afae21004799014d8d56afb4c, type: 2}
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
   blockTypeUISelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
   usePositionTransformHandleEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}
@@ -60,7 +60,6 @@ MonoBehaviour:
   currentBuildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}
   isFired: 0
   escPressed: 0
-  blocksBeingEdited: []
 --- !u!114 &2862434262636868990
 MonoBehaviour:
   m_ObjectHideFlags: 0

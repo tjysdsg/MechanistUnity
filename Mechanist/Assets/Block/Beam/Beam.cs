@@ -1,7 +1,6 @@
 using Core;
 using UnityEngine;
 using MeshUtils;
-using UnityEngine.Assertions;
 
 namespace Block
 {
@@ -22,7 +21,6 @@ namespace Block
         public float bottomRadius = 0.5f;
         [SerializeField] private float length = 1;
 
-
         protected override void OnEnterPlayMode()
         {
             gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();
@@ -33,16 +31,15 @@ namespace Block
             gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();
         }
 
-        public override BlockType GetBlockType()
-        {
-            return BlockType.Beam;
-        }
+        public override BlockType GetBlockType() => BlockType.Beam;
+        public override bool HasInterBlockCollision() => false;
 
         public override void Initialize()
         {
             base.Initialize();
 
             _meshCollider = GetComponent<MeshCollider>();
+
             _meshFilter = GetComponent<MeshFilter>();
 
             if (_proceduralCylinderMesh == null)

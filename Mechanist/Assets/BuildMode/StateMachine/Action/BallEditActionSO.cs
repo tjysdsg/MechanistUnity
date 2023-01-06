@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System.Linq;
+using Core;
 using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
@@ -20,7 +21,6 @@ namespace BuildMode.SM
 
         public override void OnUpdate()
         {
-            // TODO
         }
 
         public override void OnStateEnter()
@@ -28,12 +28,11 @@ namespace BuildMode.SM
             // TODO: support grouped editing
             Assert.AreEqual(1, _buildManager.blocksBeingEdited.Count);
 
-            // highlight
-            _buildManager.blocksBeingEdited[0].gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
+            _buildManager.HighlightCurrentlySelectedBlock();
 
             _transformHandle =
                 RuntimeTransformHandle.Create(
-                    _buildManager.blocksBeingEdited[0].transform,
+                    _buildManager.blocksBeingEdited.ElementAt(0).transform,
                     _buildManager.currentCamera,
                     HandleType.POSITION,
                     ObjectLayer.GetGizmosLayerIndex()
@@ -46,8 +45,7 @@ namespace BuildMode.SM
 
         public override void OnStateExit()
         {
-            // remove highlight
-            _buildManager.blocksBeingEdited[0].gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
+            _buildManager.ResetHighlight();
 
             _buildManager.usePositionTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsPosition;
             _buildManager.useRotationTransformHandleEventChannel.OnEventRaised -= SetTransformHandleTypeAsRotation;

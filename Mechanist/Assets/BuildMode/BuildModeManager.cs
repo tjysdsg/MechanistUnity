@@ -16,7 +16,7 @@ namespace BuildMode
         [SerializeField] private BlockListSO allBlocks;
 
         [Header("Building Block")] [SerializeField]
-        public BlockTypeSO currentBlockType;
+        public BlockConfigSO currentBlockConfig;
 
         [Header("Event Channels")]
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")]
@@ -55,7 +55,7 @@ namespace BuildMode
         /// </summary>
         [HideInInspector] public RaycastHit? selectionHitInfo = null;
 
-        public List<BaseBlock> blocksBeingEdited = new List<BaseBlock>();
+        public HashSet<BaseBlock> blocksBeingEdited = new HashSet<BaseBlock>();
 
         // =============================================
 
@@ -101,9 +101,9 @@ namespace BuildMode
                 currentBuildStateEventChannel.RaiseEvent(_prevState);
             }
 
-            if (currentBlockType.type != _prevBlockType)
+            if (currentBlockConfig.type != _prevBlockType)
             {
-                _prevBlockType = currentBlockType.type;
+                _prevBlockType = currentBlockConfig.type;
                 blockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
             }
         }
@@ -118,7 +118,7 @@ namespace BuildMode
         public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
         {
             if (clearCurrentBlockTypeSelection)
-                currentBlockType.type = BlockType.None;
+                currentBlockConfig.type = BlockType.None;
 
             blocksBeingEdited.Clear();
             escPressed = false;
@@ -126,12 +126,47 @@ namespace BuildMode
             selectionHitInfo = null;
             selectionRay = new Ray(Vector3.zero, Vector3.zero);
             cameraPivotPos = null;
+            ResetHighlight();
         }
 
         public void SelectBlockToEdit(BaseBlock block)
         {
             blocksBeingEdited.Clear();
             blocksBeingEdited.Add(block);
+        }
+
+        /// <summary>
+        /// 1. Highlight current selected block with an outline
+        /// 2. Dim all blocks other than currently selected ones by apply a different material
+        /// </summary>
+        public void HighlightCurrentlySelectedBlock()
+        {
+            foreach (var block in blocksBeingEdited)
+            {
+                block.gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
+            }
+
+            // dim other blocks
+            foreach (var block in allBlocks.blocks)
+            {
+                if (!blocksBeingEdited.Contains(block))
+                {
+                    block.GetComponent<MeshRenderer>().material =
+                        currentBlockConfig.GetDimmedMaterial(block.GetBlockType());
+                }
+            }
+        }
+
+        public void ResetHighlight()
+        {
+            foreach (var block in allBlocks.blocks)
+            {
+                if (block.gameObject.layer == ObjectLayer.GetOutlinedBlockLayerIndex())
+                    block.gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
+
+                block.GetComponent<MeshRenderer>().material =
+                    currentBlockConfig.GetBuildModeMaterial(block.GetBlockType());
+            }
         }
 
         #endregion
@@ -164,7 +199,7 @@ namespace BuildMode
         /// </summary>
         public void OnDoubleFire()
         {
-            if (!currentBlockType.IsNone()) return;
+            if (!currentBlockConfig.IsNone()) return;
 
             Vector2 pointer = inputManager.GetPointerScreenPosition();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
@@ -176,19 +211,17 @@ namespace BuildMode
 
         #endregion
 
-        #region UI Event Handling
+        #region Event Handling
 
         private void OnBlockTypeSelected(BlockType blockType)
         {
             // changing block type cancels the current build action
-            if (currentBlockType.type != blockType)
+            if (currentBlockConfig.type != blockType)
             {
-                currentBlockType.type = blockType;
+                currentBlockConfig.type = blockType;
                 ResetStateMachine(false);
             }
         }
-
-        #endregion
 
         public void OnGameModeChange(GameMode mode)
         {
@@ -205,7 +238,7 @@ namespace BuildMode
                 }
 
                 // notify UI the current block type
-                blockTypeUISelectionEventChannel.RaiseEvent(currentBlockType.type);
+                blockTypeUISelectionEventChannel.RaiseEvent(currentBlockConfig.type);
             }
             else
             {
@@ -216,5 +249,7 @@ namespace BuildMode
                 }
             }
         }
+
+        #endregion
     }
 }

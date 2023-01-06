@@ -26,6 +26,7 @@ namespace Block
         protected abstract void OnEnterBuildMode();
 
         public abstract BlockType GetBlockType();
+        public abstract bool HasInterBlockCollision();
 
         /// <summary>
         /// Enter game play mode, should create relevant components such as joints

@@ -12,6 +12,9 @@ namespace Block
         /// </summary>
         private Dictionary<Beam, int> _beam2Connection;
 
+        public override BlockType GetBlockType() => BlockType.Ball;
+        public override bool HasInterBlockCollision() => true;
+
         public override void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(attachment.obj is Beam);
@@ -30,11 +33,6 @@ namespace Block
             {
                 conn.OnDrawGizmos();
             }
-        }
-
-        public override BlockType GetBlockType()
-        {
-            return BlockType.Ball;
         }
     }
 }
