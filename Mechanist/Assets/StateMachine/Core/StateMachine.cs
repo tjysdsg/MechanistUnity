@@ -82,7 +82,7 @@ namespace StateMachine
                 : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
         }
 
-        private void Update()
+        public void Update()
         {
             if (_currentState.TryGetTransition(out var transitionState))
                 Transition(transitionState);

@@ -66,4 +66,7 @@ MonoBehaviour:
     Conditions:
     - ExpectedResult: 0
       Condition: {fileID: 11400000, guid: 8a764d829957fcc48b7c69ec246fc22b, type: 2}
+      Operator: 1
+    - ExpectedResult: 1
+      Condition: {fileID: 11400000, guid: 39ac2889efbc67b4eab963cdef436c15, type: 2}
       Operator: 0

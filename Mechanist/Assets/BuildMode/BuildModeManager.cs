@@ -9,7 +9,7 @@ namespace BuildMode
     [RequireComponent(typeof(StateMachine.StateMachine))]
     public class BuildModeManager : MonoBehaviour
     {
-        [Header("Configs")] [SerializeField] private GameModeSO gameMode;
+        [Header("Configs")] [SerializeField] private GameModeEventChannelSO gameModeEventChannel;
         [SerializeField] private InputManager inputManager;
         [SerializeField] public CameraSO currentCamera;
         [SerializeField] private LayerMask attachableBlockMask;
@@ -66,11 +66,6 @@ namespace BuildMode
 
         private StateMachine.StateMachine _sm;
 
-        private void Start()
-        {
-            _sm = GetComponent<StateMachine.StateMachine>();
-        }
-
         private void OnEnable()
         {
             inputManager.FireEvent += OnFire;
@@ -80,10 +75,12 @@ namespace BuildMode
             // we want to keep these callbacks below active even if this game object is disable
             // but we need to make sure they're not registered for multiple times
 
-            gameMode.OnEventRaised -= OnGameModeChange;
-            gameMode.OnEventRaised += OnGameModeChange;
+            gameModeEventChannel.OnEventRaised -= OnGameModeChange;
+            gameModeEventChannel.OnEventRaised += OnGameModeChange;
 
             blockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
+
+            _sm = GetComponent<StateMachine.StateMachine>();
         }
 
         private void OnDisable()
@@ -245,6 +242,7 @@ namespace BuildMode
             }
             else
             {
+                _sm.Update(); // give StateAction one last chance to clean up
                 gameObject.SetActive(false);
                 foreach (var block in allBlocks.blocks)
                 {

@@ -1,14 +1,13 @@
 using GameState;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace PlayMode
 {
     [RequireComponent(typeof(StateMachine.StateMachine))]
     public class PlayModeManager : MonoBehaviour
     {
-        [Header("Configs")] [SerializeField] private GameModeSO gameMode;
+        [Header("Configs")] [SerializeField] private GameModeEventChannelSO gameModeEventChannel;
         [SerializeField] private InputManager inputManager;
         [SerializeField] private CameraSO currentCamera;
         [SerializeField] private LayerMask raycastMask;
@@ -42,8 +41,8 @@ namespace PlayMode
             // we want to keep these callbacks below active even if this game object is disable
             // but we need to make sure they're not registered for multiple times
 
-            gameMode.OnEventRaised -= OnGameModeChange;
-            gameMode.OnEventRaised += OnGameModeChange;
+            gameModeEventChannel.OnEventRaised -= OnGameModeChange;
+            gameModeEventChannel.OnEventRaised += OnGameModeChange;
         }
 
         private void OnDisable()

@@ -5,16 +5,16 @@ namespace GameState
 {
     public class GameStateManager : MonoBehaviour
     {
-        [SerializeField] private GameModeSO gameMode;
+        [SerializeField] private GameModeEventChannelSO gameModeEventChannel;
         [SerializeField] private InputManager inputManager;
 
         private void Start()
         {
             // initial game mode entrance
-            gameMode.ChangeMode(gameMode.CurrentMode);
+            gameModeEventChannel.ChangeMode(gameModeEventChannel.CurrentMode);
 
             // enable relevant input mapping
-            switch (gameMode.CurrentMode)
+            switch (gameModeEventChannel.CurrentMode)
             {
                 case GameMode.BuildMode:
                     inputManager.EnableBuildingModeInput();
@@ -35,13 +35,13 @@ namespace GameState
         public void OnEnterPlayMode()
         {
             Debug.Log("GameStateManager: OnEnterPlayMode");
-            gameMode.ChangeMode(GameMode.PlayMode);
+            gameModeEventChannel.ChangeMode(GameMode.PlayMode);
         }
 
         public void OnEnterBuildMode()
         {
             Debug.Log("GameStateManager: OnEnterBuildMode");
-            gameMode.ChangeMode(GameMode.BuildMode);
+            gameModeEventChannel.ChangeMode(GameMode.BuildMode);
         }
     }
 }

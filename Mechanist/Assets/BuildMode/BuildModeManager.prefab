@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63323f897a105d74d8e7191a45393bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: {fileID: 11400000, guid: 31f3a58267f11734d979f0ca6346b069, type: 2}
+  gameModeEventChannel: {fileID: 11400000, guid: 31f3a58267f11734d979f0ca6346b069, type: 2}
   inputManager: {fileID: 11400000, guid: f6267ef17b14bde4abbc58500e9560fd, type: 2}
   currentCamera: {fileID: 11400000, guid: 464148c4bf88a514db1c909246516dec, type: 2}
   attachableBlockMask:
