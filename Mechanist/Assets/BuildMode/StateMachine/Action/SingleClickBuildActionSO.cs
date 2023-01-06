@@ -38,7 +38,8 @@ namespace BuildMode.SM
             }
 
             // instantiate brace prefab
-            var go = GameObject.Instantiate(_buildManager.currentBlockConfig.GetPrefab(), targetPos, Quaternion.identity);
+            var go = GameObject.Instantiate(_buildManager.blockConfig.GetPrefab(_buildManager.CurrentBlockType),
+                targetPos, Quaternion.identity);
             var b = go.GetComponent<SingleClickBuildBlock>();
             b.Initialize();
             b.EnterBuildMode();

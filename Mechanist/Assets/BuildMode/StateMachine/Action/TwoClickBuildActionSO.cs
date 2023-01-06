@@ -60,7 +60,7 @@ namespace BuildMode.SM
             var selectionTransform = selectionHitInfo.transform;
 
             // instantiate brace prefab
-            var go = GameObject.Instantiate(_buildManager.currentBlockConfig.GetPrefab());
+            var go = GameObject.Instantiate(_buildManager.blockConfig.GetPrefab(_buildManager.CurrentBlockType));
             var b = go.GetComponent<TwoClickBuildBlock>();
             b.block1 = _firstBlock.transform;
             b.block2 = selectionTransform;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using StateMachine;
 using StateMachine.ScriptableObjects;
 
@@ -17,7 +18,7 @@ namespace BuildMode.SM
 
         protected override bool Statement()
         {
-            return _buildManager.currentBlockConfig.IsNone() && _buildManager.cameraPivotPos.HasValue;
+            return _buildManager.CurrentBlockType == BlockType.None && _buildManager.cameraPivotPos.HasValue;
         }
     }
 }

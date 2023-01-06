@@ -16,7 +16,7 @@ namespace BuildMode
         [SerializeField] private BlockListSO allBlocks;
 
         [Header("Building Block")] [SerializeField]
-        public BlockConfigSO currentBlockConfig;
+        public BlockConfigSO blockConfig;
 
         [Header("Event Channels")]
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")]
@@ -61,7 +61,10 @@ namespace BuildMode
 
         private string _prevState = "";
         private BlockType _prevBlockType = BlockType.None;
-        StateMachine.StateMachine _sm;
+        private BlockType _currentBlockType = BlockType.None;
+        public BlockType CurrentBlockType => _currentBlockType;
+
+        private StateMachine.StateMachine _sm;
 
         private void Start()
         {
@@ -101,9 +104,9 @@ namespace BuildMode
                 currentBuildStateEventChannel.RaiseEvent(_prevState);
             }
 
-            if (currentBlockConfig.type != _prevBlockType)
+            if (_currentBlockType != _prevBlockType)
             {
-                _prevBlockType = currentBlockConfig.type;
+                _prevBlockType = _currentBlockType;
                 blockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
             }
         }
@@ -118,7 +121,7 @@ namespace BuildMode
         public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
         {
             if (clearCurrentBlockTypeSelection)
-                currentBlockConfig.type = BlockType.None;
+                _currentBlockType = BlockType.None;
 
             blocksBeingEdited.Clear();
             escPressed = false;
@@ -152,7 +155,7 @@ namespace BuildMode
                 if (!blocksBeingEdited.Contains(block))
                 {
                     block.GetComponent<MeshRenderer>().material =
-                        currentBlockConfig.GetDimmedMaterial(block.GetBlockType());
+                        blockConfig.GetDimmedMaterial(block.GetBlockType());
                 }
             }
         }
@@ -165,7 +168,7 @@ namespace BuildMode
                     block.gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
 
                 block.GetComponent<MeshRenderer>().material =
-                    currentBlockConfig.GetBuildModeMaterial(block.GetBlockType());
+                    blockConfig.GetBuildModeMaterial(block.GetBlockType());
             }
         }
 
@@ -199,7 +202,7 @@ namespace BuildMode
         /// </summary>
         public void OnDoubleFire()
         {
-            if (!currentBlockConfig.IsNone()) return;
+            if (_currentBlockType != BlockType.None) return;
 
             Vector2 pointer = inputManager.GetPointerScreenPosition();
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
@@ -216,9 +219,9 @@ namespace BuildMode
         private void OnBlockTypeSelected(BlockType blockType)
         {
             // changing block type cancels the current build action
-            if (currentBlockConfig.type != blockType)
+            if (_currentBlockType != blockType)
             {
-                currentBlockConfig.type = blockType;
+                _currentBlockType = blockType;
                 ResetStateMachine(false);
             }
         }
@@ -238,7 +241,7 @@ namespace BuildMode
                 }
 
                 // notify UI the current block type
-                blockTypeUISelectionEventChannel.RaiseEvent(currentBlockConfig.type);
+                blockTypeUISelectionEventChannel.RaiseEvent(_currentBlockType);
             }
             else
             {

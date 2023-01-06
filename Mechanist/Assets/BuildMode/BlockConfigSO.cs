@@ -2,41 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Core;
-using UnityEngine.Serialization;
 
 namespace Block
 {
     [CreateAssetMenu(menuName = "Game/BlockConfigSO")]
     public class BlockConfigSO : ScriptableObject
     {
-        public BlockType type = BlockType.None;
+        [SerializeField] private List<BlockConfig> _blockConfigs;
 
-        [FormerlySerializedAs("_blockTypePrefabs")] [SerializeField]
-        private List<BlockConfig> _blockConfigs;
+        public GameObject GetPrefab(BlockType type) => Search(type).prefab;
+        public Material GetBuildModeMaterial(BlockType type) => Search(type).BuildModeMaterial;
+        public Material GetDimmedMaterial(BlockType type) => Search(type).DimmedMaterial;
+        public bool IsTwoClickBuild(BlockType type) => type == BlockType.Beam;
+        public bool IsSingleClickBuild(BlockType type) => type is BlockType.Ball or BlockType.Hinge;
 
-        public GameObject GetPrefab() => Search(type).prefab;
-        public Material GetBuildModeMaterial(BlockType pType) => Search(pType).BuildModeMaterial;
-        public Material GetDimmedMaterial(BlockType pType) => Search(pType).DimmedMaterial;
-
-        private BlockConfig Search(BlockType pType)
+        private BlockConfig Search(BlockType type)
         {
-            if (pType == BlockType.None)
-                throw new Exception($"{pType} selected you pig");
+            if (type == BlockType.None)
+                throw new Exception($"{type} selected you pig");
 
             foreach (var e in _blockConfigs)
             {
-                if (e.type == pType)
+                if (e.type == type)
                     return e;
             }
 
-            throw new Exception($"Cannot find a block prefab of {pType}, set it in the BlockConfigSO asset you pig");
+            throw new Exception($"Cannot find a block prefab of {type}, set it in the BlockConfigSO asset you pig");
         }
-
-        public bool IsTwoClickBuild() => type == BlockType.Beam;
-
-        public bool IsSingleClickBuild() => type is BlockType.Hinge or BlockType.Ball;
-
-        public bool IsNone() => type == BlockType.None;
     }
 
     [Serializable]

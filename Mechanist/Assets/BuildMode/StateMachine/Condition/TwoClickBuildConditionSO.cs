@@ -17,7 +17,7 @@ namespace BuildMode.SM
 
         protected override bool Statement()
         {
-            return _buildManager.currentBlockConfig.IsTwoClickBuild();
+            return _buildManager.blockConfig.IsTwoClickBuild(_buildManager.CurrentBlockType);
         }
     }
 }
