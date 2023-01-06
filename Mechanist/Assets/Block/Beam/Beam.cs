@@ -64,9 +64,7 @@ namespace Block
         public void UpdateProceduralModel()
         {
             if (block1 == null || block2 == null)
-            {
                 return;
-            }
 
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
 
@@ -90,28 +88,22 @@ namespace Block
             }
         }
 
-
         public void UpdateMeshInEditor()
         {
+            if (block1 == null || block2 == null)
+                return;
+
+            (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
+
+            // update transform
+            transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
+
+            // generate/update cylinder mesh
+            length = direction.magnitude;
             ProceduralCylinderMesh mesh =
                 new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
             GetComponent<MeshFilter>().sharedMesh = mesh.UpdateMesh();
-        }
-
-        public void OnDrawGizmos()
-        {
-            if (block1 == null || block2 == null)
-            {
-                return;
-            }
-
-            var gizmoMesh = new ProceduralCylinderMesh(0.2f, 0.2f, 1, 4, 1);
-
-            // draw gizmo mesh
-            Gizmos.color = Color.gray;
-            (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
-            Gizmos.DrawMesh(gizmoMesh.UpdateMesh(0.2f, 0.2f, direction.magnitude), center,
-                Quaternion.FromToRotation(Vector3.forward, direction));
+            GetComponent<MeshCollider>().sharedMesh = mesh.Mesh;
         }
 
         #endregion
