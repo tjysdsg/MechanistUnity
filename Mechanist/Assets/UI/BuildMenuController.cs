@@ -41,9 +41,6 @@ public class BuildMenuController : BaseUIController
 
     protected override void Initialize()
     {
-        _document = GetComponent<UIDocument>();
-        _root = _document.rootVisualElement;
-
         _braceButton = _root.Q<Button>("beam-button");
         _wieldPointButton = _root.Q<Button>("ball-button");
         _hingeButton = _root.Q<Button>("hinge-button");

@@ -1,14 +1,15 @@
 using System;
 using UnityEngine;
 using System.IO;
-using UnityEngine.UI;
+using UI;
+using UnityEngine.UIElements;
 
 namespace Console
 {
-    public class GameConsole : MonoBehaviour
+    public class GameConsoleController : BaseUIController
     {
         [SerializeField] private int maxLength = 1000;
-        [SerializeField] private Text text;
+        private TextField text;
 
         private FileSystemWatcher _watcher;
         private FileStream _fileStream;
@@ -16,10 +17,18 @@ namespace Console
         private string _content = "";
         private bool _changed = false;
 
-        private void OnEnable()
+        protected override void Initialize()
         {
-            text.text = _content;
-            if (Application.isEditor) return;
+            text = _root.Q<TextField>("console");
+
+            // disable in editor
+            if (Application.isEditor)
+            {
+                text.visible = false;
+                return;
+            }
+
+            text.visible = true;
 
             // set up file watcher
             var (logDir, logFile) = GetLogFilePath();
@@ -98,7 +107,7 @@ namespace Console
                 if (_content.Length > maxLength)
                     _content = _content.Substring(_content.Length - maxLength, maxLength);
 
-                text.text = _content;
+                text.value = _content;
                 _changed = false;
                 _watcher.EnableRaisingEvents = true;
             }

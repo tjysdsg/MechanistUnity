@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9222790357259057652}
   - component: {fileID: 9222790357259057653}
   - component: {fileID: 9222790357259057655}
+  - component: {fileID: 1286348804}
   m_Layer: 5
   m_Name: BuildModeUI
   m_TagString: Untagged
@@ -65,3 +66,16 @@ MonoBehaviour:
   buildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}
   positionToolButtonEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}
   rotationToolButtonEventChannel: {fileID: 11400000, guid: 7f4947f665005c24a9f45b34449ffc30, type: 2}
+--- !u!114 &1286348804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222790357259057674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15620d6b232bbad428aaf2f788cb8e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLength: 1000
