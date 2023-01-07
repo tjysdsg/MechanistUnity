@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -18,6 +19,7 @@ namespace Block
 
         public override BlockType GetBlockType() => BlockType.Ball;
         public override bool HasInterBlockCollision() => true;
+        public override bool IsBlockAttachment() => false;
 
         protected override void Initialize()
         {
@@ -39,6 +41,12 @@ namespace Block
             if (_beamToConnection.TryGetValue(other, out int i))
                 return i;
             return -1;
+        }
+
+        public Beam GetConnectedBeam(int connectionIndex)
+        {
+            Assert.AreNotEqual(-1, connectionIndex);
+            return _connections.ElementAt(connectionIndex).Beam;
         }
 
         protected override void OnEnterPlayMode()

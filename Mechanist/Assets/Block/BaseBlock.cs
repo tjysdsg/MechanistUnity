@@ -17,6 +17,8 @@ namespace Block
         private GameMode _gameMode = GameMode.MainMenu;
         private GameMode _prevGameMode = GameMode.MainMenu;
 
+        public abstract bool IsBlockAttachment();
+
         protected virtual void OnEnable()
         {
             if (_go == null)

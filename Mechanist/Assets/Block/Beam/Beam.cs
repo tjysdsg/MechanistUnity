@@ -21,6 +21,8 @@ namespace Block
         public float bottomRadius = 0.5f;
         [SerializeField] private float length = 1;
 
+        public override bool IsBlockAttachment() => true;
+
         protected override void OnEnterPlayMode()
         {
             gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();

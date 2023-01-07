@@ -14,7 +14,9 @@ namespace Block
     public abstract class BallBeamConnection : IJointConnection
     {
         [SerializeField] protected TheBall _ball = null;
+        public TheBall Ball => _ball;
         [SerializeField] protected Beam _beam = null;
+        public Beam Beam => _beam;
 
         public abstract Joint CreatePhysicalConnection();
         public abstract void DestroyPhysicalConnection();

@@ -166,7 +166,7 @@ namespace BuildMode
 
         private void Start()
         {
-            EnterNoneState();
+            ToNoneState();
         }
 
         private void Update()
@@ -192,9 +192,12 @@ namespace BuildMode
                     _twoClickBuildData.Clear();
 
                 if (_prevState == BuildModeState.BallEdit)
-                    ExitBallEditState();
+                    OnExitBallEditState();
                 if (_prevState == BuildModeState.BallConnectionEdit)
-                    ExitBallConnectionEditState();
+                    OnExitBallConnectionEditState();
+
+                if (_state == BuildModeState.BallConnectionEdit)
+                    OnEnterBallConnectionEditState();
             }
 
             // ======================== state check can only happen above this line ========================
@@ -222,15 +225,15 @@ namespace BuildMode
             if (_escPressed)
             {
                 if (_state == BuildModeState.BallConnectionEdit)
-                    EnterBallEditState(_ballConnectionEditData.ball);
+                    ToBallEditState(_ballConnectionEditData.ball);
                 else
-                    EnterNoneState();
+                    ToNoneState();
 
                 _escPressed = false;
             }
         }
 
-        private void EnterNoneState()
+        private void ToNoneState()
         {
             _state = BuildModeState.None;
         }
@@ -241,18 +244,21 @@ namespace BuildMode
             {
                 if (_currentBlockType != BlockType.None) // build a block
                 {
-                    EnterNClickBuildState();
+                    ToNClickBuildState();
                 }
                 else if (_onScreenSelectionData.didHitBlock) // select an existing block to edit
                 {
-                    EnterBallEditState(_onScreenSelectionData.hitInfo.transform.GetComponent<BaseBlock>());
+                    var t = _onScreenSelectionData.hitInfo.transform;
+                    var ball = t.GetComponent<TheBall>();
+                    if (ball != null)
+                        ToBallEditState(ball);
                 }
 
                 _onScreenSelectionData.Clear();
             }
         }
 
-        private void EnterNClickBuildState()
+        private void ToNClickBuildState()
         {
             if (blockConfig.IsSingleClickBuild(_currentBlockType))
             {
@@ -292,7 +298,7 @@ namespace BuildMode
             _currentBlockType = BlockType.None;
 
             _onScreenSelectionData.Clear();
-            EnterNoneState();
+            ToNoneState();
         }
 
         private void TwoClickBuildStateUpdate()
@@ -331,7 +337,7 @@ namespace BuildMode
 
                         _twoClickBuildData.Clear();
                         _currentBlockType = BlockType.None;
-                        EnterNoneState();
+                        ToNoneState();
                     }
                 }
             }
@@ -339,14 +345,14 @@ namespace BuildMode
             _onScreenSelectionData.Clear();
         }
 
-        private void EnterBallEditState(BaseBlock block)
+        private void ToBallEditState(BaseBlock block)
         {
             _state = BuildModeState.BallEdit;
 
             // TODO: support grouped editing
             _ballEditData.ball = (TheBall)block;
 
-            HighlightCurrentlySelectedBlock();
+            HighlightBlocks(_ballEditData.ball);
 
             _ballEditData.transformHandle =
                 RuntimeTransformHandle.Create(
@@ -369,7 +375,7 @@ namespace BuildMode
                 var t = _onScreenSelectionData.hitInfo.transform;
                 if (t.gameObject.layer == ObjectLayer.GetBlockAttachmentLayerIndex())
                 {
-                    EnterBallConnectionEditState(
+                    ToBallConnectionEditState(
                         _ballEditData.ball,
                         _ballEditData.ball.FindConnectionIndexFromOther(t.GetComponent<Beam>())
                     );
@@ -379,7 +385,7 @@ namespace BuildMode
             _onScreenSelectionData.Clear();
         }
 
-        private void ExitBallEditState()
+        private void OnExitBallEditState()
         {
             ResetHighlight();
 
@@ -390,20 +396,24 @@ namespace BuildMode
             _ballEditData.Clear();
         }
 
-        private void EnterBallConnectionEditState(TheBall ball, int connectionIndex)
+        private void ToBallConnectionEditState(TheBall ball, int connectionIndex)
         {
             _state = BuildModeState.BallConnectionEdit;
             _ballConnectionEditData.ball = ball;
             _ballConnectionEditData.connectionIndex = connectionIndex;
+        }
 
-            HighlightCurrentlySelectedBlock();
+        private void OnEnterBallConnectionEditState()
+        {
+            HighlightBlocks(_ballConnectionEditData.ball,
+                _ballConnectionEditData.ball.GetConnectedBeam(_ballConnectionEditData.connectionIndex));
         }
 
         private void BallConnectionEditStateUpdate()
         {
         }
 
-        private void ExitBallConnectionEditState()
+        private void OnExitBallConnectionEditState()
         {
             _ballConnectionEditData.Clear();
             ResetHighlight();
@@ -418,14 +428,15 @@ namespace BuildMode
         /// 1. Highlight current selected block with an outline
         /// 2. Dim all blocks other than currently selected ones by apply a different material
         /// </summary>
-        private void HighlightCurrentlySelectedBlock()
+        private void HighlightBlocks(params BaseBlock[] blocks)
         {
-            _ballEditData.ball.gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
+            foreach (var b in blocks)
+                b.gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
 
             // dim other blocks
             foreach (var block in allBlocks.blocks)
             {
-                if (_ballEditData.ball != block)
+                if (!blocks.Contains(block))
                     block.GetComponent<MeshRenderer>().material = blockConfig.GetDimmedMaterial(block.GetBlockType());
             }
         }
@@ -435,7 +446,12 @@ namespace BuildMode
             foreach (var block in allBlocks.blocks)
             {
                 if (block.gameObject.layer == ObjectLayer.GetOutlinedBlockLayerIndex())
-                    block.gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
+                {
+                    if (block.IsBlockAttachment())
+                        block.gameObject.layer = ObjectLayer.GetBlockAttachmentLayerIndex();
+                    else
+                        block.gameObject.layer = ObjectLayer.GetBuildModeBlockLayerIndex();
+                }
 
                 block.GetComponent<MeshRenderer>().material =
                     blockConfig.GetBuildModeMaterial(block.GetBlockType());
@@ -495,7 +511,7 @@ namespace BuildMode
             if (_currentBlockType != blockType)
             {
                 _currentBlockType = blockType;
-                EnterNClickBuildState();
+                ToNClickBuildState();
             }
         }
 
@@ -504,7 +520,7 @@ namespace BuildMode
             // enable/disable this game object
             if (mode == GameMode.BuildMode)
             {
-                EnterNoneState();
+                ToNoneState();
                 gameObject.SetActive(true);
                 foreach (var block in allBlocks.blocks)
                     block.EnterBuildMode();
@@ -514,7 +530,7 @@ namespace BuildMode
             }
             else
             {
-                EnterNoneState();
+                ToNoneState();
                 Update(); // one last chance to clean up
                 gameObject.SetActive(false);
                 foreach (var block in allBlocks.blocks)
