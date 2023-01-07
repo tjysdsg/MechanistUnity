@@ -1,13 +1,24 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Block;
 using Core;
 using UnityEngine;
 using GameState;
-using UnityEngine.Serialization;
+using TransformHandle;
+using UnityEngine.Assertions;
 
 namespace BuildMode
 {
-    [RequireComponent(typeof(StateMachine.StateMachine))]
+    public enum BuildModeState
+    {
+        None,
+        SingleClickBuild,
+        TwoClickBuild,
+        BallEdit,
+        BallConnectionEdit,
+    }
+
     public class BuildModeManager : MonoBehaviour
     {
         [Header("Configs")] [SerializeField] private GameModeEventChannelSO gameModeEventChannel;
@@ -34,47 +45,104 @@ namespace BuildMode
         [SerializeField] public VoidEventChannelSO useRotationTransformHandleEventChannel;
         [SerializeField] private StringEventChannelSO currentBuildStateEventChannel;
 
-        /// <summary>
-        /// Did user left-clicked the mouse
-        /// </summary>
-        [Header("Status variables")] public bool isFired = false;
+        #region Status variables
 
-        public bool escPressed = false;
+        private bool _escPressed = false;
 
-        /// <summary>
-        /// The pivot for the camera to go to
-        /// </summary>
-        public Vector3? cameraPivotPos = null;
+        private BuildModeState _state = BuildModeState.None;
+        private BuildModeState _prevState = BuildModeState.None;
 
-        /// <summary>
-        /// The ray fired when user left-clicked the mouse to build something
-        /// </summary>
-        public Ray selectionRay;
-
-        /// <summary>
-        /// The hit result of <see cref="selectionRay"/> at the time of firing
-        /// </summary>
-        public RaycastHit? selectionHitInfo = null;
-
-        public HashSet<BaseBlock> blocksBeingEdited = new HashSet<BaseBlock>();
-
-        /// <summary>
-        /// The connection index of <see cref="blocksBeingEdited"/> that is currently being edited
-        /// </summary>
-        public int connectionIndexBeingEdited = -1;
-
-        // =============================================
-
-        private string _prevState = "";
         private BlockType _prevBlockType = BlockType.None;
         private BlockType _currentBlockType = BlockType.None;
-        public BlockType CurrentBlockType => _currentBlockType;
 
-        private StateMachine.StateMachine _sm;
+        private class OnScreenSelectionData
+        {
+            /// <summary>
+            /// Is the left mouse button clicked
+            /// </summary>
+            public bool isFired = false;
+
+            /// <summary>
+            /// Did raycast hit a block
+            /// </summary>
+            public bool didHitBlock = false;
+
+            /// <summary>
+            /// The ray fired when user left-clicked the mouse to build something
+            /// </summary>
+            public Ray ray;
+
+            /// <summary>
+            /// The hit result of <see cref="ray"/> at the time of firing
+            /// </summary>
+            public RaycastHit hitInfo;
+
+            public void Clear()
+            {
+                isFired = false;
+                didHitBlock = false;
+            }
+        }
+
+        private OnScreenSelectionData _onScreenSelectionData = new OnScreenSelectionData();
+
+        private struct TwoClickBuildData
+        {
+            public TheBall firstBlock;
+            public bool firstBlockSelected;
+
+            public void Clear()
+            {
+                firstBlock = null;
+                firstBlockSelected = false;
+            }
+        }
+
+        private TwoClickBuildData _twoClickBuildData = new TwoClickBuildData();
+
+        private struct BallEditData
+        {
+            public RuntimeTransformHandle transformHandle;
+            public TheBall ball;
+
+            public void Clear()
+            {
+                transformHandle = null;
+                ball = null;
+            }
+
+            public void SetTransformHandleTypeAsPosition()
+            {
+                transformHandle.type = HandleType.POSITION;
+            }
+
+            public void SetTransformHandleTypeAsRotation()
+            {
+                transformHandle.type = HandleType.ROTATION;
+            }
+        }
+
+        private BallEditData _ballEditData = new BallEditData();
+
+        private class BallConnectionEditData
+        {
+            public TheBall ball = null;
+            public int connectionIndex = -1;
+
+            public void Clear()
+            {
+                ball = null;
+                connectionIndex = -1;
+            }
+        }
+
+        private BallConnectionEditData _ballConnectionEditData = new BallConnectionEditData();
+
+        #endregion
 
         private void OnEnable()
         {
-            inputManager.FireEvent += OnFire;
+            inputManager.FireEvent += OnScreenSelection;
             inputManager.DoubleFireEvent += OnDoubleFire;
             inputManager.EscPressedEvent += OnEsc;
 
@@ -85,94 +153,284 @@ namespace BuildMode
             gameModeEventChannel.OnEventRaised += OnGameModeChange;
 
             blockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
-
-            _sm = GetComponent<StateMachine.StateMachine>();
         }
 
         private void OnDisable()
         {
-            inputManager.FireEvent -= OnFire;
+            inputManager.FireEvent -= OnScreenSelection;
             inputManager.DoubleFireEvent -= OnDoubleFire;
             inputManager.EscPressedEvent -= OnEsc;
 
             blockTypeUISelectionEventChannel.OnEventRaised -= OnBlockTypeSelected;
         }
 
+        private void Start()
+        {
+            EnterNoneState();
+        }
+
         private void Update()
         {
-            // notify UI using event channels
-            if (_sm.CurrentStateName != _prevState)
-            {
-                _prevState = _sm.CurrentStateName;
-                currentBuildStateEventChannel.RaiseEvent(_prevState);
-            }
-
             if (_currentBlockType != _prevBlockType)
             {
+                blockTypeUISelectionEventChannel.RaiseEvent(_currentBlockType);
                 _prevBlockType = _currentBlockType;
-                blockTypeUISelectionEventChannel.RaiseEvent(_prevBlockType);
+            }
+
+            // check for state change
+            if (_prevState != _state)
+            {
+                Debug.Log($"Build mode state changed from {_prevState} to {_state}");
+
+                // notify UI using event channels
+                currentBuildStateEventChannel.RaiseEvent(_state.ToString());
+
+                if (_prevState is BuildModeState.SingleClickBuild or BuildModeState.TwoClickBuild)
+                    _currentBlockType = BlockType.None;
+
+                if (_prevState == BuildModeState.TwoClickBuild)
+                    _twoClickBuildData.Clear();
+
+                if (_prevState == BuildModeState.BallEdit)
+                    ExitBallEditState();
+                if (_prevState == BuildModeState.BallConnectionEdit)
+                    ExitBallConnectionEditState();
+            }
+
+            // ======================== state check can only happen above this line ========================
+            // ======================== state change can only happen below this line ========================
+            _prevState = _state;
+            switch (_state)
+            {
+                case BuildModeState.None:
+                    NoneStateUpdate();
+                    break;
+                case BuildModeState.SingleClickBuild:
+                    SingleClickBuildStateUpdate();
+                    break;
+                case BuildModeState.TwoClickBuild:
+                    TwoClickBuildStateUpdate();
+                    break;
+                case BuildModeState.BallEdit:
+                    BallEditStateUpdate();
+                    break;
+                case BuildModeState.BallConnectionEdit:
+                    BallConnectionEditStateUpdate();
+                    break;
+            }
+
+            if (_escPressed)
+            {
+                if (_state == BuildModeState.BallConnectionEdit)
+                    EnterBallEditState(_ballConnectionEditData.ball);
+                else
+                    EnterNoneState();
+
+                _escPressed = false;
             }
         }
 
-        #region APIs Used by State Actions
-
-        public void AddCreatedBlock(BaseBlock block)
+        private void EnterNoneState()
         {
-            allBlocks.blocks.Add(block);
+            _state = BuildModeState.None;
         }
 
-        /// <summary>
-        /// Reset status variables related to the fire input
-        /// </summary>
-        public void ResetFireEventStatus()
+        private void NoneStateUpdate()
         {
-            isFired = false;
-            selectionHitInfo = null;
-            selectionRay = new Ray(Vector3.zero, Vector3.zero);
+            if (_onScreenSelectionData.isFired)
+            {
+                if (_currentBlockType != BlockType.None) // build a block
+                {
+                    EnterNClickBuildState();
+                }
+                else if (_onScreenSelectionData.didHitBlock) // select an existing block to edit
+                {
+                    EnterBallEditState(_onScreenSelectionData.hitInfo.transform.GetComponent<BaseBlock>());
+                }
+
+                _onScreenSelectionData.Clear();
+            }
         }
 
-        public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
+        private void EnterNClickBuildState()
         {
-            if (clearCurrentBlockTypeSelection)
-                _currentBlockType = BlockType.None;
+            if (blockConfig.IsSingleClickBuild(_currentBlockType))
+            {
+                _state = BuildModeState.SingleClickBuild;
+            }
+            else
+            {
+                Assert.IsTrue(blockConfig.IsTwoClickBuild(_currentBlockType));
+                _state = BuildModeState.TwoClickBuild;
+            }
+        }
 
-            blocksBeingEdited.Clear();
-            escPressed = false;
-            cameraPivotPos = null;
-            connectionIndexBeingEdited = -1;
-            ResetFireEventStatus();
+        private void SingleClickBuildStateUpdate()
+        {
+            if (!_onScreenSelectionData.isFired) return;
+
+            Vector3 targetPos = Vector3.zero;
+
+            // find a point on the sphere surface where the camera pivot is on
+            Camera camera = currentCamera.camera;
+            float distance = camera.GetComponent<BuildModeCamera>().distance;
+            Vector3 camPosition = camera.transform.position;
+            Vector3 displacement = _onScreenSelectionData.ray.direction.normalized * distance;
+            targetPos = camPosition + displacement;
+
+            // find an empty spot if something blocks us
+            if (_onScreenSelectionData.didHitBlock && _onScreenSelectionData.hitInfo.distance <= distance)
+                targetPos = _onScreenSelectionData.hitInfo.transform.position; // TODO: avoid overlap
+
+            // instantiate brace prefab
+            var go = GameObject.Instantiate(blockConfig.GetPrefab(_currentBlockType),
+                targetPos, Quaternion.identity);
+            var b = go.GetComponent<SingleClickBuildBlock>();
+            b.EnterBuildMode();
+
+            AddCreatedBlock(b);
+            _currentBlockType = BlockType.None;
+
+            _onScreenSelectionData.Clear();
+            EnterNoneState();
+        }
+
+        private void TwoClickBuildStateUpdate()
+        {
+            if (_onScreenSelectionData.isFired && _onScreenSelectionData.didHitBlock)
+            {
+                var info = _onScreenSelectionData.hitInfo;
+                var selectionTransform = info.transform;
+
+                TheBall selectedBlock = selectionTransform.GetComponent<TheBall>();
+                if (selectedBlock != null)
+                {
+                    if (!_twoClickBuildData.firstBlockSelected)
+                    {
+                        _twoClickBuildData.firstBlockSelected = true;
+                        _twoClickBuildData.firstBlock = selectedBlock;
+                    }
+                    else
+                    {
+                        // instantiate brace prefab
+                        var go = GameObject.Instantiate(blockConfig.GetPrefab(_currentBlockType));
+                        var b = go.GetComponent<TwoClickBuildBlock>();
+                        b.block1 = _twoClickBuildData.firstBlock.transform;
+                        b.block2 = selectionTransform;
+                        b.EnterBuildMode();
+
+                        // notify two attached blocks
+                        var attachment = new BlockAttachment
+                        {
+                            obj = b, point = info.point // TODO: point is incorrect
+                        };
+                        _twoClickBuildData.firstBlock.OnAttach(attachment);
+                        selectedBlock.OnAttach(attachment);
+
+                        AddCreatedBlock(b);
+
+                        _twoClickBuildData.Clear();
+                        _currentBlockType = BlockType.None;
+                        EnterNoneState();
+                    }
+                }
+            }
+
+            _onScreenSelectionData.Clear();
+        }
+
+        private void EnterBallEditState(BaseBlock block)
+        {
+            _state = BuildModeState.BallEdit;
+
+            // TODO: support grouped editing
+            _ballEditData.ball = (TheBall)block;
+
+            HighlightCurrentlySelectedBlock();
+
+            _ballEditData.transformHandle =
+                RuntimeTransformHandle.Create(
+                    block.transform,
+                    currentCamera,
+                    HandleType.POSITION,
+                    ObjectLayer.GetGizmosLayerIndex()
+                );
+            _ballEditData.transformHandle.space = HandleSpace.WORLD;
+
+            usePositionTransformHandleEventChannel.OnEventRaised += _ballEditData.SetTransformHandleTypeAsPosition;
+            useRotationTransformHandleEventChannel.OnEventRaised += _ballEditData.SetTransformHandleTypeAsRotation;
+        }
+
+        private void BallEditStateUpdate()
+        {
+            // switch to ball connection editor if a connected beam is selected
+            if (_onScreenSelectionData.isFired && _onScreenSelectionData.didHitBlock)
+            {
+                var t = _onScreenSelectionData.hitInfo.transform;
+                if (t.gameObject.layer == ObjectLayer.GetBlockAttachmentLayerIndex())
+                {
+                    EnterBallConnectionEditState(
+                        _ballEditData.ball,
+                        _ballEditData.ball.FindConnectionIndexFromOther(t.GetComponent<Beam>())
+                    );
+                }
+            }
+
+            _onScreenSelectionData.Clear();
+        }
+
+        private void ExitBallEditState()
+        {
+            ResetHighlight();
+
+            usePositionTransformHandleEventChannel.OnEventRaised -= _ballEditData.SetTransformHandleTypeAsPosition;
+            useRotationTransformHandleEventChannel.OnEventRaised -= _ballEditData.SetTransformHandleTypeAsRotation;
+
+            GameObject.Destroy(_ballEditData.transformHandle.gameObject);
+            _ballEditData.Clear();
+        }
+
+        private void EnterBallConnectionEditState(TheBall ball, int connectionIndex)
+        {
+            _state = BuildModeState.BallConnectionEdit;
+            _ballConnectionEditData.ball = ball;
+            _ballConnectionEditData.connectionIndex = connectionIndex;
+
+            HighlightCurrentlySelectedBlock();
+        }
+
+        private void BallConnectionEditStateUpdate()
+        {
+        }
+
+        private void ExitBallConnectionEditState()
+        {
+            _ballConnectionEditData.Clear();
             ResetHighlight();
         }
 
-        public void SelectBlockToEdit(BaseBlock block)
+        private void AddCreatedBlock(BaseBlock block)
         {
-            blocksBeingEdited.Clear();
-            blocksBeingEdited.Add(block);
+            allBlocks.blocks.Add(block);
         }
 
         /// <summary>
         /// 1. Highlight current selected block with an outline
         /// 2. Dim all blocks other than currently selected ones by apply a different material
         /// </summary>
-        public void HighlightCurrentlySelectedBlock()
+        private void HighlightCurrentlySelectedBlock()
         {
-            foreach (var block in blocksBeingEdited)
-            {
-                block.gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
-            }
+            _ballEditData.ball.gameObject.layer = ObjectLayer.GetOutlinedBlockLayerIndex();
 
             // dim other blocks
             foreach (var block in allBlocks.blocks)
             {
-                if (!blocksBeingEdited.Contains(block))
-                {
-                    block.GetComponent<MeshRenderer>().material =
-                        blockConfig.GetDimmedMaterial(block.GetBlockType());
-                }
+                if (_ballEditData.ball != block)
+                    block.GetComponent<MeshRenderer>().material = blockConfig.GetDimmedMaterial(block.GetBlockType());
             }
         }
 
-        public void ResetHighlight()
+        private void ResetHighlight()
         {
             foreach (var block in allBlocks.blocks)
             {
@@ -184,33 +442,36 @@ namespace BuildMode
             }
         }
 
-        #endregion
-
         #region Input Handling
 
         private void OnEsc()
         {
-            escPressed = true;
+            _escPressed = true;
         }
 
         /// <summary>
-        /// User clicked left mouse button and the BuildingModeCamera dispatch the event to us
+        /// User clicked left mouse button
         /// </summary>
-        public void OnFire()
+        public void OnScreenSelection()
         {
-            isFired = true;
+            _onScreenSelectionData.isFired = true;
+
             Vector2 pointer = inputManager.GetPointerScreenPosition();
-            selectionRay = currentCamera.camera.ScreenPointToRay(pointer);
-            selectionHitInfo = null;
+            var ray = currentCamera.camera.ScreenPointToRay(pointer);
+            _onScreenSelectionData.ray = ray;
+
             if (Physics.Raycast(
-                    ray: selectionRay, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
+                    ray: ray, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
                     layerMask: raycastMask
                 ))
-                selectionHitInfo = info;
+            {
+                _onScreenSelectionData.didHitBlock = true;
+                _onScreenSelectionData.hitInfo = info;
+            }
         }
 
         /// <summary>
-        /// User double clicked left mouse button and the BuildingModeCamera dispatch the event to us
+        /// User double clicked left mouse button to move camera to a cursor position
         /// </summary>
         public void OnDoubleFire()
         {
@@ -220,7 +481,7 @@ namespace BuildMode
             Ray ray = currentCamera.camera.ScreenPointToRay(pointer);
             if (Physics.Raycast(ray, out RaycastHit info))
             {
-                cameraPivotPos = info.point;
+                moveToEventChannel.RaiseEvent(info.point);
             }
         }
 
@@ -234,35 +495,30 @@ namespace BuildMode
             if (_currentBlockType != blockType)
             {
                 _currentBlockType = blockType;
-                ResetStateMachine(false);
+                EnterNClickBuildState();
             }
         }
 
-        public void OnGameModeChange(GameMode mode)
+        private void OnGameModeChange(GameMode mode)
         {
-            // we always reset no matter what game mode we entered
-            ResetStateMachine(true);
-
             // enable/disable this game object
             if (mode == GameMode.BuildMode)
             {
+                EnterNoneState();
                 gameObject.SetActive(true);
                 foreach (var block in allBlocks.blocks)
-                {
                     block.EnterBuildMode();
-                }
 
                 // notify UI the current block type
                 blockTypeUISelectionEventChannel.RaiseEvent(_currentBlockType);
             }
             else
             {
-                _sm.Update(); // give StateAction one last chance to clean up
+                EnterNoneState();
+                Update(); // one last chance to clean up
                 gameObject.SetActive(false);
                 foreach (var block in allBlocks.blocks)
-                {
                     block.EnterPlayMode();
-                }
             }
         }
 
