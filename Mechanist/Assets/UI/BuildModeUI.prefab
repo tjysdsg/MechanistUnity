@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1580426152077de4986e68976c9caf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uiState: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
   blockTypeSelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
   buildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}
   positionToolButtonEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Block;
 using Core;
@@ -25,6 +23,7 @@ namespace BuildMode
         [SerializeField] private InputManager inputManager;
         [SerializeField] public CameraSO currentCamera;
         [SerializeField] private BlockListSO allBlocks;
+        [SerializeField] private UIStateSO _uiState;
         [SerializeField] private LayerMask raycastMask;
 
         [Header("Building Block")] [SerializeField]
@@ -470,12 +469,16 @@ namespace BuildMode
         /// </summary>
         public void OnScreenSelection()
         {
+            // check if UI was clicked
+            Vector2 pointer = inputManager.GetPointerScreenPosition();
+            if (IsMouseOverAnyUI())
+                return;
+
             _onScreenSelectionData.isFired = true;
 
-            Vector2 pointer = inputManager.GetPointerScreenPosition();
+            // raycast
             var ray = currentCamera.camera.ScreenPointToRay(pointer);
             _onScreenSelectionData.ray = ray;
-
             if (Physics.Raycast(
                     ray: ray, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
                     layerMask: raycastMask
@@ -500,6 +503,8 @@ namespace BuildMode
                 moveToEventChannel.RaiseEvent(info.point);
             }
         }
+
+        private bool IsMouseOverAnyUI() => _uiState.isMouseOverUIElements;
 
         #endregion
 
