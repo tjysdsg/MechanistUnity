@@ -16,5 +16,4 @@
             <ui:Button text="Rotation" display-tooltip-when-elided="true" name="rotation" class="button" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:TextField picking-mode="Ignore" value="filler text" text="console" multiline="true" name="console" focusable="false" style="position: absolute; bottom: 0; left: 0; width: 40%; height: 50%; white-space: normal; font-size: 10px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
 </ui:UXML>
