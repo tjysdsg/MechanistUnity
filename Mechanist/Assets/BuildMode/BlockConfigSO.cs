@@ -14,7 +14,7 @@ namespace Block
         public Material GetBuildModeMaterial(BlockType type) => Search(type).BuildModeMaterial;
         public Material GetDimmedMaterial(BlockType type) => Search(type).DimmedMaterial;
         public bool IsTwoClickBuild(BlockType type) => type == BlockType.Beam;
-        public bool IsSingleClickBuild(BlockType type) => type is BlockType.Ball or BlockType.Hinge;
+        public bool IsSingleClickBuild(BlockType type) => type == BlockType.Ball;
 
         private BlockConfig Search(BlockType type)
         {

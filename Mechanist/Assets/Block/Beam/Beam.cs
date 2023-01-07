@@ -56,13 +56,13 @@ namespace Block
         /// <summary>
         /// Attach self to an attachable block if haven't.
         /// This is used for to insert missing connections to the attachable block during game initialization.
-        /// No need to call this when entering play mode from build mode since <see cref="AttachableBlock.OnAttach"/>
+        /// No need to call this when entering play mode from build mode since <see cref="TheBall.OnAttach"/>
         /// would have been called by then.
         /// </summary>
         private void AttachSelfToBlockIfHavent(Transform b)
         {
-            AttachableBlock ab = b.GetComponent<AttachableBlock>();
-            if (ab.FindConnectionFromOther(this) == null)
+            TheBall ab = b.GetComponent<TheBall>();
+            if (ab.FindConnectionIndexFromOther(this) == -1)
             {
                 ab.OnAttach(new BlockAttachment
                 {

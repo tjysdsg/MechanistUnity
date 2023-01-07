@@ -43,13 +43,11 @@ public class BuildMenuController : BaseUIController
     {
         _braceButton = _root.Q<Button>("beam-button");
         _wieldPointButton = _root.Q<Button>("ball-button");
-        _hingeButton = _root.Q<Button>("hinge-button");
         _currentBlockTypeLabel = _root.Q<Label>("current-block-type");
         _currentStateLabel = _root.Q<Label>("current-state");
 
         _braceButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Beam); };
         _wieldPointButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Ball); };
-        _hingeButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Hinge); };
 
         blockTypeSelectionEventChannel.OnEventRaised += ChangeCurrentBlockTypeLabel;
         buildStateEventChannel.OnEventRaised += ChangeBuildState;

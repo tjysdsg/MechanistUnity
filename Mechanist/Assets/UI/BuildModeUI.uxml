@@ -4,7 +4,6 @@
         <ui:VisualElement name="bottom-panel" class="panel" style="width: auto; height: auto; justify-content: center; bottom: 0; position: absolute; flex-direction: column; align-items: center;">
             <ui:VisualElement name="block-type-buttons" style="flex-direction: row;">
                 <ui:Button text="Ball" display-tooltip-when-elided="true" name="ball-button" class="button" />
-                <ui:Button text="Hinge" display-tooltip-when-elided="true" name="hinge-button" class="button" />
                 <ui:Button text="Beam" display-tooltip-when-elided="true" name="beam-button" class="button" style="flex-direction: column;" />
             </ui:VisualElement>
             <ui:VisualElement name="build-state-display" style="background-color: rgb(255, 255, 255); flex-direction: row;">

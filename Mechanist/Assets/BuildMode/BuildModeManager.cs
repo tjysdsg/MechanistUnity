@@ -3,6 +3,7 @@ using Block;
 using Core;
 using UnityEngine;
 using GameState;
+using UnityEngine.Serialization;
 
 namespace BuildMode
 {
@@ -12,8 +13,8 @@ namespace BuildMode
         [Header("Configs")] [SerializeField] private GameModeEventChannelSO gameModeEventChannel;
         [SerializeField] private InputManager inputManager;
         [SerializeField] public CameraSO currentCamera;
-        [SerializeField] private LayerMask attachableBlockMask;
         [SerializeField] private BlockListSO allBlocks;
+        [SerializeField] private LayerMask raycastMask;
 
         [Header("Building Block")] [SerializeField]
         public BlockConfigSO blockConfig;
@@ -36,26 +37,31 @@ namespace BuildMode
         /// <summary>
         /// Did user left-clicked the mouse
         /// </summary>
-        [HideInInspector] public bool isFired = false;
+        [Header("Status variables")] public bool isFired = false;
 
-        [HideInInspector] public bool escPressed = false;
+        public bool escPressed = false;
 
         /// <summary>
         /// The pivot for the camera to go to
         /// </summary>
-        [HideInInspector] public Vector3? cameraPivotPos = null;
+        public Vector3? cameraPivotPos = null;
 
         /// <summary>
         /// The ray fired when user left-clicked the mouse to build something
         /// </summary>
-        [HideInInspector] public Ray selectionRay;
+        public Ray selectionRay;
 
         /// <summary>
         /// The hit result of <see cref="selectionRay"/> at the time of firing
         /// </summary>
-        [HideInInspector] public RaycastHit? selectionHitInfo = null;
+        public RaycastHit? selectionHitInfo = null;
 
         public HashSet<BaseBlock> blocksBeingEdited = new HashSet<BaseBlock>();
+
+        /// <summary>
+        /// The connection index of <see cref="blocksBeingEdited"/> that is currently being edited
+        /// </summary>
+        public int connectionIndexBeingEdited = -1;
 
         // =============================================
 
@@ -115,6 +121,16 @@ namespace BuildMode
             allBlocks.blocks.Add(block);
         }
 
+        /// <summary>
+        /// Reset status variables related to the fire input
+        /// </summary>
+        public void ResetFireEventStatus()
+        {
+            isFired = false;
+            selectionHitInfo = null;
+            selectionRay = new Ray(Vector3.zero, Vector3.zero);
+        }
+
         public void ResetStateMachine(bool clearCurrentBlockTypeSelection)
         {
             if (clearCurrentBlockTypeSelection)
@@ -122,10 +138,9 @@ namespace BuildMode
 
             blocksBeingEdited.Clear();
             escPressed = false;
-            isFired = false;
-            selectionHitInfo = null;
-            selectionRay = new Ray(Vector3.zero, Vector3.zero);
             cameraPivotPos = null;
+            connectionIndexBeingEdited = -1;
+            ResetFireEventStatus();
             ResetHighlight();
         }
 
@@ -189,7 +204,7 @@ namespace BuildMode
             selectionHitInfo = null;
             if (Physics.Raycast(
                     ray: selectionRay, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
-                    layerMask: attachableBlockMask
+                    layerMask: raycastMask
                 ))
                 selectionHitInfo = info;
         }

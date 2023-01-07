@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Block;
 using Core;
 using UnityEngine;
 using StateMachine;
@@ -18,15 +19,32 @@ namespace BuildMode.SM
     {
         protected new BallEditActionSO OriginSO => (BallEditActionSO)base.OriginSO;
         private RuntimeTransformHandle _transformHandle = null;
+        private TheBall _ballBeingEdited = null;
 
         public override void OnUpdate()
         {
+            // switch to ball connection editor if a connected beam is selected
+            if (_buildManager.isFired && _buildManager.selectionHitInfo != null)
+            {
+                RaycastHit info = _buildManager.selectionHitInfo.Value;
+                if (info.transform.gameObject.layer == ObjectLayer.GetBlockAttachmentLayerIndex())
+                {
+                    var b = info.transform.GetComponent<Beam>();
+                    _buildManager.connectionIndexBeingEdited = _ballBeingEdited.FindConnectionIndexFromOther(b);
+                }
+
+                _buildManager.ResetFireEventStatus();
+            }
         }
 
         public override void OnStateEnter()
         {
             // TODO: support grouped editing
             Assert.AreEqual(1, _buildManager.blocksBeingEdited.Count);
+
+            _buildManager.ResetFireEventStatus();
+
+            _ballBeingEdited = (TheBall)_buildManager.blocksBeingEdited.ElementAt(0);
 
             _buildManager.HighlightCurrentlySelectedBlock();
 
@@ -52,6 +70,7 @@ namespace BuildMode.SM
 
             GameObject.Destroy(_transformHandle.gameObject);
             _transformHandle = null;
+            _ballBeingEdited = null;
         }
 
         private void SetTransformHandleTypeAsPosition()

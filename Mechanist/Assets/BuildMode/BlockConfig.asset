@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329618f126e7452e8ff11679092efd31, type: 3}
   m_Name: BlockConfig
   m_EditorClassIdentifier: 
-  type: 0
   _blockConfigs:
   - type: 0
     prefab: {fileID: 0}
@@ -23,10 +22,6 @@ MonoBehaviour:
     BuildModeMaterial: {fileID: 2100000, guid: 9f74a13152dad544abedc7538eb3182c, type: 2}
     DimmedMaterial: {fileID: 2100000, guid: 527e5b7debd3ed743bd9c40465aa971e, type: 2}
   - type: 2
-    prefab: {fileID: 6765289666285938618, guid: 4c8f7005d1bd653498b80bf9fb760593, type: 3}
-    BuildModeMaterial: {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
-    DimmedMaterial: {fileID: 2100000, guid: 59643ea78a7c1b04b8b68c273840d214, type: 2}
-  - type: 3
     prefab: {fileID: 8532427180110263355, guid: 331984d7e77d60f4ebe26d8f3a95fe5e, type: 3}
     BuildModeMaterial: {fileID: 2100000, guid: d76d5dba59c8a824a8170635648a356c, type: 2}
     DimmedMaterial: {fileID: 2100000, guid: 6c2f5463d0a885c4aa09b5996a9a7c75, type: 2}

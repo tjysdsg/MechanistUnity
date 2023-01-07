@@ -16,15 +16,15 @@ namespace BuildMode.SM
     {
         protected new TwoClickBuildActionSO OriginSO => (TwoClickBuildActionSO)base.OriginSO;
 
-        private AttachableBlock _firstBlock; // the first block to attach the brace to
+        private TheBall _firstBlock; // the first block to attach the brace to
         private bool _firstBlockSelected = false;
 
         public override void OnUpdate()
         {
             if (!_buildManager.isFired || _buildManager.selectionHitInfo == null) return;
 
-            AttachableBlock selectedBlock =
-                _buildManager.selectionHitInfo.Value.transform.GetComponent<AttachableBlock>();
+            TheBall selectedBlock =
+                _buildManager.selectionHitInfo.Value.transform.GetComponent<TheBall>();
 
             if (selectedBlock == null) return;
 
@@ -44,7 +44,7 @@ namespace BuildMode.SM
         /// <summary>
         /// The first step in a two click build, the first object is selected
         /// </summary>
-        private void step1(AttachableBlock selectedBlock)
+        private void step1(TheBall selectedBlock)
         {
             _firstBlockSelected = true;
             _firstBlock = selectedBlock;
@@ -53,7 +53,7 @@ namespace BuildMode.SM
         /// <summary>
         /// The second step of a two click build. The second object is selected and we should create the block right now.
         /// </summary>
-        private void step2(AttachableBlock selectedBlock)
+        private void step2(TheBall selectedBlock)
         {
             Assert.IsTrue(_buildManager.selectionHitInfo.HasValue);
             var selectionHitInfo = _buildManager.selectionHitInfo.Value;

@@ -1,17 +1,20 @@
-#nullable enable
 using System.Collections.Generic;
 using Core;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Block
 {
-    public class TheBall : AttachableBlock
+    public class TheBall : SingleClickBuildBlock
     {
+        [SerializeReference] private List<BallBeamConnection> _connections = new List<BallBeamConnection>();
+
         /// <summary>
-        /// Map a beam to its connection index, so that we can quickly find out which connection you are editing when
-        /// you clicked on a beam
+        /// Map a block attachment to its connection index, so that we can quickly find out which connection you are
+        /// editing when you clicked on an attachment
         /// </summary>
-        private Dictionary<BaseBlock, int> _beam2Connection = new Dictionary<BaseBlock, int>();
+        private readonly Dictionary<Beam, int> _beamToConnection =
+            new Dictionary<Beam, int>();
 
         public override BlockType GetBlockType() => BlockType.Ball;
         public override bool HasInterBlockCollision() => true;
@@ -24,23 +27,39 @@ namespace Block
         {
         }
 
-        public override void OnAttach(BlockAttachment attachment)
+        public virtual void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(attachment.obj is Beam);
-            connections.Add(new FixBallBeamConnection(this, (Beam)attachment.obj));
+            _connections.Add(new FixBallBeamConnection(this, (Beam)attachment.obj)); // fixed connection by default
+            _beamToConnection[(Beam)attachment.obj] = _connections.Count - 1;
         }
 
-        public override BallBeamConnection? FindConnectionFromOther(BaseBlock other)
+        public int FindConnectionIndexFromOther(Beam other)
         {
-            if (_beam2Connection.TryGetValue(other, out int i))
-                return connections[i];
+            if (_beamToConnection.TryGetValue(other, out int i))
+                return i;
+            return -1;
+        }
 
-            return null;
+        protected override void OnEnterPlayMode()
+        {
+            foreach (var conn in _connections)
+            {
+                conn.CreatePhysicalConnection();
+            }
+        }
+
+        protected override void OnEnterBuildMode()
+        {
+            foreach (var conn in _connections)
+            {
+                conn.DestroyPhysicalConnection();
+            }
         }
 
         private void OnDrawGizmos()
         {
-            foreach (var conn in connections)
+            foreach (var conn in _connections)
             {
                 conn.OnDrawGizmos();
             }

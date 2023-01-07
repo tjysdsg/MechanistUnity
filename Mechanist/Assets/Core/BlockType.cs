@@ -4,7 +4,6 @@
     {
         None,
         Beam,
-        Hinge,
         Ball,
     }
 }
