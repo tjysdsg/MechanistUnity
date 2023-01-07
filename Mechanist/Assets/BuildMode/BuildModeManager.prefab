@@ -57,4 +57,4 @@ MonoBehaviour:
   blockTypeUISelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
   usePositionTransformHandleEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}
   useRotationTransformHandleEventChannel: {fileID: 11400000, guid: 7f4947f665005c24a9f45b34449ffc30, type: 2}
-  currentBuildStateEventChannel: {fileID: 11400000, guid: 94dc4cc43897c0b4591e2c17ad7bc646, type: 2}
+  _blockConnectionTypeUISelectionEventChannel: {fileID: 11400000, guid: 68a14c87f3795bd4a8ee9d20b6ad6c18, type: 2}

@@ -49,6 +49,14 @@ namespace Block
             return _connections.ElementAt(connectionIndex).Beam;
         }
 
+        public BallBeamConnection GetConnectionAtIndex(int connectionIndex) => _connections[connectionIndex];
+
+        public void SetConnectionAtIndex(int connectionIndex, BallBeamConnection conn)
+        {
+            Assert.IsFalse(_connections.Contains(conn));
+            _connections[connectionIndex] = conn;
+        }
+
         protected override void OnEnterPlayMode()
         {
             foreach (var conn in _connections)

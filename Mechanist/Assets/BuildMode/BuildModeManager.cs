@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Block;
 using Core;
@@ -41,6 +42,7 @@ namespace BuildMode
 
         [SerializeField] public VoidEventChannelSO usePositionTransformHandleEventChannel;
         [SerializeField] public VoidEventChannelSO useRotationTransformHandleEventChannel;
+        [SerializeField] private BlockConnectionTypeEventChannelSO _blockConnectionTypeUISelectionEventChannel;
 
         #region Status variables
 
@@ -149,6 +151,7 @@ namespace BuildMode
             gameModeEventChannel.OnEventRaised += OnGameModeChange;
 
             blockTypeUISelectionEventChannel.OnEventRaised += OnUIBlockTypeSelected;
+            _blockConnectionTypeUISelectionEventChannel.OnEventRaised += OnUIBlockConnectionTypeSelected;
         }
 
         private void OnDisable()
@@ -213,6 +216,8 @@ namespace BuildMode
                     BallConnectionEditStateUpdate();
                     break;
             }
+
+            _uiState.isEditingBallConnection = _state == BuildModeState.BallConnectionEdit;
 
             if (_escPressed)
             {
@@ -403,6 +408,7 @@ namespace BuildMode
 
         private void BallConnectionEditStateUpdate()
         {
+            // TODO: show handle for changing rotation axis
         }
 
         private void OnExitBallConnectionEditState()
@@ -510,6 +516,28 @@ namespace BuildMode
 
             _currentBlockType = blockType;
             ToNClickBuildState();
+        }
+
+        private void OnUIBlockConnectionTypeSelected(BlockConnectionType type)
+        {
+            var ball = _ballConnectionEditData.ball;
+            var index = _ballConnectionEditData.connectionIndex;
+
+            BallBeamConnection conn = null;
+            switch (type)
+            {
+                case BlockConnectionType.Fixed:
+                    conn = new FixBallBeamConnection(ball, ball.GetConnectionAtIndex(index).Beam);
+                    break;
+                case BlockConnectionType.Hinge:
+                    conn = new HingeBallBeamConnection(ball, ball.GetConnectionAtIndex(index).Beam);
+                    break;
+                case BlockConnectionType.Free:
+                    throw new NotImplementedException();
+            }
+
+            Assert.IsNotNull(conn);
+            ball.SetConnectionAtIndex(index, conn);
         }
 
         private void OnGameModeChange(GameMode mode)

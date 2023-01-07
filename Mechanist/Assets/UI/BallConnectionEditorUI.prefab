@@ -62,3 +62,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiState: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
+  _panelClassName: panel
+  _blockConnectionTypeEventChannel: {fileID: 11400000, guid: 68a14c87f3795bd4a8ee9d20b6ad6c18, type: 2}

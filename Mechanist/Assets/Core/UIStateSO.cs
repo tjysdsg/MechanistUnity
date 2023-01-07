@@ -6,6 +6,7 @@ namespace Core
     public class UIStateSO : ScriptableObject
     {
         public bool isMouseOverUIElements = false;
+        public bool isEditingBallConnection = false;
         public BlockType currentBlockType = BlockType.None;
         public string currentBuildState = "None";
     }
