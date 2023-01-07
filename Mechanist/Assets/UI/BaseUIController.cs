@@ -7,7 +7,7 @@ namespace UI
 {
     public abstract class BaseUIController : MonoBehaviour
     {
-        [SerializeField] private UIStateSO _uiState;
+        [SerializeField] protected UIStateSO _uiState;
         [SerializeField] private string _panelClassName = "panel";
 
         protected UIDocument _document;

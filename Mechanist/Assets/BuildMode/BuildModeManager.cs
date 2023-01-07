@@ -35,14 +35,12 @@ namespace BuildMode
         public Vector3EventChannelSO moveToEventChannel;
 
         [Header("UI Event Channels")]
-        [Tooltip("The event channel is for UI controller to tell us what current block user selected, " +
-                 "and for us to tell UI what we're building")]
+        [Tooltip("The event channel is for UI controller to tell us what current block user selected")]
         [SerializeField]
         private BlockTypeEventChannelSO blockTypeUISelectionEventChannel;
 
         [SerializeField] public VoidEventChannelSO usePositionTransformHandleEventChannel;
         [SerializeField] public VoidEventChannelSO useRotationTransformHandleEventChannel;
-        [SerializeField] private StringEventChannelSO currentBuildStateEventChannel;
 
         #region Status variables
 
@@ -51,7 +49,6 @@ namespace BuildMode
         private BuildModeState _state = BuildModeState.None;
         private BuildModeState _prevState = BuildModeState.None;
 
-        private BlockType _prevBlockType = BlockType.None;
         private BlockType _currentBlockType = BlockType.None;
 
         private class OnScreenSelectionData
@@ -151,7 +148,7 @@ namespace BuildMode
             gameModeEventChannel.OnEventRaised -= OnGameModeChange;
             gameModeEventChannel.OnEventRaised += OnGameModeChange;
 
-            blockTypeUISelectionEventChannel.OnEventRaised += OnBlockTypeSelected;
+            blockTypeUISelectionEventChannel.OnEventRaised += OnUIBlockTypeSelected;
         }
 
         private void OnDisable()
@@ -160,7 +157,7 @@ namespace BuildMode
             inputManager.DoubleFireEvent -= OnDoubleFire;
             inputManager.EscPressedEvent -= OnEsc;
 
-            blockTypeUISelectionEventChannel.OnEventRaised -= OnBlockTypeSelected;
+            blockTypeUISelectionEventChannel.OnEventRaised -= OnUIBlockTypeSelected;
         }
 
         private void Start()
@@ -170,19 +167,15 @@ namespace BuildMode
 
         private void Update()
         {
-            if (_currentBlockType != _prevBlockType)
-            {
-                blockTypeUISelectionEventChannel.RaiseEvent(_currentBlockType);
-                _prevBlockType = _currentBlockType;
-            }
+            _uiState.currentBlockType = _currentBlockType;
 
             // check for state change
             if (_prevState != _state)
             {
                 Debug.Log($"Build mode state changed from {_prevState} to {_state}");
 
-                // notify UI using event channels
-                currentBuildStateEventChannel.RaiseEvent(_state.ToString());
+                // notify UI
+                _uiState.currentBuildState = _state.ToString();
 
                 if (_prevState is BuildModeState.SingleClickBuild or BuildModeState.TwoClickBuild)
                     _currentBlockType = BlockType.None;
@@ -510,14 +503,13 @@ namespace BuildMode
 
         #region Event Handling
 
-        private void OnBlockTypeSelected(BlockType blockType)
+        private void OnUIBlockTypeSelected(BlockType blockType)
         {
-            // changing block type cancels the current build action
-            if (_currentBlockType != blockType)
-            {
-                _currentBlockType = blockType;
-                ToNClickBuildState();
-            }
+            if (_state != BuildModeState.None)
+                return;
+
+            _currentBlockType = blockType;
+            ToNClickBuildState();
         }
 
         private void OnGameModeChange(GameMode mode)
@@ -529,13 +521,11 @@ namespace BuildMode
                 gameObject.SetActive(true);
                 foreach (var block in allBlocks.blocks)
                     block.EnterBuildMode();
-
-                // notify UI the current block type
-                blockTypeUISelectionEventChannel.RaiseEvent(_currentBlockType);
             }
             else
             {
                 ToNoneState();
+                _currentBlockType = BlockType.None;
                 Update(); // one last chance to clean up
                 gameObject.SetActive(false);
                 foreach (var block in allBlocks.blocks)

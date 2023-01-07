@@ -11,14 +11,9 @@ public class BuildMenuController : BaseUIController
     private Button _wieldPointButton;
     private Button _hingeButton;
 
-    /// <summary>
-    /// This channel is two-way.
-    /// We want block type changes reflected in the UI.
-    /// 
-    /// For example, using shortcut will bypass UI, in this case <see cref="BuildModeManager"/> will notify us
-    /// using the same channel
-    /// </summary>
-    [SerializeField] private BlockTypeEventChannelSO blockTypeSelectionEventChannel;
+    [Tooltip("Event channel used to notify others that user selected a block type to build using the buttons")]
+    [SerializeField]
+    private BlockTypeEventChannelSO blockTypeSelectionEventChannel;
 
     #endregion
 
@@ -26,7 +21,6 @@ public class BuildMenuController : BaseUIController
 
     private Label _currentBlockTypeLabel;
     private Label _currentStateLabel;
-    [SerializeField] private StringEventChannelSO buildStateEventChannel;
 
     #endregion
 
@@ -49,31 +43,20 @@ public class BuildMenuController : BaseUIController
         _braceButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Beam); };
         _wieldPointButton.clicked += () => { NotifyBlockTypeSelectionChanged(BlockType.Ball); };
 
-        blockTypeSelectionEventChannel.OnEventRaised += ChangeCurrentBlockTypeLabel;
-        buildStateEventChannel.OnEventRaised += ChangeBuildState;
-
         _positionToolButton = _root.Q("transform-handle-panel").Q<Button>("position");
         _rotationToolButton = _root.Q("transform-handle-panel").Q<Button>("rotation");
         _positionToolButton.clicked += () => { positionToolButtonEventChannel.RaiseEvent(); };
         _rotationToolButton.clicked += () => { rotationToolButtonEventChannel.RaiseEvent(); };
     }
 
+    private void Update()
+    {
+        _currentBlockTypeLabel.text = _uiState.currentBlockType.ToString();
+        _currentStateLabel.text = _uiState.currentBuildState;
+    }
+
     private void NotifyBlockTypeSelectionChanged(BlockType type)
     {
         blockTypeSelectionEventChannel.RaiseEvent(type);
-        ChangeCurrentBlockTypeLabel(type);
-    }
-
-    /// <summary>
-    /// This function is only called when some other objects notified us, so DO NOT notify them back!
-    /// </summary>
-    private void ChangeCurrentBlockTypeLabel(BlockType type)
-    {
-        _currentBlockTypeLabel.text = type.ToString();
-    }
-
-    private void ChangeBuildState(string name)
-    {
-        _currentStateLabel.text = name;
     }
 }
