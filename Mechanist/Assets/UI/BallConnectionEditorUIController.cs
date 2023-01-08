@@ -34,8 +34,9 @@ public class BallConnectionEditorUIController : BaseUIController
 
     private void OnConnectionTypeChanged(ChangeEvent<string> e)
     {
+        BlockConnectionType t = BlockConnectionType.Fixed;
         Assert.IsTrue(
-            BlockConnectionType.TryParse(e.newValue, out BlockConnectionType t)
+            BlockConnectionType.TryParse(e.newValue, out t)
         );
         _blockConnectionTypeEventChannel.RaiseEvent(t);
     }
