@@ -221,6 +221,7 @@ namespace BuildMode
             }
 
             _uiState.isEditingBallConnection = _state == BuildModeState.BallConnectionEdit;
+            _uiState.isEditingBall = _state == BuildModeState.BallEdit;
 
             if (_escPressed)
             {

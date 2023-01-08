@@ -9,5 +9,6 @@ namespace Core
         public static int GetBuildModeBlockLayerIndex() => LayerMask.NameToLayer("BuildModeBlock");
         public static int GetBlockAttachmentLayerIndex() => LayerMask.NameToLayer("BlockAttachment");
         public static int GetOutlinedBlockLayerIndex() => LayerMask.NameToLayer("OutlinedBlock");
+        public static int GetUILayerMask() => LayerMask.GetMask("UI");
     }
 }

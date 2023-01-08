@@ -1,15 +1,16 @@
 using System;
 using UnityEngine;
 using System.IO;
+using TMPro;
 using UI;
-using UnityEngine.UIElements;
 
 namespace Console
 {
     public class GameConsoleController : BaseUIController
     {
-        [SerializeField] private int maxLength = 1000;
-        private TextField text;
+        // TODO: number of line based truncating
+        [SerializeField] private int maxLength = 500;
+        [SerializeField] private TextMeshProUGUI _text;
 
         private FileSystemWatcher _watcher;
         private FileStream _fileStream;
@@ -19,16 +20,12 @@ namespace Console
 
         protected override void Initialize()
         {
-            text = _root.Q<TextField>("console");
-
             // disable in editor
             if (Application.isEditor)
             {
-                text.visible = false;
+                gameObject.SetActive(false);
                 return;
             }
-
-            text.visible = true;
 
             // set up file watcher
             var (logDir, logFile) = GetLogFilePath();
@@ -99,15 +96,13 @@ namespace Console
 
         private void Update()
         {
-            if (Application.isEditor) return;
-
             if (_changed)
             {
                 _content += _reader.ReadToEnd();
                 if (_content.Length > maxLength)
                     _content = _content.Substring(_content.Length - maxLength, maxLength);
 
-                text.value = _content;
+                _text.text = _content;
                 _changed = false;
                 _watcher.EnableRaisingEvents = true;
             }
