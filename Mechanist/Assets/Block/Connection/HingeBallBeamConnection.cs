@@ -39,7 +39,10 @@ namespace Block
             }
 
             Vector3 direction = _beam.transform.position - _ball.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction, _ball.transform.TransformDirection(axis));
+            Quaternion rotation = Quaternion.LookRotation(
+                direction,
+                Vector3.Cross(_ball.transform.TransformDirection(axis), direction)
+            );
             _connectionModel.transform.SetPositionAndRotation(_ball.transform.position, rotation);
         }
 
