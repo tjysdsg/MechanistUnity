@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-namespace Block
+namespace BuildMode
 {
     [CreateAssetMenu(menuName = "Game/BlockConfigSO")]
     public class BlockConfigSO : ScriptableObject
@@ -32,7 +32,7 @@ namespace Block
     }
 
     [Serializable]
-    class BlockConfig
+    internal class BlockConfig
     {
         public BlockType type;
         public GameObject prefab;

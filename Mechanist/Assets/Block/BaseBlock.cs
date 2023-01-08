@@ -37,7 +37,7 @@ namespace Block
             LateInitialize();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (_prevGameMode != _gameMode) // game mode has changed
             {

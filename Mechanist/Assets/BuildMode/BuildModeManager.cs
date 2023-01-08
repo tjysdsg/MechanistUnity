@@ -27,8 +27,11 @@ namespace BuildMode
         [SerializeField] private UIStateSO _uiState;
         [SerializeField] private LayerMask raycastMask;
 
-        [Header("Building Block")] [SerializeField]
+        [Header("Building Block")] //
+        [SerializeField]
         public BlockConfigSO blockConfig;
+
+        [SerializeField] private BlockConnectionConfigSO _blockConnectionConfig;
 
         [Header("Event Channels")]
         [Tooltip("The event channel used to tell the build mode camera to move to a certain object")]
@@ -530,7 +533,10 @@ namespace BuildMode
                     conn = new FixBallBeamConnection(ball, ball.GetConnectionAtIndex(index).Beam);
                     break;
                 case BlockConnectionType.Hinge:
-                    conn = new HingeBallBeamConnection(ball, ball.GetConnectionAtIndex(index).Beam);
+                    conn = new HingeBallBeamConnection(
+                        ball, ball.GetConnectionAtIndex(index).Beam,
+                        _blockConnectionConfig.GetPrefab(BlockConnectionType.Hinge)
+                    );
                     break;
                 case BlockConnectionType.Free:
                     throw new NotImplementedException();

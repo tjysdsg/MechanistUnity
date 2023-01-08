@@ -23,5 +23,9 @@ namespace Block
         {
             GameObject.Destroy(_joint);
         }
+
+        public override void Update()
+        {
+        }
     }
 }

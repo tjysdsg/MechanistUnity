@@ -9,9 +9,12 @@ namespace Block
         [SerializeField] private Vector3 axis = Vector3.up;
 
         private HingeJoint _joint = null;
+        private GameObject _connectionModel = null;
+        private GameObject _prefab = null;
 
-        public HingeBallBeamConnection(TheBall ball, Beam beam) : base(ball, beam)
+        public HingeBallBeamConnection(TheBall ball, Beam beam, GameObject prefab) : base(ball, beam)
         {
+            _prefab = prefab;
         }
 
         public override Joint CreatePhysicalConnection()
@@ -26,6 +29,18 @@ namespace Block
         public override void DestroyPhysicalConnection()
         {
             GameObject.Destroy(_joint);
+        }
+
+        public override void Update()
+        {
+            if (_connectionModel == null)
+            {
+                _connectionModel = GameObject.Instantiate(_prefab);
+            }
+
+            Vector3 direction = _ball.transform.position - _beam.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction, _ball.transform.TransformDirection(axis));
+            _connectionModel.transform.SetPositionAndRotation(_ball.transform.position, rotation);
         }
 
         /// <summary>

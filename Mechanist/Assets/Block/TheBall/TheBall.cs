@@ -29,6 +29,16 @@ namespace Block
         {
         }
 
+        protected override void Update()
+        {
+            base.Update();
+
+            foreach (var conn in _connections)
+            {
+                conn.Update();
+            }
+        }
+
         public virtual void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(attachment.obj is Beam);

@@ -53,6 +53,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1152
   blockConfig: {fileID: 11400000, guid: c911d37afae21004799014d8d56afb4c, type: 2}
+  _blockConnectionConfig: {fileID: 11400000, guid: 666ec5353ad915549bbdc66a5d018a7e, type: 2}
   moveToEventChannel: {fileID: 11400000, guid: 41e90d16745c33b418b81badcfa1cfac, type: 2}
   blockTypeUISelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
   usePositionTransformHandleEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}

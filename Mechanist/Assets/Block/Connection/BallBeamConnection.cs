@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using UnityEngine;
 
 namespace Block
@@ -20,6 +21,7 @@ namespace Block
 
         public abstract Joint CreatePhysicalConnection();
         public abstract void DestroyPhysicalConnection();
+        public abstract void Update();
 
         public BallBeamConnection(TheBall ball, Beam beam)
         {
