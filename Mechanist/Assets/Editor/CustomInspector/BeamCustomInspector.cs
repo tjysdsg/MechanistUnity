@@ -2,16 +2,19 @@ using UnityEditor;
 using Block;
 using UnityEngine;
 
-[CustomEditor(typeof(Beam))]
-public class BeamCustomInspector : Editor
+namespace CustomEditor
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(Beam))]
+    public class BeamCustomInspector : Editor
     {
-        DrawDefaultInspector();
-
-        Beam beam = (Beam)target;
-
-        if (GUILayout.Button("Refresh"))
-            beam.UpdateMeshInEditor();
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+    
+            Beam beam = (Beam)target;
+    
+            if (GUILayout.Button("Refresh"))
+                beam.UpdateMeshInEditor();
+        }
     }
 }
