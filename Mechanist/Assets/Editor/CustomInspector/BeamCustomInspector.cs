@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CustomEditor
 {
-    [CustomEditor(typeof(Beam))]
+    [UnityEditor.CustomEditor(typeof(Beam))]
     public class BeamCustomInspector : Editor
     {
         public override void OnInspectorGUI()

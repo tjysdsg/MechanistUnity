@@ -1,6 +1,6 @@
 {
     "name": "PlayModeAssembly",
-    "rootNamespace": "PlayMode",
+    "rootNamespace": "",
     "references": [
         "GUID:7dd599cbc1212d140aeb9125b247934d",
         "GUID:df74dd5b91e04c9438a377d97c4ffb60",
@@ -14,7 +14,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

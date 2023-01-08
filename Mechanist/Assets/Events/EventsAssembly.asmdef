@@ -1,13 +1,15 @@
 {
-    "name": "GameState",
+    "name": "Events",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:350d614a8f0c58845a5da546655eea15"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
