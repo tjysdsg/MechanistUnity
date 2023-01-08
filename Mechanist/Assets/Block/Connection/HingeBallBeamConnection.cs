@@ -38,7 +38,7 @@ namespace Block
                 _connectionModel = GameObject.Instantiate(_prefab);
             }
 
-            Vector3 direction = _ball.transform.position - _beam.transform.position;
+            Vector3 direction = _beam.transform.position - _ball.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction, _ball.transform.TransformDirection(axis));
             _connectionModel.transform.SetPositionAndRotation(_ball.transform.position, rotation);
         }
