@@ -46,6 +46,7 @@ namespace BuildMode
         [SerializeField] public VoidEventChannelSO usePositionTransformHandleEventChannel;
         [SerializeField] public VoidEventChannelSO useRotationTransformHandleEventChannel;
         [SerializeField] private BlockConnectionTypeEventChannelSO _blockConnectionTypeUISelectionEventChannel;
+        [SerializeField] private VoidEventChannelSO _rotateHingeConnectionEventChannel;
 
         #region Status variables
 
@@ -129,15 +130,17 @@ namespace BuildMode
         {
             public TheBall ball = null;
             public int connectionIndex = -1;
+            public bool isRotatingHingeConnection = false;
 
             public void Clear()
             {
                 ball = null;
                 connectionIndex = -1;
+                isRotatingHingeConnection = false;
             }
         }
 
-        private BallConnectionEditData _ballConnectionEditData = new BallConnectionEditData();
+        private readonly BallConnectionEditData _ballConnectionEditData = new BallConnectionEditData();
 
         #endregion
 
@@ -155,6 +158,7 @@ namespace BuildMode
 
             blockTypeUISelectionEventChannel.OnEventRaised += OnUIBlockTypeSelected;
             _blockConnectionTypeUISelectionEventChannel.OnEventRaised += OnUIBlockConnectionTypeSelected;
+            _rotateHingeConnectionEventChannel.OnEventRaised += OnUIRotateHingeConnection;
         }
 
         private void OnDisable()
@@ -164,6 +168,8 @@ namespace BuildMode
             inputManager.EscPressedEvent -= OnEsc;
 
             blockTypeUISelectionEventChannel.OnEventRaised -= OnUIBlockTypeSelected;
+            _blockConnectionTypeUISelectionEventChannel.OnEventRaised -= OnUIBlockConnectionTypeSelected;
+            _rotateHingeConnectionEventChannel.OnEventRaised -= OnUIRotateHingeConnection;
         }
 
         private void Start()
@@ -220,8 +226,8 @@ namespace BuildMode
                     break;
             }
 
-            _uiState.isEditingBallConnection = _state == BuildModeState.BallConnectionEdit;
             _uiState.isEditingBall = _state == BuildModeState.BallEdit;
+            _uiState.blockConnectionEditorUIData.isEditingBallConnection = _state == BuildModeState.BallConnectionEdit;
 
             if (_escPressed)
             {
@@ -412,7 +418,36 @@ namespace BuildMode
 
         private void BallConnectionEditStateUpdate()
         {
-            // TODO: show handle for changing rotation axis
+            var ball = _ballConnectionEditData.ball;
+            var connectionIndex = _ballConnectionEditData.connectionIndex;
+            var conn = ball.GetConnectionAtIndex(connectionIndex);
+
+            _uiState.blockConnectionEditorUIData.connectionType = conn.GetConnectionType();
+
+            // allow user to rotate the axis of hinge joint
+            if (_ballConnectionEditData.isRotatingHingeConnection)
+            {
+                HingeBallBeamConnection hingeConn = (HingeBallBeamConnection)conn;
+
+                var ray = currentCamera.camera.ScreenPointToRay(inputManager.GetPointerScreenPosition());
+                if (Physics.Raycast(
+                        ray: ray, hitInfo: out RaycastHit info, maxDistance: Mathf.Infinity,
+                        layerMask: 1 << ball.gameObject.layer
+                    ))
+                {
+                    if (info.transform.gameObject == ball.gameObject)
+                    {
+                        hingeConn.SetAxis(info.point - ball.transform.position, Space.World);
+                    }
+                }
+
+                // stop rotating on click
+                if (_onScreenSelectionData.isFired)
+                {
+                    _ballConnectionEditData.isRotatingHingeConnection = false;
+                    _onScreenSelectionData.Clear();
+                }
+            }
         }
 
         private void OnExitBallConnectionEditState()
@@ -470,7 +505,7 @@ namespace BuildMode
         /// <summary>
         /// User clicked left mouse button
         /// </summary>
-        public void OnScreenSelection()
+        private void OnScreenSelection()
         {
             // check if UI was clicked
             Vector2 pointer = inputManager.GetPointerScreenPosition();
@@ -495,7 +530,7 @@ namespace BuildMode
         /// <summary>
         /// User double clicked left mouse button to move camera to a cursor position
         /// </summary>
-        public void OnDoubleFire()
+        private void OnDoubleFire()
         {
             if (_currentBlockType != BlockType.None) return;
 
@@ -545,6 +580,11 @@ namespace BuildMode
 
             Assert.IsNotNull(conn);
             ball.SetConnectionAtIndex(index, conn);
+        }
+
+        private void OnUIRotateHingeConnection()
+        {
+            _ballConnectionEditData.isRotatingHingeConnection = true;
         }
 
         private void OnGameModeChange(GameMode mode)

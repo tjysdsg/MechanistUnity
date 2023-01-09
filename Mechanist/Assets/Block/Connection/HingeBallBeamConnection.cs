@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using UnityEngine;
 
 namespace Block
@@ -34,25 +35,23 @@ namespace Block
         public override void Update()
         {
             if (_connectionModel == null)
-            {
                 _connectionModel = GameObject.Instantiate(_prefab);
-            }
 
             Vector3 direction = _beam.transform.position - _ball.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(
-                direction,
-                Vector3.Cross(_ball.transform.TransformDirection(axis), direction)
-            );
+            Vector3 axisWorld = _ball.transform.TransformDirection(axis);
+
+            Vector3 upwards = Vector3.Cross(axisWorld, direction);
+            Vector3 forward = Vector3.Cross(upwards, axisWorld);
+            Quaternion rotation = Quaternion.LookRotation(forward, upwards);
             _connectionModel.transform.SetPositionAndRotation(_ball.transform.position, rotation);
         }
 
-        /// <summary>
-        /// Change the axis of rotation of the hinge connection
-        /// </summary>
-        /// <param name="axis">Axis in local space of the object that owns the joint</param>
-        public void SetRotationAxis(Vector3 axis)
+        public void SetAxis(Vector3 axis, Space space)
         {
-            _joint.axis = axis;
+            if (space == Space.Self)
+                this.axis = axis.normalized;
+            else
+                this.axis = _ball.transform.InverseTransformDirection(axis).normalized;
         }
 
         public override void OnDrawGizmos()
@@ -62,5 +61,7 @@ namespace Block
             var t = _ball.transform;
             Gizmos.DrawLine(t.position, t.position + t.TransformDirection(axis).normalized);
         }
+
+        public override BlockConnectionType GetConnectionType() => BlockConnectionType.Hinge;
     }
 }

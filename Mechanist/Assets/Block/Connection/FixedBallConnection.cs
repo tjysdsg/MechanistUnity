@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using UnityEngine;
 
 namespace Block
@@ -27,5 +28,7 @@ namespace Block
         public override void Update()
         {
         }
+
+        public override BlockConnectionType GetConnectionType() => BlockConnectionType.Fixed;
     }
 }

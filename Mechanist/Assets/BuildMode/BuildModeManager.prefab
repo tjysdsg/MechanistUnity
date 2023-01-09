@@ -59,3 +59,4 @@ MonoBehaviour:
   usePositionTransformHandleEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}
   useRotationTransformHandleEventChannel: {fileID: 11400000, guid: 7f4947f665005c24a9f45b34449ffc30, type: 2}
   _blockConnectionTypeUISelectionEventChannel: {fileID: 11400000, guid: 68a14c87f3795bd4a8ee9d20b6ad6c18, type: 2}
+  _rotateHingeConnectionEventChannel: {fileID: 11400000, guid: 8ee9df1d187c5b54a9ba8e1297f7699c, type: 2}

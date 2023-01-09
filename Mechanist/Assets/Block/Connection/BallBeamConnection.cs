@@ -32,5 +32,7 @@ namespace Block
         public virtual void OnDrawGizmos()
         {
         }
+
+        public abstract BlockConnectionType GetConnectionType();
     }
 }

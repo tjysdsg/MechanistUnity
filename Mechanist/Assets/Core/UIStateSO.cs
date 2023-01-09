@@ -7,8 +7,17 @@ namespace Core
     {
         public bool isMouseOverUIElements = false;
         public bool isEditingBall = false;
-        public bool isEditingBallConnection = false;
         public BlockType currentBlockType = BlockType.None;
         public string currentBuildState = "None";
+
+        public readonly BlockConnectionEditorUIData blockConnectionEditorUIData = new BlockConnectionEditorUIData();
+    }
+
+    public class BlockConnectionEditorUIData
+    {
+        public BlockConnectionType connectionType = BlockConnectionType.Fixed;
+        public bool isEditingBallConnection = false;
+        public bool isEditingHingeConnection = false;
+        public bool isRotatingHingeConnection = false;
     }
 }
