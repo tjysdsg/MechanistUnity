@@ -14,7 +14,7 @@ namespace Block
         private Vector3? _origPos = null;
         private Quaternion? _origRotation = null;
 
-        private GameMode _gameMode = GameMode.MainMenu;
+        protected GameMode _gameMode = GameMode.MainMenu;
         private GameMode _prevGameMode = GameMode.MainMenu;
 
         public abstract bool IsBlockAttachment();

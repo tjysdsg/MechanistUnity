@@ -10,7 +10,7 @@ namespace Block
     public class Beam : TwoClickBuildBlock
     {
         private MeshCollider _meshCollider = null;
-        public Mesh Mesh => _proceduralCylinderMesh.Mesh;
+        private Mesh Mesh => _proceduralCylinderMesh.Mesh;
 
         private ProceduralCylinderMesh _proceduralCylinderMesh = null;
         private MeshFilter _meshFilter = null;
@@ -20,6 +20,9 @@ namespace Block
         public float topRadius = 0.5f;
         public float bottomRadius = 0.5f;
         [SerializeField] private float length = 1;
+
+        private Vector3 _block1Pos;
+        private Vector3 _block2Pos;
 
         public override bool IsBlockAttachment() => true;
 
@@ -40,6 +43,28 @@ namespace Block
         {
             _meshCollider = GetComponent<MeshCollider>();
             _meshFilter = GetComponent<MeshFilter>();
+
+            _block1Pos = block1.position;
+            _block2Pos = block2.position;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            // update the model to always connect two blocks in build mode
+            if (_gameMode == GameMode.BuildMode)
+            {
+                var p1 = block1.position;
+                var p2 = block2.position;
+
+                if (p1 != _block1Pos || p2 != _block2Pos)
+                {
+                    UpdateProceduralModel();
+                    _block1Pos = p1;
+                    _block2Pos = p2;
+                }
+            }
         }
 
         protected override void LateInitialize()
