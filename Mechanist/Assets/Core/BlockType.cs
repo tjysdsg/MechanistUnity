@@ -5,5 +5,6 @@
         None,
         Beam,
         Ball,
+        Spring,
     }
 }

@@ -9,17 +9,16 @@ namespace Block
     [RequireComponent(typeof(MeshRenderer))]
     public class Beam : TwoClickBuildBlock
     {
-        private MeshCollider _meshCollider = null;
-        private Mesh Mesh => _proceduralCylinderMesh.Mesh;
+        private ProceduralCylinderMesh _proceduralMesh = null;
 
-        private ProceduralCylinderMesh _proceduralCylinderMesh = null;
-        private MeshFilter _meshFilter = null;
+        [Header("Initial configs")] //
+        [SerializeField]
+        private int nRadialSegments = 10;
 
-        [Header("Initial configs")] public int nRadialSegments = 10;
-        public int nHeightSegments = 2;
-        public float topRadius = 0.5f;
-        public float bottomRadius = 0.5f;
-        [SerializeField] private float length = 1;
+        [SerializeField] private int nHeightSegments = 2;
+        [SerializeField] private float topRadius = 0.5f;
+        [SerializeField] private float bottomRadius = 0.5f;
+        [SerializeField] protected float length = 1;
 
         private Vector3? _block1Pos = null;
         private Vector3? _block2Pos = null;
@@ -41,8 +40,17 @@ namespace Block
 
         protected override void Initialize()
         {
-            _meshCollider = GetComponent<MeshCollider>();
-            _meshFilter = GetComponent<MeshFilter>();
+        }
+
+        protected override void LateInitialize()
+        {
+            if (block1 == null || block2 == null)
+                return;
+
+            AttachSelfToBlockIfHavent(block1);
+            AttachSelfToBlockIfHavent(block2);
+
+            UpdateProceduralModel();
         }
 
         protected override void Update()
@@ -69,19 +77,6 @@ namespace Block
             }
         }
 
-        protected override void LateInitialize()
-        {
-            if (block1 == null || block2 == null)
-                return;
-
-            AttachSelfToBlockIfHavent(block1);
-            AttachSelfToBlockIfHavent(block2);
-
-            _proceduralCylinderMesh =
-                new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
-            UpdateProceduralModel();
-        }
-
         public override Rigidbody GetPlugForAttachedBlock(SingleClickBuildBlock scbb) => _rigidbody;
 
         /// <summary>
@@ -97,7 +92,7 @@ namespace Block
                 ab.OnAttach(new BlockAttachment(this));
         }
 
-        private (Vector3, Vector3) CalculatePositionAndDirectionVectors()
+        protected (Vector3, Vector3) CalculatePositionAndDirectionVectors()
         {
             Vector3 pos1 = block1.position;
             Vector3 pos2 = block2.position;
@@ -109,17 +104,20 @@ namespace Block
         }
 
         // Update the position and the mesh of the cylinder based on the two connected objects
-        public void UpdateProceduralModel()
+        public virtual void UpdateProceduralModel()
         {
+            if (_proceduralMesh == null)
+                _proceduralMesh =
+                    new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
 
             // update transform
             transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
 
-            // generate/update cylinder mesh
+            // update mesh
             length = direction.magnitude;
-            _meshFilter.sharedMesh = _proceduralCylinderMesh.UpdateMesh(topRadius, bottomRadius, length);
-            _meshCollider.sharedMesh = Mesh;
+            GetComponent<MeshFilter>().sharedMesh = _proceduralMesh.UpdateMesh(topRadius, bottomRadius, length);
+            GetComponent<MeshCollider>().sharedMesh = _proceduralMesh.Mesh;
         }
 
         #region Editor related
@@ -131,24 +129,6 @@ namespace Block
                 (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
                 transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
             }
-        }
-
-        public void UpdateMeshInEditor()
-        {
-            if (block1 == null || block2 == null)
-                return;
-
-            (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
-
-            // update transform
-            transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
-
-            // generate/update cylinder mesh
-            length = direction.magnitude;
-            ProceduralCylinderMesh mesh =
-                new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
-            GetComponent<MeshFilter>().sharedMesh = mesh.UpdateMesh();
-            GetComponent<MeshCollider>().sharedMesh = mesh.Mesh;
         }
 
         #endregion

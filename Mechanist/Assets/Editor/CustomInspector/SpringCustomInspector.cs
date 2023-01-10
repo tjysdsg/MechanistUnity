@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace CustomEditor
 {
-    [UnityEditor.CustomEditor(typeof(Beam))]
-    public class BeamCustomInspector : Editor
+    [UnityEditor.CustomEditor(typeof(Spring))]
+    public class SpringCustomInspector : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-    
-            Beam beam = (Beam)target;
-    
+
+            Spring t = (Spring)target;
+
             if (GUILayout.Button("Refresh"))
-                beam.UpdateProceduralModel();
+                t.UpdateProceduralModel();
         }
     }
 }
