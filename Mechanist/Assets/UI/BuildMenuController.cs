@@ -23,8 +23,8 @@ public class BuildMenuController : BaseUIController
 
     private void Update()
     {
-        _currentBlockTypeLabel.text = _uiState.currentBlockType.ToString();
-        _currentStateLabel.text = _uiState.currentBuildState;
+        _currentBlockTypeLabel.text = _state.currentBlockType.ToString();
+        _currentStateLabel.text = _state.currentBuildState;
     }
 
     private void NotifyBlockTypeSelectionChanged(BlockType type)

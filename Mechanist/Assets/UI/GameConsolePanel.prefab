@@ -252,6 +252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15620d6b232bbad428aaf2f788cb8e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiState: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
+  _state: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
   maxLength: 300
   _text: {fileID: 3662974574314705253}

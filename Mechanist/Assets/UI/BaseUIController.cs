@@ -7,11 +7,11 @@ namespace UI
 {
     public abstract class BaseUIController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected UIStateSO _uiState = null;
+        [SerializeField] protected UIStateSO _state = null;
 
         private void OnEnable()
         {
-            Assert.IsNotNull(_uiState);
+            Assert.IsNotNull(_state);
             Initialize();
         }
 
@@ -19,12 +19,12 @@ namespace UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            _uiState.isMouseOverUIElements = true;
+            _state.isMouseOverUIElements = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _uiState.isMouseOverUIElements = false;
+            _state.isMouseOverUIElements = false;
         }
     }
 }

@@ -19,7 +19,7 @@ public class TransformToolUIController : BaseUIController
 
     private void Update()
     {
-        if (!_uiState.isEditingBall)
+        if (!_state.isEditingBall)
         {
             _panel.gameObject.SetActive(false);
             return;

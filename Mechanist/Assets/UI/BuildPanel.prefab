@@ -1116,11 +1116,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1580426152077de4986e68976c9caf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiState: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
+  _state: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
   _beamButton: {fileID: 1180685180513490218}
   _ballButton: {fileID: 1180685181259548538}
   _currentBlockTypeLabel: {fileID: 1180685182090316655}
   _currentStateLabel: {fileID: 1180685181308494802}
   blockTypeSelectionEventChannel: {fileID: 11400000, guid: c0e136831759c1344ac4aab9d09bdade, type: 2}
-  positionToolButtonEventChannel: {fileID: 11400000, guid: 2793cb07bf44ed04f92c22db4715f174, type: 2}
-  rotationToolButtonEventChannel: {fileID: 11400000, guid: 7f4947f665005c24a9f45b34449ffc30, type: 2}

@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6604ac5e0ad741c5860e308f8954aadc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiState: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
+  _state: {fileID: 11400000, guid: 8df89c7f66ecfbf40b20ce639b688d95, type: 2}
   _panel: {fileID: 1049866252652967337}
   _positionButton: {fileID: 8274692270255994631}
   _rotationButton: {fileID: 8274692268956262023}

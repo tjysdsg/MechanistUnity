@@ -19,10 +19,16 @@ public class BallConnectionEditorUIController : BaseUIController
     private readonly BlockConnectionType[] _blockConnectionTypes =
         (BlockConnectionType[])Enum.GetValues(typeof(BlockConnectionType)).Cast<BlockConnectionType>();
 
+    private Dictionary<BlockConnectionType, int> _blockConnectionTypeToIndex =
+        new Dictionary<BlockConnectionType, int>();
+
     private readonly string[] _blockConnectionTypeNames = Enum.GetNames(typeof(BlockConnectionType));
 
     protected override void Initialize()
     {
+        for (int i = 0; i < _blockConnectionTypes.Length; ++i)
+            _blockConnectionTypeToIndex[_blockConnectionTypes[i]] = i;
+
         var options = new List<TMP_Dropdown.OptionData>();
         foreach (var name in _blockConnectionTypeNames)
         {
@@ -39,7 +45,7 @@ public class BallConnectionEditorUIController : BaseUIController
     private void Update()
     {
         // set this menu visible only if we're actually editing a connection
-        if (!_uiState.blockConnectionEditorUIData.isEditingBallConnection)
+        if (!_state.blockConnectionEditorUIData.isEditingBallConnection)
         {
             _panel.gameObject.SetActive(false);
             return;
@@ -47,8 +53,10 @@ public class BallConnectionEditorUIController : BaseUIController
 
         _panel.gameObject.SetActive(true);
 
+        _connectionTypeSelector.value = _blockConnectionTypeToIndex[_state.blockConnectionEditorUIData.connectionType];
+
         // show rotate hinge button if the connection being edited is a hinge
-        if (_uiState.blockConnectionEditorUIData.connectionType == BlockConnectionType.Hinge)
+        if (_state.blockConnectionEditorUIData.connectionType == BlockConnectionType.Hinge)
             _rotateHingeButton.gameObject.SetActive(true);
         else
             _rotateHingeButton.gameObject.SetActive(false);
@@ -56,6 +64,10 @@ public class BallConnectionEditorUIController : BaseUIController
 
     private void OnConnectionTypeChanged(int index)
     {
-        _blockConnectionTypeEventChannel.RaiseEvent(_blockConnectionTypes[index]);
+        var t = _blockConnectionTypes[index];
+        _blockConnectionTypeEventChannel.RaiseEvent(t);
+
+        // necessary to avoid assigning previous value to the dropdown in Update()
+        _state.blockConnectionEditorUIData.connectionType = t;
     }
 }
