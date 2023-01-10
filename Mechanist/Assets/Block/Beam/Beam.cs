@@ -21,8 +21,8 @@ namespace Block
         public float bottomRadius = 0.5f;
         [SerializeField] private float length = 1;
 
-        private Vector3 _block1Pos;
-        private Vector3 _block2Pos;
+        private Vector3? _block1Pos = null;
+        private Vector3? _block2Pos = null;
 
         public override bool IsBlockAttachment() => true;
 
@@ -43,22 +43,24 @@ namespace Block
         {
             _meshCollider = GetComponent<MeshCollider>();
             _meshFilter = GetComponent<MeshFilter>();
-
-            _block1Pos = block1.position;
-            _block2Pos = block2.position;
         }
 
         protected override void Update()
         {
             base.Update();
 
+            if (!_block1Pos.HasValue)
+                _block1Pos = block1.position;
+            if (!_block2Pos.HasValue)
+                _block2Pos = block2.position;
+
             // update the model to always connect two blocks in build mode
             if (_gameMode == GameMode.BuildMode)
             {
-                var p1 = block1.position;
-                var p2 = block2.position;
+                var p1 = block1!.position;
+                var p2 = block2!.position;
 
-                if (p1 != _block1Pos || p2 != _block2Pos)
+                if (p1 != _block1Pos! || p2 != _block2Pos!)
                 {
                     UpdateProceduralModel();
                     _block1Pos = p1;
@@ -80,6 +82,8 @@ namespace Block
             UpdateProceduralModel();
         }
 
+        public override Rigidbody GetPlugForAttachedBlock(SingleClickBuildBlock scbb) => _rigidbody;
+
         /// <summary>
         /// Attach self to an attachable block if haven't.
         /// This is used for to insert missing connections to the attachable block during game initialization.
@@ -90,13 +94,7 @@ namespace Block
         {
             TheBall ab = b.GetComponent<TheBall>();
             if (ab.FindConnectionIndexFromOther(this) == -1)
-            {
-                ab.OnAttach(new BlockAttachment
-                {
-                    obj = this,
-                    point = transform.position,
-                });
-            }
+                ab.OnAttach(new BlockAttachment(this));
         }
 
         private (Vector3, Vector3) CalculatePositionAndDirectionVectors()

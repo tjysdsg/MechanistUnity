@@ -9,14 +9,14 @@ namespace Block
     {
         private FixedJoint _joint = null;
 
-        public FixBallBeamConnection(TheBall ball, Beam beam) : base(ball, beam)
+        public FixBallBeamConnection(TheBall ball, Beam beam, Rigidbody plug) : base(ball, beam, plug)
         {
         }
 
         public override Joint CreatePhysicalConnection()
         {
             _joint = _ball.gameObject.AddComponent<FixedJoint>();
-            _joint.connectedBody = _beam.GetComponent<Rigidbody>();
+            _joint.connectedBody = _plug;
             return _joint;
         }
 

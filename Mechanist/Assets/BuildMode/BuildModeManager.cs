@@ -327,20 +327,17 @@ namespace BuildMode
                     {
                         // instantiate brace prefab
                         var go = GameObject.Instantiate(blockConfig.GetPrefab(_currentBlockType));
-                        var b = go.GetComponent<TwoClickBuildBlock>();
-                        b.block1 = _twoClickBuildData.firstBlock.transform;
-                        b.block2 = selectionTransform;
-                        b.EnterBuildMode();
+                        var tcbb = go.GetComponent<TwoClickBuildBlock>();
+                        tcbb.block1 = _twoClickBuildData.firstBlock.transform;
+                        tcbb.block2 = selectionTransform;
+                        tcbb.EnterBuildMode();
 
                         // notify two attached blocks
-                        var attachment = new BlockAttachment
-                        {
-                            obj = b, point = info.point // TODO: point is incorrect
-                        };
+                        var attachment = new BlockAttachment(tcbb);
                         _twoClickBuildData.firstBlock.OnAttach(attachment);
                         selectedBlock.OnAttach(attachment);
 
-                        AddCreatedBlock(b);
+                        AddCreatedBlock(tcbb);
 
                         _twoClickBuildData.Clear();
                         _currentBlockType = BlockType.None;
@@ -561,17 +558,18 @@ namespace BuildMode
         {
             var ball = _ballConnectionEditData.ball;
             var index = _ballConnectionEditData.connectionIndex;
+            var beam = ball.GetConnectionAtIndex(index).Beam;
+            var plug = beam.GetPlugForAttachedBlock(ball);
 
             BallBeamConnection conn = null;
             switch (type)
             {
                 case BlockConnectionType.Fixed:
-                    conn = new FixBallBeamConnection(ball, ball.GetConnectionAtIndex(index).Beam);
+                    conn = new FixBallBeamConnection(ball, beam, plug);
                     break;
                 case BlockConnectionType.Hinge:
                     conn = new HingeBallBeamConnection(
-                        ball, ball.GetConnectionAtIndex(index).Beam,
-                        _blockConnectionConfig.GetPrefab(BlockConnectionType.Hinge)
+                        ball, beam, plug, _blockConnectionConfig.GetPrefab(BlockConnectionType.Hinge)
                     );
                     break;
                 case BlockConnectionType.Free:

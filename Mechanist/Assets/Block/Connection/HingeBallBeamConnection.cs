@@ -13,7 +13,8 @@ namespace Block
         private GameObject _connectionModel = null;
         private GameObject _prefab = null;
 
-        public HingeBallBeamConnection(TheBall ball, Beam beam, GameObject prefab) : base(ball, beam)
+        public HingeBallBeamConnection(TheBall ball, Beam beam, Rigidbody plug, GameObject prefab)
+            : base(ball, beam, plug)
         {
             _prefab = prefab;
         }
@@ -21,7 +22,7 @@ namespace Block
         public override Joint CreatePhysicalConnection()
         {
             _joint = _ball.gameObject.AddComponent<HingeJoint>();
-            _joint.connectedBody = _beam.GetComponent<Rigidbody>();
+            _joint.connectedBody = _plug;
             _joint.axis = axis;
             _joint.anchor = Vector3.zero;
             return _joint;

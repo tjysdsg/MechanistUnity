@@ -42,7 +42,12 @@ namespace Block
         public virtual void OnAttach(BlockAttachment attachment)
         {
             Assert.IsTrue(attachment.obj is Beam);
-            _connections.Add(new FixBallBeamConnection(this, (Beam)attachment.obj)); // fixed connection by default
+
+            var beam = (Beam)attachment.obj;
+            var plug = beam.GetPlugForAttachedBlock(this);
+
+            _connections.Add(new FixBallBeamConnection(this, beam, plug)); // fixed connection by default
+
             _beamToConnection[(Beam)attachment.obj] = _connections.Count - 1;
         }
 

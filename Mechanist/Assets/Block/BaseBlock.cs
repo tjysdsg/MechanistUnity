@@ -120,5 +120,16 @@ namespace Block
     {
         [SerializeField] public Transform block1;
         [SerializeField] public Transform block2;
+
+        /// <summary>
+        /// When a block connects to a <see cref="TwoClickBuildBlock"/>,
+        /// it might be physically connected to another rigidbody instead of directly to this game object.
+        ///
+        /// For example, a spring has two connection points ("plugs"),
+        /// the actual physical connection is between a block and one of these plugs.
+        ///
+        /// This function returns the assigned plug for <see cref="scbb"/>.
+        /// </summary>
+        public abstract Rigidbody GetPlugForAttachedBlock(SingleClickBuildBlock scbb);
     }
 }
