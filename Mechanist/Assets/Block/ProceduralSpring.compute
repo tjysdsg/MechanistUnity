@@ -1,0 +1,71 @@
+#pragma kernel Main
+
+struct GeneratedVertex
+{
+    float3 position;
+    float2 uv;
+};
+
+RWStructuredBuffer<GeneratedVertex> verts;
+RWStructuredBuffer<int> triangles;
+
+float cylinder_radius;
+float radius;
+float height;
+int n_radial_segments;
+int n_segments;
+int n_circles;
+
+static const float PI = 3.14159265f;
+
+[numthreads(64, 1, 1)]
+void Main(uint3 id : SV_DispatchThreadID)
+{
+    const int vert_rows = n_segments + 1;
+    const int vert_cols = n_radial_segments + 1;
+    if ((int)id.x >= vert_rows * vert_cols)
+        return;
+
+    const float angle_step = 2 * PI / n_radial_segments;
+    const float height_per_seg = height / n_segments;
+    const float t_step = 2 * PI * n_circles / n_segments;
+    const float uv_step_h = 1.0f / n_radial_segments;
+    const float uv_step_v = 1.0f / n_segments;
+
+    const int seg_i = id.x / vert_cols;
+    const int col = id.x % vert_cols;
+
+    float angle = col * angle_step;
+    if (col == vert_cols - 1) angle = 0;
+
+    // vertex positions and UVs
+    float3 cylinder_coord = float3(
+        cylinder_radius * cos(angle),
+        cylinder_radius * sin(angle),
+        0
+    );
+
+    float R = radius - cylinder_coord.x;
+    float t = seg_i * t_step;
+    verts[id.x].position = float3(
+        R * cos(t),
+        R * sin(t),
+        height_per_seg * seg_i + cylinder_coord.y - height / 2
+    );
+    verts[id.x].uv = float2(
+        col * uv_step_h, seg_i * uv_step_v
+    );
+
+    // triangles
+    if (seg_i == 0 || col >= vert_cols - 1)
+        return;
+
+    const int tri_idx = (seg_i - 1) * n_radial_segments * 6 + col * 6;
+    triangles[tri_idx + 0] = seg_i * vert_cols + col + 1;
+    triangles[tri_idx + 1] = seg_i * vert_cols + col;
+    triangles[tri_idx + 2] = (seg_i - 1) * vert_cols + col;
+
+    triangles[tri_idx + 3] = (seg_i - 1) * vert_cols + col + 1;
+    triangles[tri_idx + 4] = seg_i * vert_cols + col + 1;
+    triangles[tri_idx + 5] = (seg_i - 1) * vert_cols + col;
+}
