@@ -328,14 +328,10 @@ namespace BuildMode
                         // instantiate brace prefab
                         var go = GameObject.Instantiate(blockConfig.GetPrefab(_currentBlockType));
                         var tcbb = go.GetComponent<TwoClickBuildBlock>();
+                        // these two block will be notified using OnAttach() during during the initialization of tcbb
                         tcbb.block1 = _twoClickBuildData.firstBlock.transform;
                         tcbb.block2 = selectionTransform;
                         tcbb.EnterBuildMode();
-
-                        // notify two attached blocks
-                        var attachment = new BlockAttachment(tcbb);
-                        _twoClickBuildData.firstBlock.OnAttach(attachment);
-                        selectedBlock.OnAttach(attachment);
 
                         AddCreatedBlock(tcbb);
 

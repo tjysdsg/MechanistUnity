@@ -25,3 +25,7 @@ MonoBehaviour:
     prefab: {fileID: 8532427180110263355, guid: 331984d7e77d60f4ebe26d8f3a95fe5e, type: 3}
     BuildModeMaterial: {fileID: 2100000, guid: d76d5dba59c8a824a8170635648a356c, type: 2}
     DimmedMaterial: {fileID: 2100000, guid: 6c2f5463d0a885c4aa09b5996a9a7c75, type: 2}
+  - type: 3
+    prefab: {fileID: 7809542545717102720, guid: 6627d41fe264275499d0b5c6b8765af9, type: 3}
+    BuildModeMaterial: {fileID: 2100000, guid: ff9bcc3d5819f47479c49158408afeb8, type: 2}
+    DimmedMaterial: {fileID: 2100000, guid: e58f339de6c921943b3b5dfd2af324ac, type: 2}

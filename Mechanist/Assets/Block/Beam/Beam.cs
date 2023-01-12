@@ -1,6 +1,7 @@
 using Core;
 using UnityEngine;
 using MeshUtils;
+using UnityEngine.Assertions;
 
 namespace Block
 {
@@ -44,8 +45,8 @@ namespace Block
 
         protected override void LateInitialize()
         {
-            if (block1 == null || block2 == null)
-                return;
+            // NOTE: must be in LateInitialize since we need to wait for somebody to assign block1 and block2
+            Assert.IsTrue(block1 != null && block2 != null);
 
             AttachSelfToBlockIfHavent(block1);
             AttachSelfToBlockIfHavent(block2);
