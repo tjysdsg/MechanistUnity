@@ -554,7 +554,8 @@ namespace BuildMode
         {
             var ball = _ballConnectionEditData.ball;
             var index = _ballConnectionEditData.connectionIndex;
-            var beam = ball.GetConnectionAtIndex(index).Beam;
+            var prevConn = ball.GetConnectionAtIndex(index);
+            var beam = prevConn.Beam;
             var plug = beam.GetPlugForAttachedBlock(ball);
 
             BallBeamConnection conn = null;
@@ -574,6 +575,8 @@ namespace BuildMode
 
             Assert.IsNotNull(conn);
             ball.SetConnectionAtIndex(index, conn);
+
+            prevConn.OnDisable();
         }
 
         private void OnUIRotateHingeConnection()

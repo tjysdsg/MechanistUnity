@@ -29,6 +29,10 @@ namespace Block
         {
         }
 
+        public override void OnDisable()
+        {
+        }
+
         public override BlockConnectionType GetConnectionType() => BlockConnectionType.Fixed;
     }
 }

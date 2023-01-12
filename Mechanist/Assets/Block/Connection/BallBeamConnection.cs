@@ -24,6 +24,7 @@ namespace Block
         public abstract Joint CreatePhysicalConnection();
         public abstract void DestroyPhysicalConnection();
         public abstract void Update();
+        public abstract void OnDisable();
 
         public BallBeamConnection(TheBall ball, Beam beam, Rigidbody plug)
         {

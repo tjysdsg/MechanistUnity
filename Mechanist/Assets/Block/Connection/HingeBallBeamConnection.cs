@@ -33,9 +33,15 @@ namespace Block
             GameObject.Destroy(_joint);
         }
 
+        public override void OnDisable()
+        {
+            if (_connectionModel is not null)
+                GameObject.Destroy(_connectionModel);
+        }
+
         public override void Update()
         {
-            if (_connectionModel == null)
+            if (_connectionModel is null)
                 _connectionModel = GameObject.Instantiate(_prefab);
 
             Vector3 direction = _beam.transform.position - _ball.transform.position;
