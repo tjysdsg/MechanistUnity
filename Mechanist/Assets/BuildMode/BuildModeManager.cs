@@ -435,7 +435,22 @@ namespace BuildMode
                 {
                     if (info.transform.gameObject == ball.gameObject)
                     {
-                        hingeConn.SetAxis(info.point - ball.transform.position, Space.World);
+                        var axis = info.point - ball.transform.position;
+
+                        // snap to degrees
+                        float step = Mathf.Deg2Rad * 30;
+                        float xAngle = Mathf.Acos(axis.x);
+                        float yAngle = Mathf.Acos(axis.y);
+                        float zAngle = Mathf.Acos(axis.z);
+
+                        xAngle = Mathf.Round(xAngle / step) * step;
+                        yAngle = Mathf.Round(yAngle / step) * step;
+                        zAngle = Mathf.Round(zAngle / step) * step;
+
+                        hingeConn.SetAxis(
+                            new Vector3(Mathf.Cos(xAngle), Mathf.Cos(yAngle), Mathf.Cos(zAngle)).Tidy(),
+                            Space.World
+                        );
                     }
                 }
 
