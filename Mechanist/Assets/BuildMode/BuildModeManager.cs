@@ -200,6 +200,8 @@ namespace BuildMode
                 if (_prevState == BuildModeState.BallConnectionEdit)
                     OnExitBallConnectionEditState();
 
+                if (_state == BuildModeState.BallEdit)
+                    OnEnterBallEditState();
                 if (_state == BuildModeState.BallConnectionEdit)
                     OnEnterBallConnectionEditState();
             }
@@ -352,8 +354,6 @@ namespace BuildMode
             // TODO: support grouped editing
             _ballEditData.ball = (TheBall)block;
 
-            HighlightBlocks(_ballEditData.ball);
-
             _ballEditData.transformHandle =
                 RuntimeTransformHandle.Create(
                     block.transform,
@@ -365,6 +365,11 @@ namespace BuildMode
 
             usePositionTransformHandleEventChannel.OnEventRaised += _ballEditData.SetTransformHandleTypeAsPosition;
             useRotationTransformHandleEventChannel.OnEventRaised += _ballEditData.SetTransformHandleTypeAsRotation;
+        }
+
+        private void OnEnterBallEditState()
+        {
+            HighlightBlocks(_ballEditData.ball);
         }
 
         private void BallEditStateUpdate()
