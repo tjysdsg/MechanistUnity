@@ -60,6 +60,15 @@ namespace Block
                     _prevPlug2Pos = p2;
                 }
             }
+
+            // update the plugs' position in build mode
+            if (_gameMode == GameMode.BuildMode)
+            {
+                _plug1.position = block1.position;
+                _plug2.position = block2.position;
+                _prevPlug1Pos = _plug1.position;
+                _prevPlug2Pos = _plug2.position;
+            }
         }
 
         protected override void OnEnterPlayMode()
