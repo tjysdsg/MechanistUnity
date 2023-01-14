@@ -1,5 +1,3 @@
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace MeshUtils
@@ -69,11 +67,7 @@ namespace MeshUtils
                 new GraphicsBuffer(GraphicsBuffer.Target.Structured, _trisArrayLength, GENERATED_INDEX_STRIDE);
 
             // find the our compute shader
-            var guid = AssetDatabase.FindAssets("ProceduralSpring").FirstOrDefault();
-            if (string.IsNullOrEmpty(guid))
-                Debug.LogError("Cannot find compute shader: ProceduralSpring.compute");
-            else
-                _shader = AssetDatabase.LoadAssetAtPath<ComputeShader>(AssetDatabase.GUIDToAssetPath(guid));
+            _shader = Resources.Load<ComputeShader>("ProceduralSpring");
         }
 
         ~ProceduralSpringMeshGPU()
