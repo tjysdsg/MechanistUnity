@@ -576,17 +576,16 @@ namespace BuildMode
             var index = _ballConnectionEditData.connectionIndex;
             var prevConn = ball.GetConnectionAtIndex(index);
             var beam = prevConn.Beam;
-            var plug = beam.GetPlugForAttachedBlock(ball);
 
             BallBeamConnection conn = null;
             switch (type)
             {
                 case BlockConnectionType.Fixed:
-                    conn = new FixBallBeamConnection(ball, beam, plug);
+                    conn = new FixBallBeamConnection(ball, beam);
                     break;
                 case BlockConnectionType.Hinge:
                     conn = new HingeBallBeamConnection(
-                        ball, beam, plug, _blockConnectionConfig.GetPrefab(BlockConnectionType.Hinge)
+                        ball, beam, _blockConnectionConfig.GetPrefab(BlockConnectionType.Hinge)
                     );
                     break;
                 case BlockConnectionType.Free:

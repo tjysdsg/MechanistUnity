@@ -162,6 +162,8 @@ namespace SaveSystem
 
             JsonSerializer serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.Converters.Add(new Vector3JsonConverter());
+            serializer.Formatting = Formatting.Indented;
             using (StreamWriter sw = new StreamWriter(File.Open(savePath, FileMode.Create)))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {

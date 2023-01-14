@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using SaveSystem;
 using UnityEngine;
 
 namespace Block
@@ -13,8 +14,10 @@ namespace Block
         private GameObject _connectionModel = null;
         private GameObject _prefab = null;
 
-        public HingeBallBeamConnection(TheBall ball, Beam beam, Rigidbody plug, GameObject prefab)
-            : base(ball, beam, plug)
+        public override BlockConnectionType GetConnectionType() => BlockConnectionType.Hinge;
+
+        public HingeBallBeamConnection(TheBall ball, Beam beam, GameObject prefab)
+            : base(ball, beam)
         {
             _prefab = prefab;
         }
@@ -69,6 +72,33 @@ namespace Block
             Gizmos.DrawLine(t.position, t.position + t.TransformDirection(axis).normalized);
         }
 
-        public override BlockConnectionType GetConnectionType() => BlockConnectionType.Hinge;
+        #region Save and load
+
+        internal class HingeConnectionSaveData : SaveData
+        {
+            public ReferenceSaveData ball;
+            public ReferenceSaveData beam;
+            public Vector3 axis;
+
+            public HingeConnectionSaveData(int id, string typename) : base(id, typename)
+            {
+            }
+        }
+
+        public override SaveData OnSave()
+        {
+            var data = new HingeConnectionSaveData(GetSaveDataId(), GetConnectionType().ToString());
+            data.ball = new ReferenceSaveData(_ball.GetSaveDataId());
+            data.beam = new ReferenceSaveData(_beam.GetSaveDataId());
+            data.axis = axis;
+            return data;
+        }
+
+        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

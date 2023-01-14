@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
@@ -30,19 +31,6 @@ namespace Block
         {
         }
 
-        public override SaveData OnSave()
-        {
-            // TODO: Implement this
-            Debug.Log("Saving TheBall");
-            return null;
-        }
-
-        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
-        {
-            // TODO: Implement this
-            throw new System.NotImplementedException();
-        }
-
         protected override void Update()
         {
             base.Update();
@@ -58,9 +46,7 @@ namespace Block
             Assert.IsTrue(attachment.obj is Beam);
 
             var beam = (Beam)attachment.obj;
-            var plug = beam.GetPlugForAttachedBlock(this);
-
-            _connections.Add(new FixBallBeamConnection(this, beam, plug)); // fixed connection by default
+            _connections.Add(new FixBallBeamConnection(this, beam)); // fixed connection by default
 
             _beamToConnection[(Beam)attachment.obj] = _connections.Count - 1;
         }
@@ -109,5 +95,38 @@ namespace Block
                 conn.OnDrawGizmos();
             }
         }
+
+        #region Save and load
+
+        [Serializable]
+        internal class BallSaveData : SaveData
+        {
+            public Vector3 position;
+            public List<SaveData> connections;
+
+            public BallSaveData(int id, string typename) : base(id, typename)
+            {
+            }
+        }
+
+        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
+        {
+            // TODO: Implement this
+            throw new System.NotImplementedException();
+        }
+
+        public override SaveData OnSave()
+        {
+            var data = new BallSaveData(GetSaveDataId(), GetBlockType().ToString());
+            data.position = transform.position;
+            data.connections = new();
+
+            foreach (var conn in _connections)
+                data.connections.Add(conn.OnSave());
+
+            return data;
+        }
+
+        #endregion
     }
 }

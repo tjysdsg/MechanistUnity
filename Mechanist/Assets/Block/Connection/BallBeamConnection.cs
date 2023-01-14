@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using SaveSystem;
 using UnityEngine;
 
 namespace Block
@@ -12,7 +13,7 @@ namespace Block
     }
 
     [Serializable]
-    public abstract class BallBeamConnection : IJointConnection
+    public abstract class BallBeamConnection : IJointConnection, ISaveable
     {
         [SerializeField] protected TheBall _ball = null;
         public TheBall Ball => _ball;
@@ -26,11 +27,11 @@ namespace Block
         public abstract void Update();
         public abstract void OnDisable();
 
-        public BallBeamConnection(TheBall ball, Beam beam, Rigidbody plug)
+        public BallBeamConnection(TheBall ball, Beam beam)
         {
             _ball = ball;
             _beam = beam;
-            _plug = plug;
+            _plug = beam.GetPlugForAttachedBlock(ball);
         }
 
         public virtual void OnDrawGizmos()
@@ -38,5 +39,9 @@ namespace Block
         }
 
         public abstract BlockConnectionType GetConnectionType();
+
+        public int GetSaveDataId() => 0;
+        public abstract SaveData OnSave();
+        public abstract void OnLoad(SaveData data, ISaveableInstanceLoader loader);
     }
 }
