@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using SaveSystem;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -27,6 +28,19 @@ namespace Block
 
         protected override void LateInitialize()
         {
+        }
+
+        public override string OnSave()
+        {
+            // TODO: Implement this
+            Debug.Log("Saving TheBall");
+            return "";
+        }
+
+        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
+        {
+            // TODO: Implement this
+            throw new System.NotImplementedException();
         }
 
         protected override void Update()

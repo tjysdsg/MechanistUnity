@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de44de012242420eb491bbd2dbbd2489, type: 3}
-  m_Name: GlobalBlockList
+  m_Script: {fileID: 11500000, guid: ccc42083e4114928b0270b3ab9b970bf, type: 3}
+  m_Name: SaveSystem
   m_EditorClassIdentifier: 
-  _saveSystem: {fileID: 11400000, guid: fe41598a22b2baf4cb6612eefa101d9f, type: 2}

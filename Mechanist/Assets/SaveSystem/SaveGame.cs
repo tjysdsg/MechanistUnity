@@ -16,7 +16,8 @@ namespace SaveSystem
     [Serializable]
     public struct SaveData
     {
-        public string id;
+        public int id;
+        public string typename;
         public string data;
     }
 
@@ -54,9 +55,9 @@ namespace SaveSystem
             _saveData.Clear();
         }
 
-        public void AddData(string id, string data)
+        public void AddData(int id, string typename, string data)
         {
-            SaveData newSaveData = new SaveData { id = id, data = data };
+            SaveData newSaveData = new SaveData { id = id, typename = typename, data = data };
             _saveData.Add(newSaveData);
         }
 

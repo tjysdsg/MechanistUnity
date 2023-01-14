@@ -1,6 +1,7 @@
 using Core;
 using UnityEngine;
 using MeshUtils;
+using SaveSystem;
 using UnityEngine.Assertions;
 
 namespace Block
@@ -52,6 +53,19 @@ namespace Block
             AttachSelfToBlockIfHavent(block2);
 
             UpdateProceduralModel();
+        }
+
+        public override string OnSave()
+        {
+            // TODO: Implement this
+            Debug.Log("Saving Beam");
+            return "";
+        }
+
+        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
+        {
+            // TODO: Implement this
+            throw new System.NotImplementedException();
         }
 
         protected override void Update()

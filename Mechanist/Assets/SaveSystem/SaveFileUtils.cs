@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SaveSystem
 {
-    public class FileSystemUtils
+    public class SaveFileUtils
     {
         private static string fileExtentionName => SaveSettingSO.Get().fileExtensionName;
 
@@ -22,7 +22,7 @@ namespace SaveSystem
                 Debug.Log(text);
         }
 
-        private static Dictionary<int, string> cachedSavePaths;
+        private static Dictionary<int, string> cachedSavePaths = null;
 
         public static Dictionary<int, string> ObtainSavePaths()
         {
@@ -117,7 +117,7 @@ namespace SaveSystem
 
                 if (saveGame == null)
                 {
-                    cachedSavePaths.Remove(slot);
+                    ObtainSavePaths().Remove(slot);
                     return null;
                 }
 
@@ -149,9 +149,9 @@ namespace SaveSystem
         {
             string savePath = $"{DataPath}/{gameFileName}{saveSlot.ToString()}{fileExtentionName}";
 
-            if (!cachedSavePaths.ContainsKey(saveSlot))
+            if (!ObtainSavePaths().ContainsKey(saveSlot))
             {
-                cachedSavePaths.Add(saveSlot, savePath);
+                ObtainSavePaths().Add(saveSlot, savePath);
             }
 
             Log($"Saving game slot {saveSlot.ToString()} to : {savePath}");
@@ -173,9 +173,9 @@ namespace SaveSystem
                 Log($"Successfully removed file at {filePath}");
                 File.Delete(filePath);
 
-                if (cachedSavePaths.ContainsKey(slot))
+                if (ObtainSavePaths().ContainsKey(slot))
                 {
-                    cachedSavePaths.Remove(slot);
+                    ObtainSavePaths().Remove(slot);
                 }
             }
             else

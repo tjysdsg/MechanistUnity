@@ -1,11 +1,12 @@
 ﻿using Core;
+using SaveSystem;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Block
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BaseBlock : MonoBehaviour
+    public abstract class BaseBlock : MonoBehaviour, ISaveable
     {
         [SerializeField] private BlockListSO allBlocks;
 
@@ -87,14 +88,14 @@ namespace Block
         /// <summary>
         /// Callback when the entering the play mode.
         ///
-        /// This is guaranteed to be called only in <see cref="MonoBehaviour.Update"/>.
+        /// This is guaranteed to be called only in <see cref="UnityEngine.PlayerLoop.Update"/>.
         /// </summary>
         protected abstract void OnEnterPlayMode();
 
         /// <summary>
         /// Callback when the entering the build mode.
         ///
-        /// This is guaranteed to be called only in <see cref="MonoBehaviour.Update"/>.
+        /// This is guaranteed to be called only in <see cref="UnityEngine.PlayerLoop.Update"/>.
         /// </summary>
         protected abstract void OnEnterBuildMode();
 
@@ -110,6 +111,15 @@ namespace Block
         /// Initialize the block in <see cref="MonoBehaviour.Start"/> event
         /// </summary>
         protected abstract void LateInitialize();
+
+        #region Save and load
+
+        public int GetId() => gameObject.GetInstanceID();
+        public string GetTypeName() => GetBlockType().ToString();
+        public abstract string OnSave();
+        public abstract void OnLoad(SaveData data, ISaveableInstanceLoader loader);
+
+        #endregion
     }
 
     public abstract class SingleClickBuildBlock : BaseBlock
