@@ -30,11 +30,11 @@ namespace Block
         {
         }
 
-        public override string OnSave()
+        public override SaveData OnSave()
         {
             // TODO: Implement this
             Debug.Log("Saving TheBall");
-            return "";
+            return null;
         }
 
         public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)

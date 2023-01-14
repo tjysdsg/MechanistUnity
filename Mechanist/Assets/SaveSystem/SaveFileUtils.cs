@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace SaveSystem
 {
@@ -73,6 +74,7 @@ namespace SaveSystem
                 return null;
             }
 
+            // TODO: fix
             SaveGame getSave = JsonUtility.FromJson<SaveGame>(data);
 
             if (getSave != null)
@@ -157,10 +159,13 @@ namespace SaveSystem
             Log($"Saving game slot {saveSlot.ToString()} to : {savePath}");
 
             saveGame.OnWrite();
-            using (var writer = new BinaryWriter(File.Open(savePath, FileMode.Create)))
+
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            using (StreamWriter sw = new StreamWriter(File.Open(savePath, FileMode.Create)))
+            using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                var jsonString = JsonUtility.ToJson(saveGame, SaveSettingSO.Get().useJsonPrettyPrint);
-                writer.Write(jsonString);
+                serializer.Serialize(writer, saveGame);
             }
         }
 

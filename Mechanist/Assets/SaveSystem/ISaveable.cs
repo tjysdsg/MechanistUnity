@@ -2,11 +2,10 @@ namespace SaveSystem
 {
     public interface ISaveable
     {
-        public int GetId();
-        public string GetTypeName();
+        public int GetSaveDataId();
 
-        public string OnSave();
-        
+        public SaveData OnSave();
+
         /// <summary>
         /// Load save data.
         /// </summary>

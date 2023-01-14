@@ -20,7 +20,7 @@ namespace SaveSystem
             {
                 var saveables = ledger.GetSaveableInstances();
                 foreach (var s in saveables)
-                    _saveGame.AddData(s.GetId(), s.GetTypeName(), s.OnSave());
+                    _saveGame.AddData(s.OnSave());
             }
 
             SaveFileUtils.WriteSave(_saveGame, saveSlot);

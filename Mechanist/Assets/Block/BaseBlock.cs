@@ -114,9 +114,8 @@ namespace Block
 
         #region Save and load
 
-        public int GetId() => gameObject.GetInstanceID();
-        public string GetTypeName() => GetBlockType().ToString();
-        public abstract string OnSave();
+        public int GetSaveDataId() => gameObject.GetInstanceID();
+        public abstract SaveData OnSave();
         public abstract void OnLoad(SaveData data, ISaveableInstanceLoader loader);
 
         #endregion

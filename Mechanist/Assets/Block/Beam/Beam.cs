@@ -1,3 +1,4 @@
+using System;
 using Core;
 using UnityEngine;
 using MeshUtils;
@@ -18,8 +19,7 @@ namespace Block
         private int nRadialSegments = 10;
 
         [SerializeField] private int nHeightSegments = 2;
-        [SerializeField] private float topRadius = 0.5f;
-        [SerializeField] private float bottomRadius = 0.5f;
+        [SerializeField] private float radius = 0.1f;
         [SerializeField] protected float length = 1;
 
         private Vector3? _block1Pos = null;
@@ -53,19 +53,6 @@ namespace Block
             AttachSelfToBlockIfHavent(block2);
 
             UpdateProceduralModel();
-        }
-
-        public override string OnSave()
-        {
-            // TODO: Implement this
-            Debug.Log("Saving Beam");
-            return "";
-        }
-
-        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
-        {
-            // TODO: Implement this
-            throw new System.NotImplementedException();
         }
 
         protected override void Update()
@@ -123,7 +110,7 @@ namespace Block
         {
             if (_proceduralMesh == null)
                 _proceduralMesh =
-                    new ProceduralCylinderMesh(topRadius, bottomRadius, length, nRadialSegments, nHeightSegments);
+                    new ProceduralCylinderMesh(radius, radius, length, nRadialSegments, nHeightSegments);
             (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
 
             // update transform
@@ -131,7 +118,7 @@ namespace Block
 
             // update mesh
             length = direction.magnitude;
-            GetComponent<MeshFilter>().sharedMesh = _proceduralMesh.UpdateMesh(topRadius, bottomRadius, length);
+            GetComponent<MeshFilter>().sharedMesh = _proceduralMesh.UpdateMesh(radius, radius, length);
             GetComponent<MeshCollider>().sharedMesh = _proceduralMesh.Mesh;
         }
 
@@ -144,6 +131,43 @@ namespace Block
                 (Vector3 center, Vector3 direction) = CalculatePositionAndDirectionVectors();
                 transform.SetPositionAndRotation(center, Quaternion.FromToRotation(Vector3.forward, direction));
             }
+        }
+
+        #endregion
+
+        #region Save and load
+
+        [Serializable]
+        internal class BeamSaveData : SaveData
+        {
+            public SaveData block1;
+            public SaveData block2;
+            public int nRadialSegments;
+            public int nHeightSegments;
+            public float radius;
+            public float length;
+
+            public BeamSaveData(int id, string typename) : base(id, typename)
+            {
+            }
+        }
+
+        public override SaveData OnSave()
+        {
+            var data = new BeamSaveData(GetSaveDataId(), GetBlockType().ToString());
+            data.block1 = new ReferenceSaveData(block1.GetComponent<BaseBlock>().GetSaveDataId());
+            data.block2 = new ReferenceSaveData(block2.GetComponent<BaseBlock>().GetSaveDataId());
+            data.nRadialSegments = nRadialSegments;
+            data.nHeightSegments = nHeightSegments;
+            data.radius = radius;
+            data.length = length;
+            return data;
+        }
+
+        public override void OnLoad(SaveData data, ISaveableInstanceLoader loader)
+        {
+            // TODO: Implement this
+            throw new NotImplementedException();
         }
 
         #endregion

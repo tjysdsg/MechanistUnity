@@ -13,12 +13,47 @@ namespace SaveSystem
         public string creationDate;
     }
 
+    /// <summary>
+    /// The data of a single game object, a component, etc.
+    /// This is the base class. It's intended to be inherited to add custom serializable fields.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// "Reference" is a special type of save data.
+    /// It is used for saving game objects that contains references to other game objects
+    /// without duplicating data.
+    /// This can ensure proper loading.
+    ///
+    /// In this case,
+    /// The <see cref="SaveData.id"/> field contains the ID of the referred object.
+    /// </remarks>
     [Serializable]
-    public struct SaveData
+    public abstract class SaveData
     {
+        /// <summary>
+        /// Unique ID
+        /// </summary>
         public int id;
+
+        /// <summary>
+        /// Type of this game object/component/...
+        ///
+        /// A corresponding <see cref="ISaveableInstanceLoader"/> will be called to load this data.
+        /// </summary>
         public string typename;
-        public string data;
+
+        public SaveData(int id, string typename)
+        {
+            this.id = id;
+            this.typename = typename;
+        }
+    }
+
+    public class ReferenceSaveData : SaveData
+    {
+        public ReferenceSaveData(int id) : base(id, "Reference")
+        {
+        }
     }
 
     /// <summary>
@@ -31,7 +66,7 @@ namespace SaveSystem
         [NonSerialized] public DateTime creationDate;
 
         [SerializeField] private SaveGameMetaData _metaData;
-        [SerializeField] private List<SaveData> _saveData = new List<SaveData>();
+        [SerializeReference] private List<SaveData> _saveData = new List<SaveData>();
 
         public IEnumerator<SaveData> GetEnumerator() => _saveData.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -55,15 +90,7 @@ namespace SaveSystem
             _saveData.Clear();
         }
 
-        public void AddData(int id, string typename, string data)
-        {
-            SaveData newSaveData = new SaveData { id = id, typename = typename, data = data };
-            _saveData.Add(newSaveData);
-        }
-
-        public void Clear()
-        {
-            _saveData.Clear();
-        }
+        public void AddData(SaveData data) => _saveData.Add(data);
+        public void Clear() => _saveData.Clear();
     }
 }
