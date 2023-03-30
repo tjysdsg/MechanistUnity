@@ -17,7 +17,7 @@ namespace SaveSystem
         {
             string value = (string)reader.Value;
             string[] v = value.Split(',');
-            return new Vector3(Int32.Parse(v[0]), Int32.Parse(v[1]), Int32.Parse(v[2]));
+            return new Vector3(float.Parse(v[0]), float.Parse(v[1]), float.Parse(v[2]));
         }
     }
 }

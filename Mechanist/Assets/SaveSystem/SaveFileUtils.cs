@@ -74,10 +74,10 @@ namespace SaveSystem
                 return null;
             }
 
-            // TODO: fix
             SaveGame getSave;
             JsonSerializer serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.TypeNameHandling = TypeNameHandling.Auto;
             serializer.Converters.Add(new Vector3JsonConverter());
             serializer.Formatting = Formatting.Indented;
             using (StreamReader s = new StreamReader(File.Open(savePath, FileMode.Open)))
@@ -171,6 +171,7 @@ namespace SaveSystem
 
             JsonSerializer serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.TypeNameHandling = TypeNameHandling.Auto;
             serializer.Converters.Add(new Vector3JsonConverter());
             serializer.Formatting = Formatting.Indented;
             using (StreamWriter sw = new StreamWriter(File.Open(savePath, FileMode.Create)))
