@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace SaveSystem
@@ -59,14 +60,17 @@ namespace SaveSystem
     /// <summary>
     /// Container for all information of a single save file.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
     public class SaveGame : IEnumerable<SaveData>
     {
+        // [JsonIgnore]
+
         [NonSerialized] public int gameVersion;
         [NonSerialized] public DateTime creationDate;
 
-        [SerializeField] private SaveGameMetaData _metaData;
-        [SerializeReference] private List<SaveData> _saveData = new List<SaveData>();
+        [JsonProperty] [SerializeField] private SaveGameMetaData _metaData;
+        [JsonProperty] [SerializeReference] private List<SaveData> _saveData = new();
 
         public IEnumerator<SaveData> GetEnumerator() => _saveData.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

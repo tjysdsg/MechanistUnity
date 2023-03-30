@@ -75,7 +75,16 @@ namespace SaveSystem
             }
 
             // TODO: fix
-            SaveGame getSave = JsonUtility.FromJson<SaveGame>(data);
+            SaveGame getSave;
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.Converters.Add(new Vector3JsonConverter());
+            serializer.Formatting = Formatting.Indented;
+            using (StreamReader s = new StreamReader(File.Open(savePath, FileMode.Open)))
+            using (JsonReader reader = new JsonTextReader(s))
+            {
+                getSave = serializer.Deserialize<SaveGame>(reader);
+            }
 
             if (getSave != null)
             {

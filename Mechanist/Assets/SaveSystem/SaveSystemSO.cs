@@ -9,9 +9,14 @@ namespace SaveSystem
     {
         private SaveGame _saveGame = new SaveGame();
 
-        private Dictionary<string, ISaveableInstanceLoader> _saveableInstanceLoaders = new();
-        private List<ISaveableInstanceLedger> _saveableInstanceLedgers = new();
+        private readonly Dictionary<string, ISaveableInstanceLoader> _saveableInstanceLoaders = new();
+        private readonly List<ISaveableInstanceLedger> _saveableInstanceLedgers = new();
 
+        /**
+         * <summary>
+         * Save all <see cref="ISaveable"/> instances registered by <see cref="SaveSystemSO.RegisterSaveableInstanceLedger"/>.
+         * </summary>
+         */
         public void Save(int saveSlot)
         {
             _saveGame.Clear();
@@ -60,6 +65,13 @@ namespace SaveSystem
             }
         }
 
+        /**
+         * <summary>
+         * Register an <see cref="ISaveableInstanceLedger"/>, all saveable objects returned by
+         * <see cref="ISaveableInstanceLedger.GetSaveableInstances"/> will be written to file when 
+         * <see cref="SaveSystemSO.Save"/> is called.
+         * </summary>
+         */
         public void RegisterSaveableInstanceLedger(ISaveableInstanceLedger ledger)
         {
             _saveableInstanceLedgers.Add(ledger);

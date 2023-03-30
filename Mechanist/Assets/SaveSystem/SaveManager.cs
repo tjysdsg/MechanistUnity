@@ -12,6 +12,10 @@ namespace SaveSystem
             {
                 _saveSystem.Save(0);
             }
+            else if (Input.GetKeyDown(KeyCode.F6))
+            {
+                _saveSystem.Load(0);
+            }
         }
     }
 }
